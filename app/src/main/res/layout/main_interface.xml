@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarSize="4dp"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarUp"
+        android:layout_width="413dp"
+        android:layout_height="53dp"
+        android:background="#ebebeb"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/buttonSearch"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="53dp"
+        android:layout_height="48dp"
+        android:accessibilityHeading="false"
+        android:allowUndo="false"
+        android:backgroundTint="#ebebeb"
+        android:visibility="visible"
+        app:icon="@drawable/ic_search"
+        app:iconTint="#000000"
+        app:strokeColor="#EBEBEB"
+        tools:ignore="MissingConstraints"
+
+        tools:layout_editor_absoluteX="285dp"
+        tools:layout_editor_absoluteY="6dp" />
+
+    <Button
+        android:id="@+id/buttonSubMenu"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="50dp"
+        android:layout_height="47dp"
+        android:backgroundTint="#EBEBEB"
+        app:icon="@drawable/ic_dropdown"
+        app:iconTint="#050505"
+        tools:layout_editor_absoluteX="355dp"
+        tools:layout_editor_absoluteY="6dp" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarDown"
+        android:layout_width="412dp"
+        android:layout_height="54dp"
+        android:background="#BEBEBE"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="677dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
