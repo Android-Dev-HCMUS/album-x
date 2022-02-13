@@ -50,10 +50,54 @@
         android:id="@+id/toolbarDown"
         android:layout_width="412dp"
         android:layout_height="54dp"
-        android:background="#BEBEBE"
+        android:background="#ebebeb"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="677dp" />
+
+    <Button
+        android:id="@+id/buttonFavorite"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="56dp"
+        android:layout_height="51dp"
+        android:backgroundTint="#ebebeb"
+        app:icon="@drawable/ic_favorite"
+        app:iconTint="#0B0B0B"
+        tools:layout_editor_absoluteX="238dp"
+        tools:layout_editor_absoluteY="680dp" />
+
+    <Button
+        android:id="@+id/buttonMenu"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="56dp"
+        android:layout_height="51dp"
+        android:backgroundTint="#ebebeb"
+        app:icon="@drawable/ic_menu"
+        app:iconTint="#0B0B0B"
+        tools:layout_editor_absoluteX="339dp"
+        tools:layout_editor_absoluteY="677dp" />
+
+    <Button
+        android:id="@+id/buttonAlbum"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="56dp"
+        android:layout_height="51dp"
+        android:backgroundTint="#ebebeb"
+        app:icon="@drawable/ic_album"
+        app:iconTint="#0B0B0B"
+        tools:layout_editor_absoluteX="132dp"
+        tools:layout_editor_absoluteY="677dp" />
+
+    <Button
+        android:id="@+id/buttonPhoto"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="56dp"
+        android:layout_height="51dp"
+        android:backgroundTint="#ebebeb"
+        app:icon="@drawable/ic_photo"
+        app:iconTint="#0B0B0B"
+        tools:layout_editor_absoluteX="38dp"
         tools:layout_editor_absoluteY="677dp" />
 
 
