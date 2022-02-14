@@ -41,7 +41,7 @@
         android:layout_width="50dp"
         android:layout_height="47dp"
         android:backgroundTint="#EBEBEB"
-        app:icon="@drawable/ic_dropdown"
+        app:icon="@drawable/ic_more"
         app:iconTint="#050505"
         tools:layout_editor_absoluteX="355dp"
         tools:layout_editor_absoluteY="6dp" />
@@ -99,6 +99,12 @@
         app:iconTint="#0B0B0B"
         tools:layout_editor_absoluteX="38dp"
         tools:layout_editor_absoluteY="677dp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="409dp"
+        android:layout_height="621dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="55dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
