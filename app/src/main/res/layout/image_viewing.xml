@@ -18,9 +18,12 @@
 
         <Button
             android:id="@+id/arrowBackButton"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="100px"
             android:layout_height="100px"
-            android:background="@drawable/ic_arrow_back"></Button>
+            android:backgroundTint="#dadada"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconTint="#000000"></Button>
     </LinearLayout>
 
     <LinearLayout
@@ -48,7 +51,9 @@
         android:background="#dadada"
         android:paddingStart="10px"
         android:paddingEnd="10px">
+
         <Button
+            android:id="@+id/buttonLike"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="81dp"
             android:layout_height="match_parent"
@@ -56,7 +61,9 @@
             android:text="Yêu thích"
             android:textColor="@color/black"
             android:textSize="10sp"></Button>
+
         <Button
+            android:id="@+id/buttonEdit"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="81dp"
             android:layout_height="match_parent"
@@ -64,7 +71,9 @@
             android:text="Chỉnh sửa"
             android:textColor="@color/black"
             android:textSize="10sp"></Button>
+
         <Button
+            android:id="@+id/buttonShare"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="80dp"
             android:layout_height="match_parent"
@@ -72,7 +81,9 @@
             android:text="Chia sẻ"
             android:textColor="@color/black"
             android:textSize="10sp"></Button>
+
         <Button
+            android:id="@+id/buttonDelete"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="80dp"
             android:layout_height="match_parent"
@@ -80,7 +91,9 @@
             android:text="Xoá"
             android:textColor="@color/black"
             android:textSize="10sp"></Button>
+
         <Button
+            android:id="@+id/buttonAdd"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="80dp"
             android:layout_height="match_parent"
