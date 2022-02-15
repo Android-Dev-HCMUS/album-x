@@ -18,10 +18,11 @@
 
         <Button
             android:id="@+id/arrowBackButton"
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:background="@drawable/ic_arrow_back">
-        </Button>
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="57dp"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconTint="#050505"></Button>
 
     </LinearLayout>
 
