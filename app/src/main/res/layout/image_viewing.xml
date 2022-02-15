@@ -13,17 +13,14 @@
         android:layout_height="150px"
         android:background="#dadada"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="20px">
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/arrowBackButton"
             style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/arrowBackButton"
             android:layout_width="100px"
             android:layout_height="100px"
-            android:backgroundTint="#dadada"
-            app:icon="@drawable/ic_arrow_back"
-            app:iconTint="#000000"></Button>
+            android:drawableLeft="@drawable/ic_arrow_back"></Button>
     </LinearLayout>
 
     <LinearLayout
@@ -46,7 +43,7 @@
     <LinearLayout
         android:id="@+id/optionBar"
         android:layout_width="match_parent"
-        android:layout_height="205px"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#dadada"
         android:paddingStart="10px"
