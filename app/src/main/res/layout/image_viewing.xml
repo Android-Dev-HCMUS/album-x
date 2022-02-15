@@ -50,6 +50,7 @@
         android:paddingEnd="10px">
 
         <Button
+            android:id="@+id/buttonLike"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="81dp"
             android:layout_height="match_parent"
@@ -59,6 +60,7 @@
             android:textSize="10sp"></Button>
 
         <Button
+            android:id="@+id/buttonEdit"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="81dp"
             android:layout_height="match_parent"
@@ -68,6 +70,7 @@
             android:textSize="10sp"></Button>
 
         <Button
+            android:id="@+id/buttonShare"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="80dp"
             android:layout_height="match_parent"
@@ -77,6 +80,7 @@
             android:textSize="10sp"></Button>
 
         <Button
+            android:id="@+id/buttonDelete"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="80dp"
             android:layout_height="match_parent"
@@ -86,6 +90,7 @@
             android:textSize="10sp"></Button>
 
         <Button
+            android:id="@+id/buttonAdd"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="80dp"
             android:layout_height="match_parent"
