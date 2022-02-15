@@ -13,14 +13,14 @@
         android:layout_height="150px"
         android:background="#dadada"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="20px">
+        android:orientation="horizontal">
 
         <Button
+            style="?android:attr/borderlessButtonStyle"
             android:id="@+id/arrowBackButton"
             android:layout_width="100px"
             android:layout_height="100px"
-            android:background="@drawable/ic_arrow_back">
+            android:drawableLeft="@drawable/ic_arrow_back">
         </Button>
 
     </LinearLayout>
