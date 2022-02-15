@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Users/Administrator/Documents/GitHub/album-x/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/Documents/GitHub/album-x/app/src/main/res/layout/main_interface.xml" value="0.25" />
+        <entry key="..\:/Users/Administrator/Documents/GitHub/album-x/app/src/main/res/layout/photo_list.xml" value="0.27708333333333335" />
         <entry key="..\:/Users/Administrator/Documents/GitHub/album-x/app/src/main/res/layout/test.xml" value="0.33605072463768115" />
         <entry key="..\:/Users/Thanh Vu/AndroidStudioProjects/AlbumX/app/src/main/res/layout/activity_main.xml" value="0.1793478260869565" />
+
         <entry key="..\:/Users/Thanh Vu/AndroidStudioProjects/album-x/app/src/main/res/drawable-anydpi/ic_arrow_back.xml" value="0.2265" />
         <entry key="..\:/Users/Thanh Vu/AndroidStudioProjects/album-x/app/src/main/res/drawable/ic_arrow_back.xml" value="0.2265" />
         <entry key="..\:/Users/Thanh Vu/AndroidStudioProjects/album-x/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2265" />
@@ -14,6 +16,7 @@
         <entry key="..\:/Users/Thanh Vu/AndroidStudioProjects/album-x/app/src/main/res/layout/image_viewing.xml" value="0.264" />
         <entry key="..\:/Users/Thanh Vu/AndroidStudioProjects/album-x/app/src/main/res/layout/main_interface.xml" value="0.264" />
         <entry key="..\:/Users/Thanh Vu/AndroidStudioProjects/album-x/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2265" />
+
       </map>
     </option>
   </component>
