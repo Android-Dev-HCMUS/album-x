@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:text="Mở"
-            android:textColor="@color/black"></Button>
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/buttonSubMenu"
@@ -29,7 +29,7 @@
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:drawableLeft="@drawable/ic_more"></Button>
+            android:drawableLeft="@drawable/ic_more" />
     </RelativeLayout>
 
     <LinearLayout
@@ -42,7 +42,7 @@
         <TextView
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:background="@drawable/ic_add"></TextView>
+            android:background="@drawable/ic_add" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,6 +53,7 @@
         android:background="#dadada"
         android:paddingStart="5dp"
         android:paddingEnd="6dp">
+
         <Button
             style="?android:attr/borderlessButtonStyle"
             android:id="@+id/buttonPhoto"
@@ -61,7 +62,8 @@
             android:drawableTop="@drawable/ic_photo"
             android:text="Thư viện"
             android:textSize="10sp"
-            android:textColor="@color/black"></Button>
+            android:textColor="@color/black" />
+
         <Button
             style="?android:attr/borderlessButtonStyle"
             android:id="@+id/buttonAlbum"
@@ -70,7 +72,8 @@
             android:drawableTop="@drawable/ic_album"
             android:text="Album"
             android:textSize="10sp"
-            android:textColor="@color/black"></Button>
+            android:textColor="@color/black" />
+
         <Button
             style="?android:attr/borderlessButtonStyle"
             android:id="@+id/buttonRecycleBin"
@@ -79,7 +82,8 @@
             android:drawableTop="@drawable/ic_delete"
             android:text="Thùng rác"
             android:textSize="10sp"
-            android:textColor="@color/black"></Button>
+            android:textColor="@color/black" />
+
         <Button
             style="?android:attr/borderlessButtonStyle"
             android:id="@+id/buttonInfo"
@@ -88,7 +92,7 @@
             android:drawableTop="@drawable/ic_info"
             android:text="Thông tin"
             android:textSize="10sp"
-            android:textColor="@color/black"></Button>
+            android:textColor="@color/black" />
     </LinearLayout>
     
 </RelativeLayout>
