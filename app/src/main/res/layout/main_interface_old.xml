@@ -73,7 +73,7 @@
         android:layout_width="56dp"
         android:layout_height="51dp"
         android:backgroundTint="#ebebeb"
-        app:icon="@drawable/ic_menu"
+        app:icon="@drawable/ic_info"
         app:iconTint="#0B0B0B"
         tools:layout_editor_absoluteX="339dp"
         tools:layout_editor_absoluteY="677dp" />

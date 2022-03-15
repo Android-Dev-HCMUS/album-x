@@ -5,5 +5,8 @@
     <item android:id="@+id/buttonPhoto" android:title="THƯ VIỆN" android:icon="@drawable/ic_photo"/>
     <item android:id="@+id/buttonAlbum" android:title="ALBUM" android:icon="@drawable/ic_album"/>
     <item android:id="@+id/buttonTrash" android:title="THÙNG RÁC" android:icon="@drawable/ic_delete"/>
-    <item android:id="@+id/buttonInformation" android:title="INFORMATION" android:icon="@drawable/ic_menu"/>
+    <item
+        android:id="@+id/buttonInformation"
+        android:icon="@drawable/ic_info"
+        android:title="INFORMATION" />
 </menu>
