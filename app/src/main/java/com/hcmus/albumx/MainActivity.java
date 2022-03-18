@@ -1,21 +1,18 @@
 package com.hcmus.albumx;
 
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends FragmentActivity {
     private BottomNavigationView bottomNavigationView;
     private ViewPager viewPager;
+    ImageButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,18 +20,22 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frameFragment, MainLayout.newInstance("main_layout"))
+                .replace(R.id.frameFragment, AllPhotosLayout.newInstance("main_layout"))
                 .commit();
+
+        button = (ImageButton) findViewById(R.id.addBtn);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.menu_photo:
+                    button.setVisibility(View.VISIBLE);
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.frameFragment, MainLayout.newInstance("main_layout"))
+                            .replace(R.id.frameFragment, AllPhotosLayout.newInstance("main_layout"))
                             .commit();
                     break;
                 case R.id.menu_album:
+                    button.setVisibility(View.INVISIBLE);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.frameFragment, AlbumList.newInstance("album"))

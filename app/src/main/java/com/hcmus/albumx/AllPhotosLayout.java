@@ -6,22 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.tabs.TabLayout;
-
-public class MainLayout extends Fragment {
+public class AllPhotosLayout extends Fragment {
     MainActivity main;
     Context context;
-    Button openBtn, subMenuBtn;
+    Button selectBtn, subMenuBtn;
+    GridView gridView;
 
-    public static MainLayout newInstance(String strArg1) {
-        MainLayout fragment = new MainLayout();
+    public static AllPhotosLayout newInstance(String strArg1) {
+        AllPhotosLayout fragment = new AllPhotosLayout();
         Bundle bundle = new Bundle();
         bundle.putString("arg1", strArg1);
         fragment.setArguments(bundle);
@@ -40,10 +38,12 @@ public class MainLayout extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = (View) inflater.inflate(R.layout.main_layout, null);
+        View view = (View) inflater.inflate(R.layout.all_photos_layout, null);
 
-        openBtn = (Button) view.findViewById(R.id.search_button);
+        selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         subMenuBtn = (Button) view.findViewById(R.id.buttonSubMenu);
+        gridView = (GridView) view.findViewById(R.id.gird_view);
+        gridView.setAdapter(new ImageAdapter(context));
 
         return view;
     }

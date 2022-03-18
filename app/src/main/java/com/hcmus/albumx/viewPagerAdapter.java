@@ -16,11 +16,11 @@ public class viewPagerAdapter extends FragmentStatePagerAdapter {
         switch (position)
         {
             case 1:
-                return MainLayout.newInstance("main");
+                return AllPhotosLayout.newInstance("main");
             case 0:
                 return AlbumList.newInstance("album");
             default:
-                return MainLayout.newInstance("main");
+                return AllPhotosLayout.newInstance("main");
         }
     }
 

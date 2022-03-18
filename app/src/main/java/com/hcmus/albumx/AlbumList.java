@@ -39,7 +39,7 @@ public class AlbumList extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View album = (View) inflater.inflate(R.layout.album_list, null);
+        View album = (View) inflater.inflate(R.layout.album_list_layout, null);
 
         ListView listView = (ListView) album.findViewById(R.id.listView);
 
