@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_photo" android:title="All photos" android:icon="@drawable/ic_photo"/>
+    <item android:id="@+id/menu_album" android:title="Album" android:icon="@drawable/ic_album"/>
+    <item android:id="@+id/menu_recycleBin" android:title="Bin" android:icon="@drawable/ic_delete"/>
+    <item android:id="@+id/menu_info" android:title="Info" android:icon="@drawable/ic_info"/>
+</menu>

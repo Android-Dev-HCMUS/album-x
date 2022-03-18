@@ -2,21 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/imageViewRow"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/ic_album"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        />
 
-    <TextView
-        android:id="@+id/textViewRow"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tất cả ảnh"
-        android:textSize="20sp"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_margin="10dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imageViewRow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:backgroundTint="@color/blue"
+            android:src="@drawable/ic_album2" />
+
+        <TextView
+            android:id="@+id/textViewRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Tất cả ảnh"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
+
 </LinearLayout>
