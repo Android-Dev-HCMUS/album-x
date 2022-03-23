@@ -8,32 +8,32 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
+
+import java.util.Arrays;
 
 public class ImageViewing extends Fragment {
     MainActivity main;
     Context context;
 
-    public int[] imageArray = {
-            R.drawable.stock_1, R.drawable.stock_2, R.drawable.stock_3, R.drawable.stock_4 ,
-            R.drawable.stock_5, R.drawable.stock_6, R.drawable.stock_7, R.drawable.stock_8,
-            R.drawable.stock_9, R.drawable.stock_10, R.drawable.stock_11, R.drawable.stock_12,
-            R.drawable.stock_13, R.drawable.stock_14, R.drawable.stock_15, R.drawable.stock_16
-    };
-
     public ImageViewing() {
 
     }
 
-    public static ImageViewing newInstance(int imagePosition) {
+    public static ImageViewing newInstance(int imagePosition, int[] imageArray) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
-        bundle.putInt("position", imagePosition);
+        bundle.putInt("positionArray", imagePosition);
+        bundle.putIntArray("imageArray", imageArray);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -55,14 +55,38 @@ public class ImageViewing extends Fragment {
 
         Bundle bundle = getArguments();
         int position = 0;
+        int[] imageArray = null;
+
+
         if (bundle != null) {
-            position = bundle.getInt("position");
+            position = bundle.getInt("positionArray");
+            imageArray = bundle.getIntArray("imageArray");
         }
 
         ViewPager viewPager = view.findViewById(R.id.imageViewPager);
         viewPager.setAdapter(new FullScreenImageAdapter(context, imageArray));
         viewPager.setCurrentItem(position);
+        Button back = (Button) view.findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.getSupportFragmentManager().popBackStack();
+                AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager().findFragmentByTag("AllPhotos");
+                if (fragment != null) {
+                    fragment.showNavAndButton();
+                }
+            }
+        });
 
         return view;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager().findFragmentByTag("AllPhotos");
+        if (fragment != null) {
+            fragment.showNavAndButton();
+        }
     }
 }
