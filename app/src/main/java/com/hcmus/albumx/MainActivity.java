@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.hcmus.albumx.AlbumList.AlbumList;
+import com.hcmus.albumx.AllPhotos.AllPhotos;
 
 public class MainActivity extends FragmentActivity {
     private BottomNavigationView bottomNavigationView;
@@ -20,7 +22,7 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frameFragment, AllPhotosLayout.newInstance("main_layout"))
+                .replace(R.id.frameFragment, AllPhotos.newInstance("main_layout"))
                 .commit();
 
         button = (ImageButton) findViewById(R.id.addBtn);
@@ -31,7 +33,7 @@ public class MainActivity extends FragmentActivity {
                     button.setVisibility(View.VISIBLE);
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.frameFragment, AllPhotosLayout.newInstance("main_layout"))
+                            .replace(R.id.frameFragment, AllPhotos.newInstance("main_layout"))
                             .commit();
                     break;
                 case R.id.menu_album:
@@ -46,4 +48,5 @@ public class MainActivity extends FragmentActivity {
             return true;
         });
     }
+
 }

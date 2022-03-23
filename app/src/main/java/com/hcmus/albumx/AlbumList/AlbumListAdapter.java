@@ -1,4 +1,4 @@
-package com.hcmus.albumx;
+package com.hcmus.albumx.AlbumList;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.hcmus.albumx.R;
 
 import java.util.List;
 import java.util.zip.Inflater;

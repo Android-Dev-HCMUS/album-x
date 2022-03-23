@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.hcmus.albumx.AlbumList.AlbumList;
+import com.hcmus.albumx.AllPhotos.AllPhotos;
+
 public class viewPagerAdapter extends FragmentStatePagerAdapter {
     public viewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
@@ -16,11 +19,11 @@ public class viewPagerAdapter extends FragmentStatePagerAdapter {
         switch (position)
         {
             case 1:
-                return AllPhotosLayout.newInstance("main");
+                return AllPhotos.newInstance("main");
             case 0:
                 return AlbumList.newInstance("album");
             default:
-                return AllPhotosLayout.newInstance("main");
+                return AllPhotos.newInstance("main");
         }
     }
 
