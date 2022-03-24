@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:id="@+id/buttonEdit" android:title="CHỈNH SỬA" android:icon="@drawable/ic_add"/>
-    <item android:id="@+id/buttonPhoto" android:title="THƯ VIỆN" android:icon="@drawable/ic_photo"/>
-    <item android:id="@+id/buttonAlbum" android:title="ALBUM" android:icon="@drawable/ic_album"/>
-    <item android:id="@+id/buttonTrash" android:title="THÙNG RÁC" android:icon="@drawable/ic_delete"/>
-    <item android:id="@+id/buttonInformation" android:title="INFORMATION" android:icon="@drawable/ic_menu"/>
-</menu>
