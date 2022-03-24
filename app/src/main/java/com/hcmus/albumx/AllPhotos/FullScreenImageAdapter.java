@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-
 public class FullScreenImageAdapter extends PagerAdapter {
     Context context;
     int[] imageArr;

@@ -2,7 +2,6 @@ package com.hcmus.albumx.AllPhotos;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.MainActivity;
@@ -27,8 +25,6 @@ public class AllPhotos extends Fragment {
     GridView gridView;
     BottomNavigationView bottomNavigationView;
     ImageButton imageButton;
-
-    private Bundle savedState = null;
 
     public int[] imageArray = {
             R.drawable.stock_1, R.drawable.stock_2, R.drawable.stock_3, R.drawable.stock_4 ,
@@ -54,7 +50,6 @@ public class AllPhotos extends Fragment {
             if (main != null) {
                 bottomNavigationView = main.findViewById(R.id.bottomNavigation);
                 imageButton = main.findViewById(R.id.addBtn);
-
             }
         } catch (IllegalStateException ignored) {
         }
@@ -79,8 +74,7 @@ public class AllPhotos extends Fragment {
                         .addToBackStack("ImageViewingUI")
                         .commit();
 
-                bottomNavigationView.setVisibility(View.INVISIBLE);
-                imageButton.setVisibility(View.INVISIBLE);
+                hideNavAndButton();
             }
         });
 
@@ -90,5 +84,9 @@ public class AllPhotos extends Fragment {
     public void showNavAndButton(){
         bottomNavigationView.setVisibility(View.VISIBLE);
         imageButton.setVisibility(View.VISIBLE);
+    }
+    public void hideNavAndButton(){
+        bottomNavigationView.setVisibility(View.INVISIBLE);
+        imageButton.setVisibility(View.INVISIBLE);
     }
 }
