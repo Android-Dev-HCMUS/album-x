@@ -52,7 +52,6 @@ public class ImageViewing extends Fragment {
         int position = 0;
         int[] imageArray = null;
 
-
         if (bundle != null) {
             position = bundle.getInt("positionArray");
             imageArray = bundle.getIntArray("imageArray");
@@ -61,6 +60,7 @@ public class ImageViewing extends Fragment {
         ViewPager viewPager = view.findViewById(R.id.imageViewPager);
         viewPager.setAdapter(new FullScreenImageAdapter(context, imageArray));
         viewPager.setCurrentItem(position);
+
         Button back = (Button) view.findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
             @Override

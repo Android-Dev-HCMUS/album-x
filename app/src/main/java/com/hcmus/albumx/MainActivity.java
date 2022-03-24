@@ -16,11 +16,9 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         loadFragment(AllPhotos.newInstance("main_layout"), "AllPhotos", "AllPhotosUI");
 
         ImageButton button = (ImageButton) findViewById(R.id.addBtn);
-
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -47,4 +45,5 @@ public class MainActivity extends FragmentActivity {
                 .addToBackStack(name)
                 .commit();
     }
+
 }

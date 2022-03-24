@@ -38,4 +38,5 @@
         android:layout_margin="10dp"
         android:layout_above="@+id/bottomNavigation"
         android:layout_alignParentEnd="true"/>
+
 </RelativeLayout>
