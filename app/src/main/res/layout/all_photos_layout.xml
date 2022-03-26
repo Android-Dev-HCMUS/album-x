@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".MainActivity">
 
     <RelativeLayout
-        android:id="@+id/top"
+        android:id="@+id/headerBar"
         android:layout_width="match_parent"
         android:layout_height="150px"
         android:background="#dadada"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tất cả ảnh"
+            android:textSize="20sp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <Button
-            android:id="@+id/buttonSearch"
+            android:id="@+id/buttonSelect"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/buttonSubMenu"
-            android:drawableLeft="@drawable/ic_search"></Button>
+            android:text="Chọn"
+            android:textSize="12sp"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/buttonSubMenu"
@@ -29,25 +39,18 @@
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:drawableLeft="@drawable/ic_more"></Button>
+            android:drawableLeft="@drawable/ic_more" />
     </RelativeLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
+    <GridView
+        android:id="@+id/gird_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/top"
-        android:layout_above="@+id/bottom"/>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:background="#dadada"
-        app:itemTextColor="@color/color_navigation"
-        app:itemIconTint="@color/color_navigation"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_navigation"/>
+        android:layout_below="@+id/headerBar"
+        android:numColumns="3"
+        android:horizontalSpacing="5dp"
+        android:verticalSpacing="5dp"
+        android:gravity="center"
+        android:stretchMode="columnWidth"/>
 
 </RelativeLayout>
