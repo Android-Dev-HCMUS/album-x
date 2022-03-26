@@ -1,0 +1,34 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.4.10'
+    ext.pesdk_version = '9.2.0' // Insert the latest SDK version here. You will find it here https://github.com/imgly/pesdk-android-demo/releases
+    repositories {
+        google()
+        gradlePluginPortal()
+        maven { url 'https://artifactory.img.ly/artifactory/imgly' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+
+        // Insert the latest SDK version number here. You will find it here https://github.com/imgly/pesdk-android-demo/releases
+        classpath "ly.img.android.pesdk:plugin:$pesdk_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://artifactory.img.ly/artifactory/imgly' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
