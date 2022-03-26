@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ly.img.android.sdk.ui.mobile_ui:focus:9.2.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b25157a7d5b2c981523b252ea98fead2/transformed/focus-9.2.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b25157a7d5b2c981523b252ea98fead2/transformed/focus-9.2.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b25157a7d5b2c981523b252ea98fead2/transformed/focus-9.2.0/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

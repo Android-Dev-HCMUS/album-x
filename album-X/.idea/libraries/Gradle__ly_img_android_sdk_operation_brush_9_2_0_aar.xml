@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ly.img.android.sdk.operation:brush:9.2.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/07471a5841eae6f3e02b5c9f38fc3389/transformed/brush-9.2.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/07471a5841eae6f3e02b5c9f38fc3389/transformed/brush-9.2.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/07471a5841eae6f3e02b5c9f38fc3389/transformed/brush-9.2.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

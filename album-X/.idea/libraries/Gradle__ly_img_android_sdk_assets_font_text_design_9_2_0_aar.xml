@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ly.img.android.sdk.assets:font-text-design:9.2.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a7d07be12ec176619a71abc903e739d8/transformed/font-text-design-9.2.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a7d07be12ec176619a71abc903e739d8/transformed/font-text-design-9.2.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/a7d07be12ec176619a71abc903e739d8/transformed/font-text-design-9.2.0/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

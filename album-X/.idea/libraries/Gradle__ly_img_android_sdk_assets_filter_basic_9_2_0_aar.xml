@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ly.img.android.sdk.assets:filter-basic:9.2.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/627168971fa6c8a171efed3c28548ef1/transformed/filter-basic-9.2.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/627168971fa6c8a171efed3c28548ef1/transformed/filter-basic-9.2.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/627168971fa6c8a171efed3c28548ef1/transformed/filter-basic-9.2.0/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
