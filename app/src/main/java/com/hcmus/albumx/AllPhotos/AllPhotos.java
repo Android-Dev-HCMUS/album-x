@@ -64,7 +64,7 @@ public class AllPhotos extends Fragment {
 
         selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         subMenuBtn = (Button) view.findViewById(R.id.buttonSubMenu);
-        gridView = (GridView) view.findViewById(R.id.gird_view);
+        gridView = (GridView) view.findViewById(R.id.grid_view);
         gridView.setAdapter(new GridImageAdapter(context, imageArray));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
