@@ -1,0 +1,483 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+MERGED from [androidx.appcompat:appcompat:1.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\3adf1b641bb7affa0cf4f757cacf2476\transformed\appcompat-1.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:16:1-42:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\2b1b32cea71a7504d989e45f5faa0f63\transformed\filter-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\32202d0a676acac12ee4a2c4b422a46e\transformed\text-design-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b25157a7d5b2c981523b252ea98fead2\transformed\focus-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:16:1-42:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:transform:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\13fd86e265f43089ad4a0c34e42075d7\transformed\transform-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\71954fb5bcba7b0349e6bd8499e2198a\transformed\text-design-9.2.0\AndroidManifest.xml:16:1-25:12
+MERGED from [ly.img.android.sdk.assets:font-text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a7d07be12ec176619a71abc903e739d8\transformed\font-text-design-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.assets:font-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ff51cdd8510a253cd1b1b6aeb6a481fe\transformed\font-basic-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.assets:font-smart-sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fb60e7cdfbb986c75e331ad7bd87f82e\transformed\font-smart-sticker-9.2.0\AndroidManifest.xml:16:1-25:12
+MERGED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:16:1-31:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\dda8725c66152e71e292e8b8274af8cc\transformed\text-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.assets:frame-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b7e29a4815351168dc8dec5339eae96f\transformed\frame-basic-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\930cc607dbbf102818da9475bd5b4c3c\transformed\frame-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b329ddefb9ad6d805657c970f20ae41d\transformed\sticker-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.assets:overlay-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\7b7b0db70c4197faa00777149458e987\transformed\overlay-basic-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4dcf7e0c30f446718cd7fe7647dc58dd\transformed\overlay-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:16:1-47:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fb535b47dc0ed6c71ef6dd71bdb2132a\transformed\adjustment-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\1df131aca3eecb9640731c228eb6778e\transformed\brush-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.ui.mobile_ui:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\9e574d44fc4eb93b172ff2cbfa55afaa\transformed\core-9.2.0\AndroidManifest.xml:16:1-31:12
+MERGED from [ly.img.android.sdk.assets:sticker-shapes:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5bd1f5e5c7330186823da820aa193178\transformed\sticker-shapes-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.assets:filter-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\627168971fa6c8a171efed3c28548ef1\transformed\filter-basic-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:16:1-37:12
+MERGED from [ly.img.android.sdk.operation:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\f3222081ae250960570a8e55d3656d15\transformed\filter-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:sticker-smart:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\611e405a28fb2fee64d3ac22fcdb6a2c\transformed\sticker-smart-9.2.0\AndroidManifest.xml:16:1-30:12
+MERGED from [ly.img.android.sdk.assets:sticker-emoticons:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5349d8b2d6064d9a98cf036dab63e039\transformed\sticker-emoticons-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fc71adbb91079de5a3dc626fec1a11e9\transformed\sticker-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:16:1-40:12
+MERGED from [ly.img.android.sdk:serializer:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c21fad7ff4ec8ef87fe72c658112e444\transformed\serializer-9.2.0\AndroidManifest.xml:16:1-25:12
+MERGED from [ly.img.android.sdk.operation:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\07471a5841eae6f3e02b5c9f38fc3389\transformed\brush-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:photo-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76395bcfd3304408532552dc2ef4cda6\transformed\photo-core-9.2.0\AndroidManifest.xml:16:1-27:12
+MERGED from [ly.img.android.sdk.operation:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd05980c360bb69d2aea6f12d53f6f35\transformed\frame-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:text:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\16ffe013098d63b38500a4358d024cd0\transformed\text-9.2.0\AndroidManifest.xml:16:1-25:12
+MERGED from [ly.img.android.sdk.operation:abstract-sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a9a40fc161ace499756ffad47b50ce8b\transformed\abstract-sticker-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4bc9430782ddf9a6372ce9190daf6597\transformed\overlay-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d389ac6214ec9f4eb86996f4ac848c86\transformed\focus-9.2.0\AndroidManifest.xml:16:1-28:12
+MERGED from [ly.img.android.sdk.operation:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76cfd836e87c7a217c7c8e10fb1b6420\transformed\adjustment-9.2.0\AndroidManifest.xml:16:1-27:12
+MERGED from [ly.img.android.sdk.operation:video-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b120909ddef88ae48c6ac6dc0b57df63\transformed\video-core-9.2.0\AndroidManifest.xml:16:1-27:12
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:2:1-26:12
+MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\Administrator\.gradle\caches\transforms-3\aaa72416bfed8625413894fec93d11fb\transformed\fragment-1.3.6\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\22346e2173c359c0d3215aff869be9c4\transformed\asynclayoutinflater-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\Administrator\.gradle\caches\transforms-3\bfba71c128e81b535064627a0f02e242\transformed\recyclerview-1.2.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat-resources:1.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\0d0d92d4da0dea1eeb127380de7e83c9\transformed\appcompat-resources-1.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\404f8da3bd4f05ff12cae768af9d5f85\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\9eda43fde6d7ae239047539c6f863478\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.2.4] C:\Users\Administrator\.gradle\caches\transforms-3\6627c6bbad537458ed91c29242eb4f0b\transformed\activity-1.2.4\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\711637dec37ccb17e9d4ca5dbe407f0c\transformed\drawerlayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\479943b8ffe2c8e9b819240e3647e14f\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3d94bc0207e4dbdbbf4345fb3d02446\transformed\customview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\3ed6596974ee179db1501285ec3acec4\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.5.0] C:\Users\Administrator\.gradle\caches\transforms-3\9405c11f0b431195d14acfbb20cc538f\transformed\core-1.5.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\53bf8c44b19f0db5a44096cf427d70ff\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\41fe807c7933f888a4625ae696f08018\transformed\lifecycle-viewmodel-savedstate-2.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\d2ff59b4d31886d44b0712f9fe99a09f\transformed\savedstate-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\4714becfd213410358ca48699d68d064\transformed\lifecycle-runtime-2.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\b44762f5888be124a0ecd6e6efcfa1d2\transformed\lifecycle-viewmodel-2.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Administrator\.gradle\caches\transforms-3\6db6be8fa68b4d0fbce6233bd5e5e245\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\9977fe0f27d99bb5c2f40e04d0986c28\transformed\tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\091e0ea1ea52d8cdbdb5fcba677940e0\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\918327d73469be7b0c0d120bfff52eae\transformed\lifecycle-livedata-core-2.3.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\34783cf5f1d8e23766e6a15173d62331\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\89740a0d7d7564651cd1bdb864d9c92e\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [ly.img.android:authorization:9.0.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\edbb6248d59710903adbda6d677b1c6f\transformed\authorization-9.0.0.0\AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.annotation:annotation-experimental:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\726dc04b52c4da6680063e80f3c5f580\transformed\annotation-experimental-1.0.0\AndroidManifest.xml:17:1-24:12
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+	package
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:3:11-51
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:1-26:12
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:5:5-78
+	android:name
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:5:22-76
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:6:5-66
+	android:name
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:6:22-64
+protected-broadcast
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:8:5-79
+	android:name
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:8:26-76
+application
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:10:5-24:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:31:5-40:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:31:5-40:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\2b1b32cea71a7504d989e45f5faa0f63\transformed\filter-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\2b1b32cea71a7504d989e45f5faa0f63\transformed\filter-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\32202d0a676acac12ee4a2c4b422a46e\transformed\text-design-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\32202d0a676acac12ee4a2c4b422a46e\transformed\text-design-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b25157a7d5b2c981523b252ea98fead2\transformed\focus-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b25157a7d5b2c981523b252ea98fead2\transformed\focus-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:29:5-40:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:29:5-40:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:transform:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\13fd86e265f43089ad4a0c34e42075d7\transformed\transform-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:transform:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\13fd86e265f43089ad4a0c34e42075d7\transformed\transform-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:font-text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a7d07be12ec176619a71abc903e739d8\transformed\font-text-design-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:font-text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a7d07be12ec176619a71abc903e739d8\transformed\font-text-design-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:font-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ff51cdd8510a253cd1b1b6aeb6a481fe\transformed\font-basic-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:font-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ff51cdd8510a253cd1b1b6aeb6a481fe\transformed\font-basic-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:28:5-29:19
+MERGED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:28:5-29:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\dda8725c66152e71e292e8b8274af8cc\transformed\text-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\dda8725c66152e71e292e8b8274af8cc\transformed\text-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:frame-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b7e29a4815351168dc8dec5339eae96f\transformed\frame-basic-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:frame-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b7e29a4815351168dc8dec5339eae96f\transformed\frame-basic-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\930cc607dbbf102818da9475bd5b4c3c\transformed\frame-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\930cc607dbbf102818da9475bd5b4c3c\transformed\frame-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b329ddefb9ad6d805657c970f20ae41d\transformed\sticker-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b329ddefb9ad6d805657c970f20ae41d\transformed\sticker-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:overlay-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\7b7b0db70c4197faa00777149458e987\transformed\overlay-basic-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:overlay-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\7b7b0db70c4197faa00777149458e987\transformed\overlay-basic-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4dcf7e0c30f446718cd7fe7647dc58dd\transformed\overlay-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4dcf7e0c30f446718cd7fe7647dc58dd\transformed\overlay-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:34:5-45:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:34:5-45:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fb535b47dc0ed6c71ef6dd71bdb2132a\transformed\adjustment-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fb535b47dc0ed6c71ef6dd71bdb2132a\transformed\adjustment-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\1df131aca3eecb9640731c228eb6778e\transformed\brush-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\1df131aca3eecb9640731c228eb6778e\transformed\brush-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.ui.mobile_ui:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\9e574d44fc4eb93b172ff2cbfa55afaa\transformed\core-9.2.0\AndroidManifest.xml:29:5-45
+MERGED from [ly.img.android.sdk.ui.mobile_ui:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\9e574d44fc4eb93b172ff2cbfa55afaa\transformed\core-9.2.0\AndroidManifest.xml:29:5-45
+MERGED from [ly.img.android.sdk.assets:sticker-shapes:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5bd1f5e5c7330186823da820aa193178\transformed\sticker-shapes-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:sticker-shapes:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5bd1f5e5c7330186823da820aa193178\transformed\sticker-shapes-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:filter-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\627168971fa6c8a171efed3c28548ef1\transformed\filter-basic-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:filter-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\627168971fa6c8a171efed3c28548ef1\transformed\filter-basic-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:34:5-35:19
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:34:5-35:19
+MERGED from [ly.img.android.sdk.operation:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\f3222081ae250960570a8e55d3656d15\transformed\filter-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\f3222081ae250960570a8e55d3656d15\transformed\filter-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:sticker-smart:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\611e405a28fb2fee64d3ac22fcdb6a2c\transformed\sticker-smart-9.2.0\AndroidManifest.xml:27:5-28:19
+MERGED from [ly.img.android.sdk.operation:sticker-smart:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\611e405a28fb2fee64d3ac22fcdb6a2c\transformed\sticker-smart-9.2.0\AndroidManifest.xml:27:5-28:19
+MERGED from [ly.img.android.sdk.assets:sticker-emoticons:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5349d8b2d6064d9a98cf036dab63e039\transformed\sticker-emoticons-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.assets:sticker-emoticons:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5349d8b2d6064d9a98cf036dab63e039\transformed\sticker-emoticons-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fc71adbb91079de5a3dc626fec1a11e9\transformed\sticker-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fc71adbb91079de5a3dc626fec1a11e9\transformed\sticker-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:32:5-38:19
+MERGED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:32:5-38:19
+MERGED from [ly.img.android.sdk.operation:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\07471a5841eae6f3e02b5c9f38fc3389\transformed\brush-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\07471a5841eae6f3e02b5c9f38fc3389\transformed\brush-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:photo-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76395bcfd3304408532552dc2ef4cda6\transformed\photo-core-9.2.0\AndroidManifest.xml:25:5-45
+MERGED from [ly.img.android.sdk.operation:photo-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76395bcfd3304408532552dc2ef4cda6\transformed\photo-core-9.2.0\AndroidManifest.xml:25:5-45
+MERGED from [ly.img.android.sdk.operation:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd05980c360bb69d2aea6f12d53f6f35\transformed\frame-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd05980c360bb69d2aea6f12d53f6f35\transformed\frame-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:abstract-sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a9a40fc161ace499756ffad47b50ce8b\transformed\abstract-sticker-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:abstract-sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a9a40fc161ace499756ffad47b50ce8b\transformed\abstract-sticker-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4bc9430782ddf9a6372ce9190daf6597\transformed\overlay-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4bc9430782ddf9a6372ce9190daf6597\transformed\overlay-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d389ac6214ec9f4eb86996f4ac848c86\transformed\focus-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d389ac6214ec9f4eb86996f4ac848c86\transformed\focus-9.2.0\AndroidManifest.xml:25:5-26:19
+MERGED from [ly.img.android.sdk.operation:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76cfd836e87c7a217c7c8e10fb1b6420\transformed\adjustment-9.2.0\AndroidManifest.xml:25:5-45
+MERGED from [ly.img.android.sdk.operation:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76cfd836e87c7a217c7c8e10fb1b6420\transformed\adjustment-9.2.0\AndroidManifest.xml:25:5-45
+MERGED from [ly.img.android.sdk.operation:video-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b120909ddef88ae48c6ac6dc0b57df63\transformed\video-core-9.2.0\AndroidManifest.xml:25:5-45
+MERGED from [ly.img.android.sdk.operation:video-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b120909ddef88ae48c6ac6dc0b57df63\transformed\video-core-9.2.0\AndroidManifest.xml:25:5-45
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:18:5-24:19
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:18:5-24:19
+MERGED from [androidx.core:core:1.5.0] C:\Users\Administrator\.gradle\caches\transforms-3\9405c11f0b431195d14acfbb20cc538f\transformed\core-1.5.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.5.0] C:\Users\Administrator\.gradle\caches\transforms-3\9405c11f0b431195d14acfbb20cc538f\transformed\core-1.5.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Administrator\.gradle\caches\transforms-3\6db6be8fa68b4d0fbce6233bd5e5e245\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Administrator\.gradle\caches\transforms-3\6db6be8fa68b4d0fbce6233bd5e5e245\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.5.0] C:\Users\Administrator\.gradle\caches\transforms-3\9405c11f0b431195d14acfbb20cc538f\transformed\core-1.5.0\AndroidManifest.xml:24:18-86
+	android:supportsRtl
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:15:9-35
+	android:label
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:13:9-41
+	android:roundIcon
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:14:9-54
+	android:largeHeap
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:31:18-42
+	android:icon
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:12:9-43
+	android:allowBackup
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:11:9-35
+	android:theme
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:16:9-40
+activity#com.photoeditorsdk.android.app.KEditorDemoActivityJava
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:17:9-23:20
+	android:label
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:18:13-45
+	android:name
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:17:19-58
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:19:13-22:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:20:17-68
+	android:name
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:20:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:21:17-76
+	android:name
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:21:27-74
+uses-sdk
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+MERGED from [androidx.appcompat:appcompat:1.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\3adf1b641bb7affa0cf4f757cacf2476\transformed\appcompat-1.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat:1.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\3adf1b641bb7affa0cf4f757cacf2476\transformed\appcompat-1.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\2b1b32cea71a7504d989e45f5faa0f63\transformed\filter-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\2b1b32cea71a7504d989e45f5faa0f63\transformed\filter-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\32202d0a676acac12ee4a2c4b422a46e\transformed\text-design-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\32202d0a676acac12ee4a2c4b422a46e\transformed\text-design-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b25157a7d5b2c981523b252ea98fead2\transformed\focus-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b25157a7d5b2c981523b252ea98fead2\transformed\focus-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:transform:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\13fd86e265f43089ad4a0c34e42075d7\transformed\transform-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:transform:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\13fd86e265f43089ad4a0c34e42075d7\transformed\transform-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\71954fb5bcba7b0349e6bd8499e2198a\transformed\text-design-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\71954fb5bcba7b0349e6bd8499e2198a\transformed\text-design-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:font-text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a7d07be12ec176619a71abc903e739d8\transformed\font-text-design-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:font-text-design:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a7d07be12ec176619a71abc903e739d8\transformed\font-text-design-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:font-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ff51cdd8510a253cd1b1b6aeb6a481fe\transformed\font-basic-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:font-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ff51cdd8510a253cd1b1b6aeb6a481fe\transformed\font-basic-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:font-smart-sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fb60e7cdfbb986c75e331ad7bd87f82e\transformed\font-smart-sticker-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:font-smart-sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fb60e7cdfbb986c75e331ad7bd87f82e\transformed\font-smart-sticker-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\dda8725c66152e71e292e8b8274af8cc\transformed\text-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:text:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\dda8725c66152e71e292e8b8274af8cc\transformed\text-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:frame-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b7e29a4815351168dc8dec5339eae96f\transformed\frame-basic-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:frame-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b7e29a4815351168dc8dec5339eae96f\transformed\frame-basic-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\930cc607dbbf102818da9475bd5b4c3c\transformed\frame-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\930cc607dbbf102818da9475bd5b4c3c\transformed\frame-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b329ddefb9ad6d805657c970f20ae41d\transformed\sticker-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b329ddefb9ad6d805657c970f20ae41d\transformed\sticker-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:overlay-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\7b7b0db70c4197faa00777149458e987\transformed\overlay-basic-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:overlay-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\7b7b0db70c4197faa00777149458e987\transformed\overlay-basic-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4dcf7e0c30f446718cd7fe7647dc58dd\transformed\overlay-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4dcf7e0c30f446718cd7fe7647dc58dd\transformed\overlay-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fb535b47dc0ed6c71ef6dd71bdb2132a\transformed\adjustment-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fb535b47dc0ed6c71ef6dd71bdb2132a\transformed\adjustment-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\1df131aca3eecb9640731c228eb6778e\transformed\brush-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\1df131aca3eecb9640731c228eb6778e\transformed\brush-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\9e574d44fc4eb93b172ff2cbfa55afaa\transformed\core-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.ui.mobile_ui:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\9e574d44fc4eb93b172ff2cbfa55afaa\transformed\core-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:sticker-shapes:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5bd1f5e5c7330186823da820aa193178\transformed\sticker-shapes-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:sticker-shapes:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5bd1f5e5c7330186823da820aa193178\transformed\sticker-shapes-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:filter-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\627168971fa6c8a171efed3c28548ef1\transformed\filter-basic-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:filter-basic:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\627168971fa6c8a171efed3c28548ef1\transformed\filter-basic-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\f3222081ae250960570a8e55d3656d15\transformed\filter-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:filter:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\f3222081ae250960570a8e55d3656d15\transformed\filter-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:sticker-smart:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\611e405a28fb2fee64d3ac22fcdb6a2c\transformed\sticker-smart-9.2.0\AndroidManifest.xml:22:5-25:56
+MERGED from [ly.img.android.sdk.operation:sticker-smart:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\611e405a28fb2fee64d3ac22fcdb6a2c\transformed\sticker-smart-9.2.0\AndroidManifest.xml:22:5-25:56
+MERGED from [ly.img.android.sdk.assets:sticker-emoticons:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5349d8b2d6064d9a98cf036dab63e039\transformed\sticker-emoticons-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.assets:sticker-emoticons:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\5349d8b2d6064d9a98cf036dab63e039\transformed\sticker-emoticons-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fc71adbb91079de5a3dc626fec1a11e9\transformed\sticker-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\fc71adbb91079de5a3dc626fec1a11e9\transformed\sticker-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk:serializer:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c21fad7ff4ec8ef87fe72c658112e444\transformed\serializer-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk:serializer:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c21fad7ff4ec8ef87fe72c658112e444\transformed\serializer-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\07471a5841eae6f3e02b5c9f38fc3389\transformed\brush-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:brush:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\07471a5841eae6f3e02b5c9f38fc3389\transformed\brush-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:photo-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76395bcfd3304408532552dc2ef4cda6\transformed\photo-core-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:photo-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76395bcfd3304408532552dc2ef4cda6\transformed\photo-core-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd05980c360bb69d2aea6f12d53f6f35\transformed\frame-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:frame:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd05980c360bb69d2aea6f12d53f6f35\transformed\frame-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:text:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\16ffe013098d63b38500a4358d024cd0\transformed\text-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:text:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\16ffe013098d63b38500a4358d024cd0\transformed\text-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:abstract-sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a9a40fc161ace499756ffad47b50ce8b\transformed\abstract-sticker-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:abstract-sticker:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\a9a40fc161ace499756ffad47b50ce8b\transformed\abstract-sticker-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4bc9430782ddf9a6372ce9190daf6597\transformed\overlay-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:overlay:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\4bc9430782ddf9a6372ce9190daf6597\transformed\overlay-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d389ac6214ec9f4eb86996f4ac848c86\transformed\focus-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:focus:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d389ac6214ec9f4eb86996f4ac848c86\transformed\focus-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76cfd836e87c7a217c7c8e10fb1b6420\transformed\adjustment-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:adjustment:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\76cfd836e87c7a217c7c8e10fb1b6420\transformed\adjustment-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:video-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b120909ddef88ae48c6ac6dc0b57df63\transformed\video-core-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk.operation:video-core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\b120909ddef88ae48c6ac6dc0b57df63\transformed\video-core-9.2.0\AndroidManifest.xml:21:5-23:41
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:7:5-9:41
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:7:5-9:41
+MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\Administrator\.gradle\caches\transforms-3\aaa72416bfed8625413894fec93d11fb\transformed\fragment-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\Administrator\.gradle\caches\transforms-3\aaa72416bfed8625413894fec93d11fb\transformed\fragment-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\22346e2173c359c0d3215aff869be9c4\transformed\asynclayoutinflater-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\22346e2173c359c0d3215aff869be9c4\transformed\asynclayoutinflater-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\Administrator\.gradle\caches\transforms-3\bfba71c128e81b535064627a0f02e242\transformed\recyclerview-1.2.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\Administrator\.gradle\caches\transforms-3\bfba71c128e81b535064627a0f02e242\transformed\recyclerview-1.2.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\0d0d92d4da0dea1eeb127380de7e83c9\transformed\appcompat-resources-1.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\0d0d92d4da0dea1eeb127380de7e83c9\transformed\appcompat-resources-1.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\404f8da3bd4f05ff12cae768af9d5f85\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\404f8da3bd4f05ff12cae768af9d5f85\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\9eda43fde6d7ae239047539c6f863478\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\9eda43fde6d7ae239047539c6f863478\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.2.4] C:\Users\Administrator\.gradle\caches\transforms-3\6627c6bbad537458ed91c29242eb4f0b\transformed\activity-1.2.4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.2.4] C:\Users\Administrator\.gradle\caches\transforms-3\6627c6bbad537458ed91c29242eb4f0b\transformed\activity-1.2.4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\711637dec37ccb17e9d4ca5dbe407f0c\transformed\drawerlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\711637dec37ccb17e9d4ca5dbe407f0c\transformed\drawerlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\479943b8ffe2c8e9b819240e3647e14f\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\479943b8ffe2c8e9b819240e3647e14f\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3d94bc0207e4dbdbbf4345fb3d02446\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3d94bc0207e4dbdbbf4345fb3d02446\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\3ed6596974ee179db1501285ec3acec4\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\3ed6596974ee179db1501285ec3acec4\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.5.0] C:\Users\Administrator\.gradle\caches\transforms-3\9405c11f0b431195d14acfbb20cc538f\transformed\core-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.5.0] C:\Users\Administrator\.gradle\caches\transforms-3\9405c11f0b431195d14acfbb20cc538f\transformed\core-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\53bf8c44b19f0db5a44096cf427d70ff\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\53bf8c44b19f0db5a44096cf427d70ff\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\41fe807c7933f888a4625ae696f08018\transformed\lifecycle-viewmodel-savedstate-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\41fe807c7933f888a4625ae696f08018\transformed\lifecycle-viewmodel-savedstate-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\d2ff59b4d31886d44b0712f9fe99a09f\transformed\savedstate-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\d2ff59b4d31886d44b0712f9fe99a09f\transformed\savedstate-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\4714becfd213410358ca48699d68d064\transformed\lifecycle-runtime-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\4714becfd213410358ca48699d68d064\transformed\lifecycle-runtime-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\b44762f5888be124a0ecd6e6efcfa1d2\transformed\lifecycle-viewmodel-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\b44762f5888be124a0ecd6e6efcfa1d2\transformed\lifecycle-viewmodel-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Administrator\.gradle\caches\transforms-3\6db6be8fa68b4d0fbce6233bd5e5e245\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Administrator\.gradle\caches\transforms-3\6db6be8fa68b4d0fbce6233bd5e5e245\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\9977fe0f27d99bb5c2f40e04d0986c28\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\9977fe0f27d99bb5c2f40e04d0986c28\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\091e0ea1ea52d8cdbdb5fcba677940e0\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\091e0ea1ea52d8cdbdb5fcba677940e0\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\918327d73469be7b0c0d120bfff52eae\transformed\lifecycle-livedata-core-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] C:\Users\Administrator\.gradle\caches\transforms-3\918327d73469be7b0c0d120bfff52eae\transformed\lifecycle-livedata-core-2.3.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\34783cf5f1d8e23766e6a15173d62331\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\34783cf5f1d8e23766e6a15173d62331\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\89740a0d7d7564651cd1bdb864d9c92e\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\89740a0d7d7564651cd1bdb864d9c92e\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [ly.img.android:authorization:9.0.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\edbb6248d59710903adbda6d677b1c6f\transformed\authorization-9.0.0.0\AndroidManifest.xml:7:5-9:41
+MERGED from [ly.img.android:authorization:9.0.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\edbb6248d59710903adbda6d677b1c6f\transformed\authorization-9.0.0.0\AndroidManifest.xml:7:5-9:41
+MERGED from [androidx.annotation:annotation-experimental:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\726dc04b52c4da6680063e80f3c5f580\transformed\annotation-experimental-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.0.0] C:\Users\Administrator\.gradle\caches\transforms-3\726dc04b52c4da6680063e80f3c5f580\transformed\annotation-experimental-1.0.0\AndroidManifest.xml:20:5-22:41
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+	tools:overrideLibrary
+		ADDED from [ly.img.android.sdk.operation:sticker-smart:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\611e405a28fb2fee64d3ac22fcdb6a2c\transformed\sticker-smart-9.2.0\AndroidManifest.xml:25:9-53
+	android:targetSdkVersion
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.CAMERA
+ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:25:5-65
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:25:5-65
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:25:5-65
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:25:5-65
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:25:5-65
+	android:name
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:25:22-62
+uses-feature#android.hardware.camera
+ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:27:5-29:36
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:27:5-29:36
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:27:5-29:36
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:27:5-29:36
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:27:5-29:36
+	android:required
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:29:9-33
+	android:name
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:28:9-47
+activity#ly.img.android.pesdk.ui.activity.CameraPreviewActivity
+ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:32:9-39:20
+	android:screenOrientation
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:37:13-49
+	android:label
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:36:13-45
+	android:hardwareAccelerated
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:35:13-47
+	android:exported
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:34:13-36
+	android:theme
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:38:13-71
+	android:name
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:33:13-82
+uses-feature#0x00020000
+ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:25:5-27:35
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:30:5-32:35
+MERGED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:30:5-32:35
+MERGED from [ly.img.android.sdk.ui.mobile_ui:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\9e574d44fc4eb93b172ff2cbfa55afaa\transformed\core-9.2.0\AndroidManifest.xml:25:5-27:35
+MERGED from [ly.img.android.sdk.ui.mobile_ui:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\9e574d44fc4eb93b172ff2cbfa55afaa\transformed\core-9.2.0\AndroidManifest.xml:25:5-27:35
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:30:5-32:35
+MERGED from [ly.img.android.sdk.operation:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d337f98752e1e9194c7a9d4195eef166\transformed\camera-9.2.0\AndroidManifest.xml:30:5-32:35
+MERGED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:28:5-30:35
+MERGED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:28:5-30:35
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:14:5-16:35
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:14:5-16:35
+	android:glEsVersion
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:26:9-41
+	android:required
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:27:9-32
+activity#ly.img.android.pesdk.ui.activity.PhotoEditorActivity
+ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:30:9-39:20
+	android:screenOrientation
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:36:13-49
+	android:label
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:35:13-45
+	android:hardwareAccelerated
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:34:13-47
+	android:windowSoftInputMode
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:38:13-52
+	android:exported
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:33:13-36
+	android:configChanges
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:32:13-71
+	android:theme
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:37:13-71
+	android:name
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:31:13-80
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:25:5-81
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:11:5-81
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:11:5-81
+	android:name
+		ADDED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:25:22-78
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:26:5-80
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:12:5-80
+MERGED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:12:5-80
+	android:name
+		ADDED from [ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:26:22-77
+activity#ly.img.android.pesdk.ui.activity.EditorActivity
+ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:35:9-44:20
+	android:screenOrientation
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:41:13-49
+	android:label
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:40:13-45
+	android:hardwareAccelerated
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:39:13-47
+	android:windowSoftInputMode
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:43:13-52
+	android:exported
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:38:13-36
+	android:configChanges
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:37:13-71
+	android:theme
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:42:13-71
+	android:name
+		ADDED from [ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:36:13-75
+uses-permission#android.permission.WAKE_LOCK
+ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:25:5-68
+	android:name
+		ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:25:22-65
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:26:5-77
+	android:name
+		ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:26:22-74
+service#ly.img.android.pesdk.backend.operator.headless.RenderService
+ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:33:9-37:61
+	android:enabled
+		ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:35:13-35
+	android:exported
+		ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:36:13-37
+	android:foregroundServiceType
+		ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:37:13-58
+	android:name
+		ADDED from [ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:34:13-88
+provider#ly.img.android.IMGLYAutoInit
+ADDED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:19:9-23:40
+	android:enabled
+		ADDED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:22:13-35
+	android:authorities
+		ADDED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:21:13-65
+	android:exported
+		ADDED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:23:13-37
+	android:name
+		ADDED from [ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:20:13-56

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Automatically generated file. DO NOT MODIFY -->
+
+    <!-- Value from build type: debug -->
+    <string name="PACKAGE__com.photoeditorsdk.android.app" translatable="false"></string>
+    <!-- Value from build type: debug -->
+    <string name="imgly_pesdk_license_path" translatable="false">pesdk_android_license</string>
+    <!-- Value from build type: debug -->
+    <string name="imgly_pesdk_module_package" translatable="false">com.photoeditorsdk.android.app</string>
+    <!-- Value from default config. -->
+    <string name="pesdk_version" translatable="false">v9.2.0</string>
+
+</resources>

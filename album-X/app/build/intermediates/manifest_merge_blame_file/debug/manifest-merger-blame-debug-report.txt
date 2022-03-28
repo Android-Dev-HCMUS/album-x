@@ -1,0 +1,168 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.photoeditorsdk.android.app"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="16"
+8-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="30" />
+9-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+11-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:5:5-78
+11-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:5:22-76
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:6:5-66
+12-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:6:22-64
+13
+14    <protected-broadcast android:name="android.intent.action.MEDIA_MOUNTED" />
+14-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:8:5-79
+14-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:8:26-76
+15
+16    <uses-permission android:name="android.permission.CAMERA" />
+16-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:25:5-65
+16-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:25:22-62
+17
+18    <uses-feature
+18-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:27:5-29:36
+19        android:name="android.hardware.camera"
+19-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:28:9-47
+20        android:required="false" />
+20-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:29:9-33
+21    <uses-feature
+21-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:25:5-27:35
+22        android:glEsVersion="0x00020000"
+22-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:26:9-41
+23        android:required="true" />
+23-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:27:9-32
+24
+25    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+25-->[ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:25:5-81
+25-->[ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:25:22-78
+26    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+26-->[ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:26:5-80
+26-->[ly.img.android.sdk.assets:font-shared:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\bd06c408c7d9dde5d4e037b6a8c7903c\transformed\font-shared-9.2.0\AndroidManifest.xml:26:22-77
+27    <uses-permission android:name="android.permission.WAKE_LOCK" />
+27-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:25:5-68
+27-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:25:22-65
+28    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+28-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:26:5-77
+28-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:26:22-74
+29
+30    <application
+30-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:10:5-24:19
+31        android:allowBackup="true"
+31-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:11:9-35
+32        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+32-->[androidx.core:core:1.5.0] C:\Users\Administrator\.gradle\caches\transforms-3\9405c11f0b431195d14acfbb20cc538f\transformed\core-1.5.0\AndroidManifest.xml:24:18-86
+33        android:debuggable="true"
+34        android:icon="@mipmap/ic_launcher"
+34-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:12:9-43
+35        android:label="@string/app_name"
+35-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:13:9-41
+36        android:largeHeap="true"
+36-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:31:18-42
+37        android:roundIcon="@mipmap/ic_launcher_round"
+37-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:14:9-54
+38        android:supportsRtl="true"
+38-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:15:9-35
+39        android:testOnly="true"
+40        android:theme="@style/AppTheme" >
+40-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:16:9-40
+41        <activity
+41-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:17:9-23:20
+42            android:name="com.photoeditorsdk.android.app.KEditorDemoActivityJava"
+42-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:17:19-58
+43            android:label="@string/app_name" >
+43-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:18:13-45
+44            <intent-filter>
+44-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:19:13-22:29
+45                <action android:name="android.intent.action.MAIN" />
+45-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:20:17-68
+45-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:20:25-66
+46
+47                <category android:name="android.intent.category.LAUNCHER" />
+47-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:21:17-76
+47-->C:\Users\Administrator\Documents\GitHub\album-x\album-X\app\src\main\AndroidManifest.xml:21:27-74
+48            </intent-filter>
+49        </activity>
+50        <activity
+50-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:32:9-39:20
+51            android:name="ly.img.android.pesdk.ui.activity.CameraPreviewActivity"
+51-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:33:13-82
+52            android:exported="true"
+52-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:34:13-36
+53            android:hardwareAccelerated="true"
+53-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:35:13-47
+54            android:label="@string/app_name"
+54-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:36:13-45
+55            android:screenOrientation="portrait"
+55-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:37:13-49
+56            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+56-->[ly.img.android.sdk.ui.mobile_ui:camera:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\154d347240a379c09ca417f108b7d6dc\transformed\camera-9.2.0\AndroidManifest.xml:38:13-71
+57        </activity>
+58        <activity
+58-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:30:9-39:20
+59            android:name="ly.img.android.pesdk.ui.activity.PhotoEditorActivity"
+59-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:31:13-80
+60            android:configChanges="keyboard|keyboardHidden|screenSize"
+60-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:32:13-71
+61            android:exported="true"
+61-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:33:13-36
+62            android:hardwareAccelerated="true"
+62-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:34:13-47
+63            android:label="@string/app_name"
+63-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:35:13-45
+64            android:screenOrientation="portrait"
+64-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:36:13-49
+65            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+65-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:37:13-71
+66            android:windowSoftInputMode="adjustPan" >
+66-->[ly.img.android.sdk.ui.mobile_ui:photo-main:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\d3c48e2bd21653dbea30e40356917a47\transformed\photo-main-9.2.0\AndroidManifest.xml:38:13-52
+67        </activity>
+68        <activity
+68-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:35:9-44:20
+69            android:name="ly.img.android.pesdk.ui.activity.EditorActivity"
+69-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:36:13-75
+70            android:configChanges="keyboard|keyboardHidden|screenSize"
+70-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:37:13-71
+71            android:exported="true"
+71-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:38:13-36
+72            android:hardwareAccelerated="true"
+72-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:39:13-47
+73            android:label="@string/app_name"
+73-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:40:13-45
+74            android:screenOrientation="portrait"
+74-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:41:13-49
+75            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+75-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:42:13-71
+76            android:windowSoftInputMode="adjustPan" >
+76-->[ly.img.android.sdk.ui.mobile_ui:all:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\ded7e3dfab219d24bc25bd84a2ed5bc1\transformed\all-9.2.0\AndroidManifest.xml:43:13-52
+77        </activity>
+78
+79        <service
+79-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:33:9-37:61
+80            android:name="ly.img.android.pesdk.backend.operator.headless.RenderService"
+80-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:34:13-88
+81            android:enabled="true"
+81-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:35:13-35
+82            android:exported="false"
+82-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:36:13-37
+83            android:foregroundServiceType="mediaPlayback" />
+83-->[ly.img.android.sdk.operation:headless:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\6638c3ca8585aa1d133cf2e1c53c94b2\transformed\headless-9.2.0\AndroidManifest.xml:37:13-58
+84
+85        <provider
+85-->[ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:19:9-23:40
+86            android:name="ly.img.android.IMGLYAutoInit"
+86-->[ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:20:13-56
+87            android:authorities="com.photoeditorsdk.android.app.IMGLYAutoInit"
+87-->[ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:21:13-65
+88            android:enabled="true"
+88-->[ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:22:13-35
+89            android:exported="false" />
+89-->[ly.img.android.sdk:core:9.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\db9add6aac030b341145d28f457fd2b0\transformed\core-9.2.0\AndroidManifest.xml:23:13-37
+90    </application>
+91
+92</manifest>
