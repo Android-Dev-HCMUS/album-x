@@ -9,15 +9,21 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
+
+import java.util.List;
 
 public class AllPhotos extends Fragment {
     MainActivity main;
@@ -26,6 +32,11 @@ public class AllPhotos extends Fragment {
     GridView gridView;
     BottomNavigationView bottomNavigationView;
     ImageButton imageButton;
+
+    RecyclerView recyclerView;
+    GalleryAdapter galleryAdapter;
+    List<String> images;
+    TextView gallery_number;
 
     public int[] imageArray = {
             R.drawable.stock_1, R.drawable.stock_2, R.drawable.stock_3, R.drawable.stock_4 ,
@@ -59,14 +70,18 @@ public class AllPhotos extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = (View) inflater.inflate(R.layout.all_photos_layout, null);
-        super.onViewCreated(view, savedInstanceState);
+        View view = (View) inflater.inflate(R.layout.all_photos_recyclerview, null);
+       // super.onViewCreated(view, savedInstanceState);
 
         selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         subMenuBtn = (Button) view.findViewById(R.id.buttonSubMenu);
-        gridView = (GridView) view.findViewById(R.id.grid_view);
-        gridView.setAdapter(new GridImageAdapter(context, imageArray));
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        recyclerView = view.findViewById(R.id.recycleview_gallery_images);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+
+        images = ImagesGallery.listOfImages(context);
+        galleryAdapter = new GalleryAdapter(context, images, new GalleryAdapter.PhotoListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 main.getSupportFragmentManager()
@@ -77,7 +92,29 @@ public class AllPhotos extends Fragment {
 
                 hideNavAndButton();
             }
+
+            @Override
+            public void onPhotoclick(String path) {
+                //DO Sth with photo
+                //Toast.makeText(MainActivity.this, "" +path, Toast.LENGTH_SHORT).show();  // đoạn này khi click vào 1 ảnh
+            }
         });
+        recyclerView.setAdapter(galleryAdapter);
+
+//        gridView = (GridView) view.findViewById(R.id.grid_view);
+//        gridView.setAdapter(new GridImageAdapter(context, imageArray));
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                main.getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.frameContent, ImageViewing.newInstance(i, imageArray), "ImageViewing")
+//                        .addToBackStack("ImageViewingUI")
+//                        .commit();
+//
+//                hideNavAndButton();
+//            }
+//        });
 
         return view;
     }
