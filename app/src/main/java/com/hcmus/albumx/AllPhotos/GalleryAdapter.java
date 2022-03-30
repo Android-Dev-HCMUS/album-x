@@ -42,13 +42,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String image = images.get(position);
+        int pos = position;
 
         Glide.with(context).load(image).into(holder.image);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                photoListener.onPhotoclick(image);
+                photoListener.onPhotoClick(image, pos);
             }
         });
     }
@@ -72,6 +73,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     }
     public interface PhotoListener {
 
-        void onPhotoclick(String path);
+        void onPhotoClick(String path, int position);
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -82,12 +81,11 @@ public class AllPhotos extends Fragment {
 
         images = ImagesGallery.listOfImages(context);
         galleryAdapter = new GalleryAdapter(context, images, new GalleryAdapter.PhotoListener() {
-
             @Override
-            public void onPhotoclick(String path) {
+            public void onPhotoClick(String path, int position) {
                 main.getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frameContent, ImageViewing.newInstance(path), "ImageViewing")
+                        .replace(R.id.frameContent, ImageViewing.newInstance(path, position, images), "ImageViewing")
                         .addToBackStack("ImageViewingUI")
                         .commit();
 

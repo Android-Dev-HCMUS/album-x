@@ -1,26 +1,20 @@
 package com.hcmus.albumx;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +26,12 @@ public class ImageViewing extends Fragment {
 
     }
 
-    public static ImageViewing newInstance(String path) {
+    public static ImageViewing newInstance(String path, int pos, List<String> imageArray) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
         bundle.putString("path", path);
+        bundle.putInt("position", pos);
+        bundle.putStringArrayList("imageArray", (ArrayList<String>) imageArray);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -56,28 +52,17 @@ public class ImageViewing extends Fragment {
         View view = (View) inflater.inflate(R.layout.image_viewing, null);
 
         Bundle bundle = getArguments();
-        String path = null;
+        ArrayList<String> imageArray = null;
+        int position = 0;
 
         if (bundle != null) {
-            path = bundle.getString("path");
+            imageArray = bundle.getStringArrayList("imageArray");
+            position = bundle.getInt("position");
         }
 
-
-        File imgFile = new  File(path);
-
-        //set Img
-
-        if(imgFile.exists()){
-
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
-            ImageView myImage = (ImageView) view.findViewById(R.id.imageView);
-
-            myImage.setImageBitmap(myBitmap);
-
-        }
-//        ViewPager viewPager = view.findViewById(R.id.imageViewPager);
-//        viewPager.setAdapter(new FullScreenImageAdapter(context, imageArray));
+        ViewPager viewPager = view.findViewById(R.id.imageViewPager);
+        viewPager.setAdapter(new FullScreenImageAdapter(context, imageArray));
+        viewPager.setCurrentItem(position);
 
         Button back = (Button) view.findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
