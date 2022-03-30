@@ -17,14 +17,14 @@
             android:layout_height="100px"
             android:drawableLeft="@drawable/ic_arrow_back" />
     </LinearLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/imageViewPager"
+    <ImageView
+        android:id="@id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
         android:layout_below="@+id/headerBar"
         android:layout_above="@+id/optionBar"/>
+
 
     <LinearLayout
         android:id="@+id/optionBar"

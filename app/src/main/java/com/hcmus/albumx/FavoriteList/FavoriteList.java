@@ -57,12 +57,12 @@ public class FavoriteList extends Fragment {
         favoriteGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mainActivity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frameContent, ImageViewing.newInstance(i, listFavoriteImg), "ImageViewing")
-                        .addToBackStack("ImageViewingUI")
-                        .commit();
-                hideNavAndButton();
+//                mainActivity.getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.frameContent, ImageViewing.newInstance(i, listFavoriteImg), "ImageViewing")
+//                        .addToBackStack("ImageViewingUI")
+//                        .commit();
+//                hideNavAndButton();
             }
         });
         return view;
