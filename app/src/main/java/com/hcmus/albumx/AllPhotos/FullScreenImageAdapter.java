@@ -8,19 +8,21 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import java.util.List;
+
 
 public class FullScreenImageAdapter extends PagerAdapter {
     Context context;
-    int[] imageArr;
+    List<String> imageArr;
 
-    public FullScreenImageAdapter(Context context, int[] imageArr) {
+    public FullScreenImageAdapter(Context context, List<String> imageArr) {
         this.context = context;
         this.imageArr = imageArr;
     }
 
     @Override
     public int getCount() {
-        return imageArr.length;
+        return imageArr.size();
     }
 
     @Override
@@ -33,7 +35,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ImageView imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setImageResource(imageArr[position]);
+//        imageView.setImageResource(imageArr.get(position));
         container.addView(imageView, 0);
 
         return imageView;

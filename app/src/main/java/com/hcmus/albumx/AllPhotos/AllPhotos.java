@@ -71,7 +71,7 @@ public class AllPhotos extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = (View) inflater.inflate(R.layout.all_photos_recyclerview, null);
-       // super.onViewCreated(view, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
 
         selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         subMenuBtn = (Button) view.findViewById(R.id.buttonSubMenu);
@@ -82,21 +82,18 @@ public class AllPhotos extends Fragment {
 
         images = ImagesGallery.listOfImages(context);
         galleryAdapter = new GalleryAdapter(context, images, new GalleryAdapter.PhotoListener() {
+
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onPhotoclick(String path) {
                 main.getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frameContent, ImageViewing.newInstance(i, imageArray), "ImageViewing")
+                        .replace(R.id.frameContent, ImageViewing.newInstance(path), "ImageViewing")
                         .addToBackStack("ImageViewingUI")
                         .commit();
 
                 hideNavAndButton();
-            }
-
-            @Override
-            public void onPhotoclick(String path) {
                 //DO Sth with photo
-                //Toast.makeText(MainActivity.this, "" +path, Toast.LENGTH_SHORT).show();  // đoạn này khi click vào 1 ảnh
+                Toast.makeText(main, "" +path, Toast.LENGTH_SHORT).show();  // đoạn này khi click vào 1 ảnh
             }
         });
         recyclerView.setAdapter(galleryAdapter);

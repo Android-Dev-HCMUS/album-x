@@ -71,7 +71,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     }
     public interface PhotoListener {
-        void onItemClick(AdapterView<?> adapterView, View view, int i, long l);
 
         void onPhotoclick(String path);
     }
