@@ -7,8 +7,8 @@ imglyConfig {
 
     pesdk {
         enabled true
-//        licencePath 'pesdk_android_license' // Name of the Licence file in the asset folder
-        licensePath()
+        licencePath 'pesdk_android_license' // Name of the Licence file in the asset folder
+//        licensePath()
     }
 
     // Define the modules you are need
@@ -49,7 +49,6 @@ android {
     buildToolsVersion '32.0.0'
 
     defaultConfig {
-//        applicationId "com.photoeditorsdk.android.app"
         applicationId "com.hcmus.albumx"
         minSdkVersion 28
         targetSdkVersion 32
