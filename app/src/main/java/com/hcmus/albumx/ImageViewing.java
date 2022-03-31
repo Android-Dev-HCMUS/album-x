@@ -1,11 +1,18 @@
 package com.hcmus.albumx;
 
+import android.annotation.SuppressLint;
+import android.app.WallpaperManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +24,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,13 +48,14 @@ public class ImageViewing extends Fragment {
         try {
             context = getActivity();
             main = (MainActivity) getActivity();
-        } catch (IllegalStateException ignored) { }
+        } catch (IllegalStateException ignored) {
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = (View) inflater.inflate(R.layout.image_viewing, null);
+        View view = (View) inflater.inflate(R.layout.image_viewing, container, false);
 
         Bundle bundle = getArguments();
         ArrayList<String> imageArray = null;
@@ -84,6 +93,39 @@ public class ImageViewing extends Fragment {
                 if (fragment != null) {
                     fragment.showNavAndButton();
                 }
+            }
+        });
+
+        Button more = (Button) view.findViewById(R.id.buttonMore);
+        ArrayList<String> finalImageArray = imageArray;
+        more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getActivity().getApplicationContext(), v);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.menu_wallpaper:
+                                WallpaperManager wallpaperManager = WallpaperManager.getInstance(v.getContext());
+                                try {
+                                    // set the wallpaper by calling the setResource function
+                                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                                    Bitmap bitmap = BitmapFactory.decodeFile(finalImageArray.get(viewPager.getCurrentItem()), bmOptions);
+                                    wallpaperManager.setBitmap(bitmap);
+                                    Toast.makeText(context, "Set wallpaper successfully", Toast.LENGTH_SHORT).show();
+                                } catch (IOException e) {
+                                    // here the errors can be logged instead of printStackTrace
+                                    e.printStackTrace();
+                                }
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.menu_image_more);
+                popup.show();
             }
         });
 
