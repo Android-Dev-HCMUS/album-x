@@ -17,7 +17,7 @@
             android:layout_height="100px"
             android:drawableLeft="@drawable/ic_arrow_back" />
     </LinearLayout>
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/imageViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

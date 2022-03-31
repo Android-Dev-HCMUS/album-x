@@ -10,7 +10,9 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.CompositePageTransformer;
+import androidx.viewpager2.widget.MarginPageTransformer;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
@@ -21,10 +23,6 @@ import java.util.List;
 public class ImageViewing extends Fragment {
     MainActivity main;
     Context context;
-
-    public ImageViewing() {
-
-    }
 
     public static ImageViewing newInstance(String path, int pos, List<String> imageArray) {
         ImageViewing fragment = new ImageViewing();
@@ -42,8 +40,7 @@ public class ImageViewing extends Fragment {
         try {
             context = getActivity();
             main = (MainActivity) getActivity();
-        } catch (IllegalStateException ignored) {
-        }
+        } catch (IllegalStateException ignored) { }
     }
 
     @Override
@@ -60,17 +57,30 @@ public class ImageViewing extends Fragment {
             position = bundle.getInt("position");
         }
 
-        ViewPager viewPager = view.findViewById(R.id.imageViewPager);
+        ViewPager2 viewPager = view.findViewById(R.id.imageViewPager);
         viewPager.setAdapter(new FullScreenImageAdapter(context, imageArray));
-        viewPager.setCurrentItem(position);
-        viewPager.setPageTransformer(true, new DepthPageTransformer());
+        viewPager.setCurrentItem(position, false);
+
+        CompositePageTransformer transformer = new CompositePageTransformer();
+        transformer.addTransformer(new MarginPageTransformer(40));
+        transformer.addTransformer(new ViewPager2.PageTransformer() {
+            @Override
+            public void transformPage(@NonNull View page, float position) {
+                float v = 1 - Math.abs(position);
+
+                page.setScaleY(0.8f + v * 0.2f);
+            }
+        });
+        viewPager.setPageTransformer(transformer);
 
         Button back = (Button) view.findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 main.getSupportFragmentManager().popBackStack();
-                AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager().findFragmentByTag("AllPhotos");
+                AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
+                        .findFragmentByTag("AllPhotos");
+
                 if (fragment != null) {
                     fragment.showNavAndButton();
                 }
@@ -86,43 +96,6 @@ public class ImageViewing extends Fragment {
         AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager().findFragmentByTag("AllPhotos");
         if (fragment != null) {
             fragment.showNavAndButton();
-        }
-    }
-
-    public static class DepthPageTransformer implements ViewPager.PageTransformer {
-        private static final float MIN_SCALE = 0.75f;
-
-        public void transformPage(View view, float position) {
-            int pageWidth = view.getWidth();
-
-            if (position < -1) { // [-Infinity,-1)
-                // This page is way off-screen to the left.
-                view.setAlpha(0f);
-
-            } else if (position <= 0) { // [-1,0]
-                // Use the default slide transition when moving to the left page
-                view.setAlpha(1f);
-                view.setTranslationX(0f);
-                view.setScaleX(1f);
-                view.setScaleY(1f);
-
-            } else if (position <= 1) { // (0,1]
-                // Fade the page out.
-                view.setAlpha(1 - position);
-
-                // Counteract the default slide transition
-                view.setTranslationX(pageWidth * -position);
-
-                // Scale the page down (between MIN_SCALE and 1)
-                float scaleFactor = MIN_SCALE
-                        + (1 - MIN_SCALE) * (1 - Math.abs(position));
-                view.setScaleX(scaleFactor);
-                view.setScaleY(scaleFactor);
-
-            }  else { // (1,+Infinity]
-                // This page is way off-screen to the right.
-                view.setAlpha(0f);
-            }
         }
     }
 }
