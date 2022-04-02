@@ -62,7 +62,6 @@ public class MainActivity extends FragmentActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frameFragment, fragment, TAG)
-                .addToBackStack(name)
                 .commit();
     }
 

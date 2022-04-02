@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,18 +16,41 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.hcmus.albumx.R;
 
-public class NewAlbumDialog extends AppCompatDialogFragment {
+public class SetNameAlbumDialog extends AppCompatDialogFragment {
+    static int SET_NAME_NEW_ALBUM = 1;
+    static int RENAME_ALBUM = 2;
+
     NewAlbumDialogListener listener;
     EditText albumName;
+    int type;
+    int position;
+
+    public SetNameAlbumDialog(int type){
+        this.type = type;
+    }
+
+    public SetNameAlbumDialog(int type, int position){
+        this.type = type;
+        this.position = position;
+    }
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_album_dialog, null);
+        View view = inflater.inflate(R.layout.set_name_album_dialog, null);
 
         albumName = view.findViewById(R.id.album_name);
+        TextView header = view.findViewById(R.id.t1);
+        if(type == SET_NAME_NEW_ALBUM){
+            header.setText("Album mới");
+        }
+        if(type == RENAME_ALBUM){
+            header.setText("Đổi tên Album");
+        }
 
         builder.setView(view)
                 .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -38,7 +62,12 @@ public class NewAlbumDialog extends AppCompatDialogFragment {
                 .setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.applyName(albumName.getText().toString());
+                        if(type == SET_NAME_NEW_ALBUM){
+                            listener.applyNameToNewAlbum(albumName.getText().toString());
+                        }
+                        if(type == RENAME_ALBUM){
+                            listener.renameAlbum(albumName.getText().toString(), position);
+                        }
                     }
                 });
 
@@ -58,6 +87,7 @@ public class NewAlbumDialog extends AppCompatDialogFragment {
     }
 
     public interface NewAlbumDialogListener {
-        void applyName(String albumName);
+        void applyNameToNewAlbum(String albumName);
+        void renameAlbum(String albumName, int position);
     }
 }
