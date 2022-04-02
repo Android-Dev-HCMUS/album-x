@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 public class ImageViewing extends Fragment {
     MainActivity main;
@@ -49,12 +48,12 @@ public class ImageViewing extends Fragment {
 
     public static int GALLERY_RESULT = 2;
 
-    public static ImageViewing newInstance(Bitmap bitmap, int pos, List<Bitmap> listBitmap) {
+    public static ImageViewing newInstance(Bitmap bitmap, int pos, ArrayList<Bitmap> listBitmap) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
         bundle.putParcelable("bitmap", bitmap);
         bundle.putInt("position", pos);
-        bundle.putParcelableArrayList("imageArray", (ArrayList<Bitmap>) listBitmap);
+        bundle.putParcelableArrayList("bitmapArray", (ArrayList<Bitmap>) listBitmap);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -76,15 +75,17 @@ public class ImageViewing extends Fragment {
 
         Bundle bundle = getArguments();
         ArrayList<String> imageArray = null;
+        ArrayList<Bitmap> bitmapArrayList = null;
         int position = 0;
 
         if (bundle != null) {
             imageArray = bundle.getStringArrayList("imageArray");
             position = bundle.getInt("position");
+            bitmapArrayList = bundle.getParcelableArrayList("bitmapArray");
         }
 
         viewPager = view.findViewById(R.id.imageViewPager);
-        viewPager.setAdapter(new FullScreenImageAdapter(context, imageArray));
+        viewPager.setAdapter(new FullScreenImageAdapter(context, bitmapArrayList));
         viewPager.setCurrentItem(position, false);
 
         CompositePageTransformer transformer = new CompositePageTransformer();

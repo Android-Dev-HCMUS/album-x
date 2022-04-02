@@ -12,9 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AllPhotos extends Fragment {
     MainActivity main;
@@ -47,7 +44,7 @@ public class AllPhotos extends Fragment {
     private static final int PICK_IMAGE = 1;
     Uri imageUri;
     ImageDatabase myDB;
-    List<Bitmap> bitmapList;
+    ArrayList<Bitmap> bitmapList;
 
     public static AllPhotos newInstance(String strArg1) {
         AllPhotos fragment = new AllPhotos();
