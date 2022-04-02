@@ -121,19 +121,10 @@ public class EditImage extends Activity implements PermissionRequest.Response {
         // Set input image
         settingsList.getSettingsModel(LoadSettings.class).setSource(inputImage);
 
-        // Create folder "AlbumX" if doesn't exist
-        /*
-        final File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "AlbumX");
-
-        if (!f.exists()) {
-            f.mkdir();
-        }
-        */
-
         settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.DIRECTORY_DCIM);
 
         new PhotoEditorBuilder(activity).setSettingsList(settingsList).startActivityForResult(activity, PESDK_RESULT);
-    }
+    }   //openEditor
 
 
     @Override
@@ -142,6 +133,7 @@ public class EditImage extends Activity implements PermissionRequest.Response {
 
 
         if (resultCode == RESULT_OK && requestCode == GALLERY_RESULT) {
+            Log.d("save", "1");
             // Open Editor with some uri in this case with an image selected from the system gallery.
             Uri selectedImage = intent.getData();
 
@@ -156,12 +148,14 @@ public class EditImage extends Activity implements PermissionRequest.Response {
             Log.i("PESDK", "Result image is located here " + data.getResultUri());
 
 
+
             // TODO: Do something with the result image
 
 
             // OPTIONAL: read the latest state to save it as a serialisation
             SettingsList lastState = data.getSettingsList();
             try {
+                Log.d("save", "3");
                 new IMGLYFileWriter(lastState).writeJson(new File(
                         getExternalFilesDir(null),
                         "serialisationReadyToReadWithPESDKFileReader.json"
@@ -172,6 +166,7 @@ public class EditImage extends Activity implements PermissionRequest.Response {
 
 
         } else if (resultCode == RESULT_CANCELED && requestCode == PESDK_RESULT) {
+            Log.d("save", "2");
             // Editor was canceled
             EditorSDKResult data = new EditorSDKResult(intent);
 

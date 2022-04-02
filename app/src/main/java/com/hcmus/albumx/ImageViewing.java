@@ -111,14 +111,12 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
                 main.getSupportFragmentManager().popBackStack();
-                AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
-                        .findFragmentByTag("AllPhotos");
+                onDetach();
 
-                if (fragment != null) {
-                    fragment.showNavAndButton();
-                }
+                //notify();
+
             }
-        });
+        }); // back onClickListener
 
         ArrayList<String> finalImageArray = imageArray;
         edit = (Button) view.findViewById(R.id.buttonEdit);
@@ -132,7 +130,7 @@ public class ImageViewing extends Fragment {
                 EditImage editImage = new EditImage(getActivity());
                 editImage.openEditor(selectedUri);
             }
-        });
+        }); //edit onClickListener
 
         share = (Button) view.findViewById(R.id.buttonShare);
 
@@ -140,35 +138,14 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
 
-
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 String path = finalImageArray.get(viewPager.getCurrentItem());
 
-
+                //Create bitmap
                 Bitmap bitmap = BitmapFactory.decodeFile(path);
-//                File sd = Environment.getExternalStorageDirectory();
-//
-//                File image = new File(sd+path, "imageNametemp");
-//                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//                Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-                //bitmap = Bitmap.createScaledBitmap(bitmap,view.getWidth(),view.getHeight(),true);
-//                ImageView imageView = null;
-//                imageView.setImageBitmap(bitmap);
-//
-//                BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
-//                Bitmap bitmap2 = bitmapDrawable.getBitmap();
+                //Create Img from bitmap and share with text
                 shareImageandText(bitmap);
-
-//                Uri uriToImage = Uri.parse(path);
-//                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
-//                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//
-//                shareIntent.setType("image/*");
-
-
             }
-        });
+        }); //share onClickListener
         more = (Button) view.findViewById(R.id.buttonMore);
 
         more.setOnClickListener(new View.OnClickListener() {
@@ -196,16 +173,16 @@ public class ImageViewing extends Fragment {
                                 return true;
                             default:
                                 return false;
-                        }
+                        } //Switch
                     }
-                });
+                }); //setOnMenuItemClickListener
                 popup.inflate(R.menu.menu_image_more);
                 popup.show();
             }
-        });
+        }); //more onClickListener
 
         return view;
-    }
+    }   //View
     private void shareImageandText(Bitmap bitmap) {
         Uri uri = getmageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -224,7 +201,7 @@ public class ImageViewing extends Fragment {
 
         // calling startactivity() to share
         startActivity(Intent.createChooser(intent, "Share Via"));
-    }
+    }   //ShareImageandText
 
     // Retrieving the url to share
     private Uri getmageToShare(Bitmap bitmap) {
@@ -245,78 +222,18 @@ public class ImageViewing extends Fragment {
             Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return uri;
-    }
+    }   //getImageToShare
 
     @Override
     public void onDetach() {
         super.onDetach();
-        AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager().findFragmentByTag("AllPhotos");
+        AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
+                .findFragmentByTag("AllPhotos");
+        View view = fragment.getView();
         if (fragment != null) {
             fragment.showNavAndButton();
+            fragment.refresh(view);
         }
-    }
+    }   //onDetach
 
-
-    public static Uri getImageContentUri2(Context context, File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.Media._ID},
-                MediaStore.Images.Media.DATA + "=? ",
-                new String[]{filePath}, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-            cursor.close();
-            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    ContentResolver resolver = context.getContentResolver();
-                    Uri picCollection = MediaStore.Images.Media
-                            .getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-                    ContentValues picDetail = new ContentValues();
-                    picDetail.put(MediaStore.Images.Media.DISPLAY_NAME, imageFile.getName());
-                    picDetail.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
-                    picDetail.put(MediaStore.Images.Media.RELATIVE_PATH,"DCIM/" + UUID.randomUUID().toString());
-                    picDetail.put(MediaStore.Images.Media.IS_PENDING,1);
-                    Uri finaluri = resolver.insert(picCollection, picDetail);
-                    picDetail.clear();
-                    picDetail.put(MediaStore.Images.Media.IS_PENDING, 0);
-                    resolver.update(picCollection, picDetail, null, null);
-                    return finaluri;
-                }else {
-                    ContentValues values = new ContentValues();
-                    values.put(MediaStore.Images.Media.DATA, filePath);
-                    return context.getContentResolver().insert(
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                }
-
-            } else {
-                return null;
-            }
-        }
-    }
-
-    public static Uri getImageContentUri(Context context, File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[] { MediaStore.Images.Media._ID },
-                MediaStore.Images.Media.DATA + "=? ",
-                new String[] { filePath }, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-            cursor.close();
-            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.DATA, filePath);
-                return context.getContentResolver().insert(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            } else {
-                return null;
-            }
-        }
-    }
 }
