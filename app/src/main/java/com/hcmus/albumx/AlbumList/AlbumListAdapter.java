@@ -9,14 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.hcmus.albumx.R;
 
+import java.util.ArrayList;
+
 
 public class AlbumListAdapter extends BaseAdapter {
     private Context context;
     private int layout;
-    private String[] albumList;
-    private Integer[] icons;
+    private ArrayList<String> albumList;
+    private ArrayList<Integer> icons;
 
-    public AlbumListAdapter(Context context, int layout, String[] albumList, Integer[] icons){
+    public AlbumListAdapter(Context context, int layout, ArrayList<String> albumList, ArrayList<Integer> icons){
         this.context = context;
         this.layout = layout;
         this.albumList = albumList;
@@ -25,12 +27,12 @@ public class AlbumListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return albumList.length;
+        return albumList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return albumList.get(i);
     }
 
     @Override
@@ -60,8 +62,8 @@ public class AlbumListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.imageView.setImageResource(icons[i]);
-        viewHolder.textView.setText(albumList[i]);
+        viewHolder.imageView.setImageResource(icons.get(i));
+        viewHolder.textView.setText(albumList.get(i));
 
         return view;
     }

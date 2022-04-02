@@ -7,12 +7,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:layout_marginBottom="15dp"
         android:gravity="center">
 
         <ImageView
             android:id="@+id/imageViewRow"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:backgroundTint="@color/blue"
             android:src="@drawable/ic_album2" />
 
@@ -20,7 +21,7 @@
             android:id="@+id/textViewRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:text="Tất cả ảnh"
             android:textColor="@color/black"
             android:textSize="18sp" />

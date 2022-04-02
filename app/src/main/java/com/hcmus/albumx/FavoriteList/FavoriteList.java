@@ -12,7 +12,6 @@ import android.widget.ImageButton;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
@@ -23,11 +22,6 @@ public class FavoriteList extends Fragment {
     GridView favoriteGridView;
     BottomNavigationView bottomNavigationView;
     ImageButton imageButton;
-
-    private int[] listFavoriteImg = {
-            R.drawable.stock_1, R.drawable.stock_3, R.drawable.stock_5, R.drawable.stock_7,
-            R.drawable.stock_9, R.drawable.stock_11, R.drawable.stock_13, R.drawable.stock_15
-    };
 
     public static FavoriteList newInstance(String strFavorite) {
         FavoriteList fragment = new FavoriteList();
@@ -53,7 +47,7 @@ public class FavoriteList extends Fragment {
         View view = (View) inflater.inflate(R.layout.favorite_photos_layout, null);
 
         favoriteGridView = (GridView) view.findViewById(R.id.favorite_gird_view);
-        favoriteGridView.setAdapter(new FavoriteListAdapter(context, listFavoriteImg));
+        //favoriteGridView.setAdapter(new FavoriteListAdapter(context, listFavoriteImg));
         favoriteGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
