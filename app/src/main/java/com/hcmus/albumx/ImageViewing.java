@@ -6,17 +6,13 @@ import android.app.WallpaperManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -38,16 +33,13 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
-import com.hcmus.albumx.AllPhotos.GalleryAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
-import androidx.core.content.FileProvider;
 public class ImageViewing extends Fragment {
     MainActivity main;
     Context context;
@@ -57,12 +49,12 @@ public class ImageViewing extends Fragment {
 
     public static int GALLERY_RESULT = 2;
 
-    public static ImageViewing newInstance(String path, int pos, List<String> imageArray) {
+    public static ImageViewing newInstance(Bitmap bitmap, int pos, List<Bitmap> listBitmap) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
-        bundle.putString("path", path);
+        bundle.putParcelable("bitmap", bitmap);
         bundle.putInt("position", pos);
-        bundle.putStringArrayList("imageArray", (ArrayList<String>) imageArray);
+        bundle.putParcelableArrayList("imageArray", (ArrayList<Bitmap>) listBitmap);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -166,15 +158,12 @@ public class ImageViewing extends Fragment {
 //                BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
 //                Bitmap bitmap2 = bitmapDrawable.getBitmap();
                 shareImageandText(bitmap);
-
 //                Uri uriToImage = Uri.parse(path);
 //                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
 //                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 //
 //                shareIntent.setType("image/*");
-
-
             }
         });
         more = (Button) view.findViewById(R.id.buttonMore);
