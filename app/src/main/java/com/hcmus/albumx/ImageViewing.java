@@ -48,14 +48,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import androidx.core.content.FileProvider;
+
 public class ImageViewing extends Fragment {
     MainActivity main;
     Context context;
 
     Button back, more, edit, like, share;
     ViewPager2 viewPager;
-
-    public static int GALLERY_RESULT = 2;
 
     public static ImageViewing newInstance(String path, int pos, List<String> imageArray) {
         ImageViewing fragment = new ImageViewing();
@@ -127,18 +126,11 @@ public class ImageViewing extends Fragment {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 String path = finalImageArray.get(viewPager.getCurrentItem());
-                Log.d("pathne", path);
-//                Uri uri = getImageContentUri(context, path);
 
-                Uri selectedUri = Uri.fromFile(new File(path)); //getImageContentUri2(context, new File(path));
-                EditImage editImage = new EditImage();
-                //editImage.openSystemGalleryToSelectAnImage();
+                Uri selectedUri = Uri.fromFile(new File(path));
+                EditImage editImage = new EditImage(getActivity());
                 editImage.openEditor(selectedUri);
-
-                Toast.makeText(context, Integer.toString(viewPager.getCurrentItem()), Toast.LENGTH_SHORT).show();
             }
         });
 

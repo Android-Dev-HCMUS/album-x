@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -41,14 +43,34 @@ import ly.img.android.pesdk.ui.utils.PermissionRequest;
 import ly.img.android.serializer._3.IMGLYFileWriter;
 
 
-public class EditImage extends Activity {
+public class EditImage extends Activity implements PermissionRequest.Response {
 
+    // Important permission request for Android 6.0 and above, don't forget to add this!
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionRequest.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void permissionGranted() {}
+
+    @Override
+    public void permissionDenied() {
+        /* TODO: The Permission was rejected by the user. The Editor was not opened,
+         * Show a hint to the user and try again. */
+    }
+
+    Activity activity;
+    EditImage(Activity ac) {
+        activity = ac;
+    }
 
     public static int PESDK_RESULT = 1;
     public static int GALLERY_RESULT = 2;
 
 
-    private static SettingsList createPesdkSettingsList() {
+    private SettingsList createPesdkSettingsList() {
         // Create a empty new SettingsList and apply the changes on this reference.
         PhotoEditorSettingsList settingsList = new PhotoEditorSettingsList();
         // If you include our asset Packs and you use our UI you also need to add them to the UI Config,
@@ -73,63 +95,45 @@ public class EditImage extends Activity {
         return settingsList;
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.photoeditorsdk_layout);
-
-        Button openGallery = findViewById(R.id.openGallery);
-        Button openCamera = findViewById(R.id.openCamera);
-
-        openGallery.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                openSystemGalleryToSelectAnImage();
-            }
-        });
-
-        openCamera.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                openSystemCameraToTakeAnImage();
-            }
-        });
-    }
-
-
-
-    public void openSystemGalleryToSelectAnImage() {
+    private void openSystemGalleryToSelectAnImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         try {
 
             startActivityForResult(intent, GALLERY_RESULT);
 
         } catch (ActivityNotFoundException exception) {
-            Toast.makeText(this, "No Gallery APP installed", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "No Gallery APP installed", Toast.LENGTH_LONG).show();
         }
     }
+
     private void openSystemCameraToTakeAnImage() {
         PhotoEditorSettingsList settingsList = (PhotoEditorSettingsList) createPesdkSettingsList();
 
-        new CameraPreviewBuilder(this)
+        new CameraPreviewBuilder(activity)
                 .setSettingsList(settingsList)
-                .startActivityForResult(this, PESDK_RESULT,  PermissionRequest.NEEDED_PREVIEW_PERMISSIONS_AND_FINE_LOCATION);
+                .startActivityForResult(activity, PESDK_RESULT, PermissionRequest.NEEDED_PREVIEW_PERMISSIONS_AND_FINE_LOCATION);
 
     }
-    public void openEditor(Uri inputImage) {
 
-        Log.d("urine", String.valueOf(inputImage));
+    protected void openEditor(Uri inputImage) {
         SettingsList settingsList = createPesdkSettingsList();
 
         // Set input image
         settingsList.getSettingsModel(LoadSettings.class).setSource(inputImage);
 
+        // Create folder "AlbumX" if doesn't exist
+        /*
+        final File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "AlbumX");
+
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        */
+
         settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.DIRECTORY_DCIM);
 
-//        new PhotoEditorBuilder(this).setSettingsList(settingsList).startActivityForResult((Activity) context, PESDK_RESULT);
-
-        new PhotoEditorBuilder(this).setSettingsList(settingsList).startActivityForResult(this, PESDK_RESULT);
+        new PhotoEditorBuilder(activity).setSettingsList(settingsList).startActivityForResult(activity, PESDK_RESULT);
     }
-
 
 
     @Override
@@ -139,14 +143,11 @@ public class EditImage extends Activity {
 
         if (resultCode == RESULT_OK && requestCode == GALLERY_RESULT) {
             // Open Editor with some uri in this case with an image selected from the system gallery.
-            Log.d("xxxxxx1", String.valueOf(intent));
             Uri selectedImage = intent.getData();
 
-            Log.d("hmmmmmm11111111", String.valueOf(intent.getData()));
             openEditor(selectedImage);
 
         } else if (resultCode == RESULT_OK && requestCode == PESDK_RESULT) {
-            Log.d("hmmmmmm2222222", String.valueOf(intent));
             // Editor has saved an Image.
             EditorSDKResult data = new EditorSDKResult(intent);
 
@@ -173,8 +174,6 @@ public class EditImage extends Activity {
         } else if (resultCode == RESULT_CANCELED && requestCode == PESDK_RESULT) {
             // Editor was canceled
             EditorSDKResult data = new EditorSDKResult(intent);
-            Log.d("hmmmmmm333", String.valueOf(intent));
-
 
             Uri sourceURI = data.getSourceUri();
 
