@@ -27,14 +27,13 @@ public class AllPhotos extends Fragment {
     MainActivity main;
     Context context;
     Button selectBtn, subMenuBtn;
-    GridView gridView;
     BottomNavigationView bottomNavigationView;
     ImageButton imageButton;
 
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
     List<String> images;
-    TextView gallery_number;
+
 
     public static AllPhotos newInstance(String strArg1) {
         AllPhotos fragment = new AllPhotos();
@@ -94,10 +93,35 @@ public class AllPhotos extends Fragment {
     public void showNavAndButton(){
         bottomNavigationView.setVisibility(View.VISIBLE);
         imageButton.setVisibility(View.VISIBLE);
+        galleryAdapter.notifyDataSetChanged();
     }
     public void hideNavAndButton(){
         bottomNavigationView.setVisibility(View.INVISIBLE);
         imageButton.setVisibility(View.INVISIBLE);
+    }
+
+    public void refresh(View view){
+
+        recyclerView = view.findViewById(R.id.recycleview_gallery_images);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+
+        images = ImagesGallery.listOfImages(context); //get image array from device
+        galleryAdapter = new GalleryAdapter(context, images, new GalleryAdapter.PhotoListener() {
+            @Override
+            public void onPhotoClick(String path, int position) {
+                main.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameContent,
+                                ImageViewing.newInstance(path, position, images),
+                                "ImageViewing")
+                        .addToBackStack("ImageViewingUI")
+                        .commit();
+
+                hideNavAndButton();
+            }
+        });
+        recyclerView.setAdapter(galleryAdapter);
     }
 
 }
