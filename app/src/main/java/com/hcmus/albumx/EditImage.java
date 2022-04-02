@@ -1,10 +1,11 @@
 package com.hcmus.albumx;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,13 +15,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.core.content.FileProvider;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import ly.img.android.pesdk.PhotoEditorSettingsList;
 import ly.img.android.pesdk.assets.filter.basic.FilterPackBasic;
@@ -33,12 +30,14 @@ import ly.img.android.pesdk.backend.model.EditorSDKResult;
 import ly.img.android.pesdk.backend.model.state.LoadSettings;
 import ly.img.android.pesdk.backend.model.state.PhotoEditorSaveSettings;
 import ly.img.android.pesdk.backend.model.state.manager.SettingsList;
+import ly.img.android.pesdk.ui.activity.CameraPreviewBuilder;
 import ly.img.android.pesdk.ui.activity.PhotoEditorBuilder;
 import ly.img.android.pesdk.ui.model.state.UiConfigFilter;
 import ly.img.android.pesdk.ui.model.state.UiConfigFrame;
 import ly.img.android.pesdk.ui.model.state.UiConfigOverlay;
 import ly.img.android.pesdk.ui.model.state.UiConfigSticker;
 import ly.img.android.pesdk.ui.model.state.UiConfigText;
+import ly.img.android.pesdk.ui.utils.PermissionRequest;
 import ly.img.android.serializer._3.IMGLYFileWriter;
 
 
@@ -47,10 +46,9 @@ public class EditImage extends Activity {
 
     public static int PESDK_RESULT = 1;
     public static int GALLERY_RESULT = 2;
-    public static int CAMERA_RESULT = 3;
 
 
-    private SettingsList createPesdkSettingsList() {
+    private static SettingsList createPesdkSettingsList() {
         // Create a empty new SettingsList and apply the changes on this reference.
         PhotoEditorSettingsList settingsList = new PhotoEditorSettingsList();
         // If you include our asset Packs and you use our UI you also need to add them to the UI Config,
@@ -98,23 +96,28 @@ public class EditImage extends Activity {
     }
 
 
-    private void openSystemGalleryToSelectAnImage() {
+
+    public void openSystemGalleryToSelectAnImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         try {
+
             startActivityForResult(intent, GALLERY_RESULT);
+
         } catch (ActivityNotFoundException exception) {
             Toast.makeText(this, "No Gallery APP installed", Toast.LENGTH_LONG).show();
         }
     }
-
     private void openSystemCameraToTakeAnImage() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
-//        Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-        startActivityForResult(intent, CAMERA_RESULT);
+        PhotoEditorSettingsList settingsList = (PhotoEditorSettingsList) createPesdkSettingsList();
+
+        new CameraPreviewBuilder(this)
+                .setSettingsList(settingsList)
+                .startActivityForResult(this, PESDK_RESULT,  PermissionRequest.NEEDED_PREVIEW_PERMISSIONS_AND_FINE_LOCATION);
+
     }
+    public void openEditor(Uri inputImage) {
 
-
-    private void openEditor(Uri inputImage) {
+        Log.d("urine", String.valueOf(inputImage));
         SettingsList settingsList = createPesdkSettingsList();
 
         // Set input image
@@ -122,15 +125,12 @@ public class EditImage extends Activity {
 
         settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.DIRECTORY_DCIM);
 
+//        new PhotoEditorBuilder(this).setSettingsList(settingsList).startActivityForResult((Activity) context, PESDK_RESULT);
+
         new PhotoEditorBuilder(this).setSettingsList(settingsList).startActivityForResult(this, PESDK_RESULT);
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -139,16 +139,14 @@ public class EditImage extends Activity {
 
         if (resultCode == RESULT_OK && requestCode == GALLERY_RESULT) {
             // Open Editor with some uri in this case with an image selected from the system gallery.
+            Log.d("xxxxxx1", String.valueOf(intent));
             Uri selectedImage = intent.getData();
+
+            Log.d("hmmmmmm11111111", String.valueOf(intent.getData()));
             openEditor(selectedImage);
 
-        } else if (resultCode == RESULT_OK && requestCode == CAMERA_RESULT) {
-            Bundle extras = intent.getExtras();
-            Bitmap bp = (Bitmap) extras.get("data");
-            Uri capturedImage = getImageUri(this, bp);
-            openEditor(capturedImage);
-
         } else if (resultCode == RESULT_OK && requestCode == PESDK_RESULT) {
+            Log.d("hmmmmmm2222222", String.valueOf(intent));
             // Editor has saved an Image.
             EditorSDKResult data = new EditorSDKResult(intent);
 
@@ -175,9 +173,13 @@ public class EditImage extends Activity {
         } else if (resultCode == RESULT_CANCELED && requestCode == PESDK_RESULT) {
             // Editor was canceled
             EditorSDKResult data = new EditorSDKResult(intent);
+            Log.d("hmmmmmm333", String.valueOf(intent));
 
 
             Uri sourceURI = data.getSourceUri();
+
+            Log.d("PESDK", "Source image is located here " + data.getSourceUri());
+
             // TODO: Do something with the source...
         }
     }
