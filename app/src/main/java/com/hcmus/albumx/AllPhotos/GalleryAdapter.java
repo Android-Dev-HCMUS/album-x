@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.hcmus.albumx.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
@@ -27,8 +28,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         this.photoListener = photoListener;
     }
 
-    public GalleryAdapter(Context context, List<String> images, AdapterView.OnItemClickListener onItemClickListener) {
-    }
+
 
 
     @NonNull
