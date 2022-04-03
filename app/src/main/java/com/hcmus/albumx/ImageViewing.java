@@ -227,7 +227,6 @@ public class ImageViewing extends Fragment {
         View view = fragment.getView();
         if (fragment != null) {
             fragment.showNavAndButton();
-            fragment.refresh(view);
         }
 
     }
