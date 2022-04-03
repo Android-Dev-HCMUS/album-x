@@ -63,10 +63,10 @@ public class SetNameAlbumDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(type == SET_NAME_NEW_ALBUM){
-                            listener.applyNameToNewAlbum(albumName.getText().toString());
+                            listener.applyNameToNewAlbum(albumName.getText().toString().trim());
                         }
                         if(type == RENAME_ALBUM){
-                            listener.renameAlbum(albumName.getText().toString(), position);
+                            listener.renameAlbum(albumName.getText().toString().trim(), position);
                         }
                     }
                 });

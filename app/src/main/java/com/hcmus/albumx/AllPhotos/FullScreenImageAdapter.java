@@ -1,6 +1,7 @@
 package com.hcmus.albumx.AllPhotos;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,17 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.hcmus.albumx.R;
 
 import java.util.ArrayList;
 
 public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder> {
     Context context;
-    ArrayList<String> imageArr;
+    ArrayList<Bitmap> bitmapArrayList;
 
-    public FullScreenImageAdapter(Context context, ArrayList<String> imageArr) {
+    public FullScreenImageAdapter(Context context, ArrayList<Bitmap> bitmapArrayList) {
         this.context = context;
-        this.imageArr = imageArr;
+        this.bitmapArrayList = bitmapArrayList;
     }
 
     @NonNull
@@ -32,14 +32,12 @@ public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImage
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String image = imageArr.get(position);
-
-        Glide.with(context).load(image).into(holder.imageView);
+        holder.imageView.setImageBitmap(bitmapArrayList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return imageArr.size();
+        return bitmapArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,25 +49,4 @@ public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImage
             imageView = itemView.findViewById(R.id.imageViewFull);
         }
     }
-
-//    @NonNull
-//    @Override
-//    public Object instantiateItem(@NonNull ViewGroup container, int position) {
-//        ImageView imageView = new ImageView(context);
-//        int padding = context.getResources().getDimensionPixelSize(
-//                 R.dimen.default_padding_side);
-//        imageView.setPadding(padding, padding, padding, padding);
-//        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//
-//        File imgFile = new  File(imageArr.get(position));
-//        Log.e("image", imgFile.getAbsolutePath());
-//        if(imgFile.exists()){
-//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//            imageView.setImageBitmap(myBitmap);
-//        }
-//        container.addView(imageView, 0);
-//
-//        return imageView;
-//    }
-
 }
