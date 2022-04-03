@@ -1,19 +1,14 @@
 package com.hcmus.albumx;
 
 
-import android.annotation.SuppressLint;
 import android.app.WallpaperManager;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,9 +35,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
-
-import androidx.core.content.FileProvider;
 
 
 public class ImageViewing extends Fragment {
@@ -61,9 +53,6 @@ public class ImageViewing extends Fragment {
     int position = 0;
 
     public static ImageViewing newInstance(Bitmap bitmap, int pos) {
-
-    public static ImageViewing newInstance(String path, int pos, List<String> imageArray) {
-
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
         bundle.putParcelable("bitmap", bitmap);
@@ -127,30 +116,18 @@ public class ImageViewing extends Fragment {
             public void onClick(View view) {
                 main.getSupportFragmentManager().popBackStack();
                 onDetach();
-
                 //notify();
-
             }
-
         });
         ImagesGallery.listOfImages(context);
-
-        }); // back onClickListener
-
 
         edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
-                String path = imageArray.get(viewPager.getCurrentItem());
+                String path = imageArray.get(position);
                 Log.d("pathne", path);
 //                Uri uri = getImageContentUri(context, path);
-
-                String path = finalImageArray.get(viewPager.getCurrentItem());
-
 
                 Uri selectedUri = Uri.fromFile(new File(path));
                 EditImage editImage = new EditImage(getActivity());
@@ -162,23 +139,10 @@ public class ImageViewing extends Fragment {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //Create Img from bitmap and share with text
                 shareImageandText(bitmapArrayList.get(position));
             }
         });
-
-
-                String path = finalImageArray.get(viewPager.getCurrentItem());
-
-                //Create bitmap
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
-                //Create Img from bitmap and share with text
-                shareImageandText(bitmap);
-            }
-        }); //share onClickListener
-        more = (Button) view.findViewById(R.id.buttonMore);
-
 
         more = (Button) view.findViewById(R.id.buttonMore);
         more.setOnClickListener(new View.OnClickListener() {
@@ -267,71 +231,4 @@ public class ImageViewing extends Fragment {
         }
 
     }
-
-    public static Uri getImageContentUri2(Context context, File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.Media._ID},
-                MediaStore.Images.Media.DATA + "=? ",
-                new String[]{filePath}, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-            cursor.close();
-            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    ContentResolver resolver = context.getContentResolver();
-                    Uri picCollection = MediaStore.Images.Media
-                            .getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-                    ContentValues picDetail = new ContentValues();
-                    picDetail.put(MediaStore.Images.Media.DISPLAY_NAME, imageFile.getName());
-                    picDetail.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
-                    picDetail.put(MediaStore.Images.Media.RELATIVE_PATH,"DCIM/" + UUID.randomUUID().toString());
-                    picDetail.put(MediaStore.Images.Media.IS_PENDING,1);
-                    Uri finaluri = resolver.insert(picCollection, picDetail);
-                    picDetail.clear();
-                    picDetail.put(MediaStore.Images.Media.IS_PENDING, 0);
-                    resolver.update(picCollection, picDetail, null, null);
-                    return finaluri;
-                }else {
-                    ContentValues values = new ContentValues();
-                    values.put(MediaStore.Images.Media.DATA, filePath);
-                    return context.getContentResolver().insert(
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                }
-
-            } else {
-                return null;
-            }
-        }
-    }
-
-    public static Uri getImageContentUri(Context context, File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[] { MediaStore.Images.Media._ID },
-                MediaStore.Images.Media.DATA + "=? ",
-                new String[] { filePath }, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-            cursor.close();
-            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.DATA, filePath);
-                return context.getContentResolver().insert(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            } else {
-                return null;
-            }
-        }
-    }
-
-    }   //onDetach
-
-
 }
