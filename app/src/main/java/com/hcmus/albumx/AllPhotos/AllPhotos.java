@@ -41,10 +41,15 @@ public class AllPhotos extends Fragment {
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
 
+
     private static final int PICK_IMAGE = 1;
     Uri imageUri;
     ImageDatabase myDB;
     ArrayList<Bitmap> bitmapList;
+
+    // List<String> images;
+
+
 
     public static AllPhotos newInstance(String strArg1) {
         AllPhotos fragment = new AllPhotos();
@@ -168,10 +173,36 @@ public class AllPhotos extends Fragment {
         bottomNavigationView.setVisibility(View.VISIBLE);
         imageButton.setVisibility(View.VISIBLE);
 
+        //galleryAdapter.notifyDataSetChanged();
+
     }
     public void hideNavAndButton(){
         bottomNavigationView.setVisibility(View.INVISIBLE);
         imageButton.setVisibility(View.INVISIBLE);
+    }
+
+    public void refresh(View view){
+
+        recyclerView = view.findViewById(R.id.recycleview_gallery_images);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+
+        images = ImagesGallery.listOfImages(context); //get image array from device
+        galleryAdapter = new GalleryAdapter(context, images, new GalleryAdapter.PhotoListener() {
+            @Override
+            public void onPhotoClick(String path, int position) {
+                main.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameContent,
+                                ImageViewing.newInstance(path, position, images),
+                                "ImageViewing")
+                        .addToBackStack("ImageViewingUI")
+                        .commit();
+
+                hideNavAndButton();
+            }
+        });
+        recyclerView.setAdapter(galleryAdapter);
     }
 
 }

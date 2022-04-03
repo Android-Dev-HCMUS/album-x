@@ -41,12 +41,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import androidx.core.content.FileProvider;
+
+
 public class ImageViewing extends Fragment {
     MainActivity main;
     Context context;
 
     Button back, more, edit, like, share;
     ViewPager2 viewPager;
+
 
     public static int GALLERY_RESULT = 2;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
@@ -56,6 +61,9 @@ public class ImageViewing extends Fragment {
     int position = 0;
 
     public static ImageViewing newInstance(Bitmap bitmap, int pos) {
+
+    public static ImageViewing newInstance(String path, int pos, List<String> imageArray) {
+
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
         bundle.putParcelable("bitmap", bitmap);
@@ -118,15 +126,17 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
                 main.getSupportFragmentManager().popBackStack();
-                AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
-                        .findFragmentByTag("AllPhotos");
+                onDetach();
 
-                if (fragment != null) {
-                    fragment.showNavAndButton();
-                }
+                //notify();
+
             }
+
         });
         ImagesGallery.listOfImages(context);
+
+        }); // back onClickListener
+
 
         edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -134,27 +144,41 @@ public class ImageViewing extends Fragment {
             public void onClick(View view) {
 
 
+
                 String path = imageArray.get(viewPager.getCurrentItem());
                 Log.d("pathne", path);
 //                Uri uri = getImageContentUri(context, path);
 
-                Uri selectedUri = Uri.fromFile(new File(path)); //getImageContentUri2(context, new File(path));
-                EditImage editImage = new EditImage();
-                //editImage.openSystemGalleryToSelectAnImage();
-                editImage.openEditor(selectedUri);
+                String path = finalImageArray.get(viewPager.getCurrentItem());
 
-                Toast.makeText(context, Integer.toString(viewPager.getCurrentItem()), Toast.LENGTH_SHORT).show();
+
+                Uri selectedUri = Uri.fromFile(new File(path));
+                EditImage editImage = new EditImage(getActivity());
+                editImage.openEditor(selectedUri);
             }
-        });
+        }); //edit onClickListener
 
         share = (Button) view.findViewById(R.id.buttonShare);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 //Create Img from bitmap and share with text
                 shareImageandText(bitmapArrayList.get(position));
             }
         });
+
+
+                String path = finalImageArray.get(viewPager.getCurrentItem());
+
+                //Create bitmap
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                //Create Img from bitmap and share with text
+                shareImageandText(bitmap);
+            }
+        }); //share onClickListener
+        more = (Button) view.findViewById(R.id.buttonMore);
+
 
         more = (Button) view.findViewById(R.id.buttonMore);
         more.setOnClickListener(new View.OnClickListener() {
@@ -180,16 +204,16 @@ public class ImageViewing extends Fragment {
                                 return true;
                             default:
                                 return false;
-                        }
+                        } //Switch
                     }
-                });
+                }); //setOnMenuItemClickListener
                 popup.inflate(R.menu.menu_image_more);
                 popup.show();
             }
-        });
+        }); //more onClickListener
 
         return view;
-    }
+    }   //View
     private void shareImageandText(Bitmap bitmap) {
         Uri uri = getmageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -208,7 +232,7 @@ public class ImageViewing extends Fragment {
 
         // calling startactivity() to share
         startActivity(Intent.createChooser(intent, "Share Via"));
-    }
+    }   //ShareImageandText
 
     // Retrieving the url to share
     private Uri getmageToShare(Bitmap bitmap) {
@@ -229,15 +253,19 @@ public class ImageViewing extends Fragment {
             Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return uri;
-    }
+    }   //getImageToShare
 
     @Override
     public void onDetach() {
         super.onDetach();
-        AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager().findFragmentByTag("AllPhotos");
+        AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
+                .findFragmentByTag("AllPhotos");
+        View view = fragment.getView();
         if (fragment != null) {
             fragment.showNavAndButton();
+            fragment.refresh(view);
         }
+
     }
 
     public static Uri getImageContentUri2(Context context, File imageFile) {
@@ -302,4 +330,8 @@ public class ImageViewing extends Fragment {
             }
         }
     }
+
+    }   //onDetach
+
+
 }
