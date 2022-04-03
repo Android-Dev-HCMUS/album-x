@@ -41,15 +41,10 @@ public class AllPhotos extends Fragment {
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
 
-
     private static final int PICK_IMAGE = 1;
     Uri imageUri;
     ImageDatabase myDB;
     ArrayList<Bitmap> bitmapList;
-
-    // List<String> images;
-
-
 
     public static AllPhotos newInstance(String strArg1) {
         AllPhotos fragment = new AllPhotos();
@@ -172,9 +167,6 @@ public class AllPhotos extends Fragment {
     public void showNavAndButton(){
         bottomNavigationView.setVisibility(View.VISIBLE);
         imageButton.setVisibility(View.VISIBLE);
-
-        //galleryAdapter.notifyDataSetChanged();
-
     }
     public void hideNavAndButton(){
         bottomNavigationView.setVisibility(View.INVISIBLE);
