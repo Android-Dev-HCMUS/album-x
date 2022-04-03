@@ -33,6 +33,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
+import com.hcmus.albumx.AllPhotos.ImageDatabase;
+import com.hcmus.albumx.AllPhotos.ImagesGallery;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,13 +49,17 @@ public class ImageViewing extends Fragment {
     ViewPager2 viewPager;
 
     public static int GALLERY_RESULT = 2;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
-    public static ImageViewing newInstance(Bitmap bitmap, int pos, ArrayList<Bitmap> listBitmap) {
+    ArrayList<String> imageArray = new ArrayList<>();
+    ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
+    int position = 0;
+
+    public static ImageViewing newInstance(Bitmap bitmap, int pos) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
         bundle.putParcelable("bitmap", bitmap);
         bundle.putInt("position", pos);
-        bundle.putParcelableArrayList("bitmapArray", (ArrayList<Bitmap>) listBitmap);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -74,15 +80,22 @@ public class ImageViewing extends Fragment {
         View view = (View) inflater.inflate(R.layout.image_viewing, container, false);
 
         Bundle bundle = getArguments();
-        ArrayList<String> imageArray = null;
-        ArrayList<Bitmap> bitmapArrayList = null;
-        int position = 0;
 
         if (bundle != null) {
-            imageArray = bundle.getStringArrayList("imageArray");
             position = bundle.getInt("position");
-            bitmapArrayList = bundle.getParcelableArrayList("bitmapArray");
         }
+
+        Cursor cursor = ImageDatabase.getInstance(context).getImages("SELECT * FROM " + ImageDatabase.TABLE_NAME);
+
+        while (cursor.moveToNext()){
+            String name = cursor.getString(1);
+            String path = cursor.getString(2);
+            imageArray.add(path);
+            byte[] image = cursor.getBlob(3);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+            bitmapArrayList.add(bitmap);
+        }
+
 
         viewPager = view.findViewById(R.id.imageViewPager);
         viewPager.setAdapter(new FullScreenImageAdapter(context, bitmapArrayList));
@@ -113,16 +126,15 @@ public class ImageViewing extends Fragment {
                 }
             }
         });
+        ImagesGallery.listOfImages(context);
 
-        ArrayList<String> finalImageArray = imageArray;
         edit = (Button) view.findViewById(R.id.buttonEdit);
-
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
-                String path = finalImageArray.get(viewPager.getCurrentItem());
+                String path = imageArray.get(viewPager.getCurrentItem());
                 Log.d("pathne", path);
 //                Uri uri = getImageContentUri(context, path);
 
@@ -136,39 +148,15 @@ public class ImageViewing extends Fragment {
         });
 
         share = (Button) view.findViewById(R.id.buttonShare);
-
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                String path = finalImageArray.get(viewPager.getCurrentItem());
-
-
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
-//                File sd = Environment.getExternalStorageDirectory();
-//
-//                File image = new File(sd+path, "imageNametemp");
-//                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//                Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-                //bitmap = Bitmap.createScaledBitmap(bitmap,view.getWidth(),view.getHeight(),true);
-//                ImageView imageView = null;
-//                imageView.setImageBitmap(bitmap);
-//
-//                BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
-//                Bitmap bitmap2 = bitmapDrawable.getBitmap();
-                shareImageandText(bitmap);
-//                Uri uriToImage = Uri.parse(path);
-//                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
-//                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//
-//                shareIntent.setType("image/*");
+                //Create Img from bitmap and share with text
+                shareImageandText(bitmapArrayList.get(position));
             }
         });
-        more = (Button) view.findViewById(R.id.buttonMore);
 
+        more = (Button) view.findViewById(R.id.buttonMore);
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,9 +171,7 @@ public class ImageViewing extends Fragment {
                                 try {
                                     viewPager.getDrawableState();
                                     // set the wallpaper by calling the setResource function
-                                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                                    Bitmap bitmap = BitmapFactory.decodeFile(finalImageArray.get(viewPager.getCurrentItem()), bmOptions);
-                                    wallpaperManager.setBitmap(bitmap);
+                                    wallpaperManager.setBitmap(bitmapArrayList.get(position));
                                     Toast.makeText(context, "Set wallpaper successfully", Toast.LENGTH_SHORT).show();
                                 } catch (IOException e) {
                                     // here the errors can be logged instead of printStackTrace
@@ -253,7 +239,6 @@ public class ImageViewing extends Fragment {
             fragment.showNavAndButton();
         }
     }
-
 
     public static Uri getImageContentUri2(Context context, File imageFile) {
         String filePath = imageFile.getAbsolutePath();

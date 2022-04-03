@@ -7,12 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +27,6 @@ import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class AllPhotos extends Fragment {
         try {
             context = getActivity();
             main = (MainActivity) getActivity();
-            myDB = new ImageDatabase(context);
+            myDB = ImageDatabase.getInstance(context);
             bitmapList = new ArrayList<>();
             if (main != null) {
                 bottomNavigationView = main.findViewById(R.id.bottomNavigation);
@@ -70,12 +70,11 @@ public class AllPhotos extends Fragment {
             Cursor cursor = myDB.getImages("SELECT * FROM " + ImageDatabase.TABLE_NAME);
             while (cursor.moveToNext()){
                 String name = cursor.getString(1);
-                Log.e("name", name);
-                byte[] image = cursor.getBlob(2);
+                String path = cursor.getString(2);
+                byte[] image = cursor.getBlob(3);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
                 bitmapList.add(bitmap);
             }
-
         } catch (IllegalStateException ignored) {
         }
     }
@@ -92,10 +91,13 @@ public class AllPhotos extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent pickImage = new Intent();
-                pickImage.setType("image/*");
-                pickImage.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(pickImage, "Chọn ảnh"), PICK_IMAGE);
+//                Intent pickImage = new Intent();
+//                pickImage.setType("image/*");
+//                pickImage.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(pickImage, "Chọn ảnh"), PICK_IMAGE);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                // Start the Intent
+                startActivityForResult(galleryIntent, 1);
             }
         });
 
@@ -109,7 +111,7 @@ public class AllPhotos extends Fragment {
                 main.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.frameContent,
-                                ImageViewing.newInstance(bitmap, position, bitmapList),
+                                ImageViewing.newInstance(bitmap, position),
                                 "ImageViewing")
                         .addToBackStack("ImageViewingUI")
                         .commit();
@@ -128,19 +130,34 @@ public class AllPhotos extends Fragment {
 
         if(requestCode == PICK_IMAGE){
             imageUri = data.getData();
+
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursors = getActivity().getContentResolver().query(imageUri,
+                    filePathColumn, null, null, null);
+            cursors.moveToFirst();
+
+            int columnIndex = cursors.getColumnIndex(filePathColumn[0]);
+            String path = cursors.getString(columnIndex);
+
             try {
-                File f = new File(String.valueOf(imageUri));
-                String imageName = f.getName();
+                String imageName = path.substring(path.lastIndexOf("/")+1);
+                Cursor cursor = myDB.getImages("SELECT * FROM " + ImageDatabase.TABLE_NAME +
+                        " WHERE " + ImageDatabase.FIELD_NAME +" = '" + imageName +"';");
 
-                InputStream input = getActivity().getContentResolver().openInputStream(imageUri);
-                Bitmap bitmap = BitmapFactory.decodeStream(input);
-                ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
+                if(cursor.moveToFirst()){
+                    Toast.makeText(context, "Image is exists in gallery ! :)", Toast.LENGTH_SHORT).show();
+                }else{
+                    InputStream input = getActivity().getContentResolver().openInputStream(imageUri);
+                    Bitmap bitmap = BitmapFactory.decodeStream(input);
+                    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
 
-                myDB.insertImageData(imageName, byteArray.toByteArray());
+                    myDB.insertImageData(imageName, path, byteArray.toByteArray());
 
-                bitmapList.add(bitmap);
-                galleryAdapter.notifyDataSetChanged();
+                    bitmapList.add(bitmap);
+                    galleryAdapter.notifyDataSetChanged();
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

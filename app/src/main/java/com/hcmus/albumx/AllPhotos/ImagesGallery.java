@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class ImagesGallery {
 
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
-
+            Log.e("d", String.valueOf(absolutePathOfImage));
             listOfAllImages.add(absolutePathOfImage);
         }
 
