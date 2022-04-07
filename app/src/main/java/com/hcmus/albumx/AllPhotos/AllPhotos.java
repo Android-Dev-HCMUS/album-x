@@ -62,6 +62,7 @@ public class AllPhotos extends Fragment {
             main = (MainActivity) getActivity();
             myDB = ImageDatabase.getInstance(context);
             bitmapList = new ArrayList<>();
+
             if (main != null) {
                 bottomNavigationView = main.findViewById(R.id.bottomNavigation);
                 imageButton = main.findViewById(R.id.addBtn);
