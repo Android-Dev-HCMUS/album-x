@@ -121,6 +121,18 @@ public class ImageViewing extends Fragment {
         });
         ImagesGallery.listOfImages(context);
 
+        // Add to favourite album
+        like = (Button) view.findViewById(R.id.buttonLike);
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+
+                Toast.makeText(main.getApplication(), "Added to favourite album", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override

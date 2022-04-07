@@ -1,6 +1,7 @@
 package com.hcmus.albumx;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -48,6 +49,10 @@ public class MainActivity extends FragmentActivity {
                     break;
                 case R.id.menu_recycleBin:
                     // Do something
+                    break;
+                case R.id.cloudStorage:
+                    Intent cloudIntent = new Intent(this, CloudStorage.class);
+                    startActivity(cloudIntent);
                     break;
                 case R.id.menu_info:
                     // Do something

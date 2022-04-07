@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 public final class ImageDatabase extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "ImageDataManager";
@@ -33,7 +34,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
             FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             FIELD_NAME + " TEXT, " +
             FIELD_PATH + " TEXT, " +
-            FIELD_IMG + " BLOB " + ")";
+            FIELD_IMG + " BLOB" + ")";
 
     public Cursor getImages(String sql){
         SQLiteDatabase database = this.getReadableDatabase();
