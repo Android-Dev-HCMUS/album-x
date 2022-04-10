@@ -29,7 +29,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
@@ -40,10 +39,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AllPhotos extends Fragment {
+    public static String TAG = "ALl Photos";
+    public static int ALBUM_ID = 0;
+
     MainActivity main;
     Context context;
     Button selectBtn, subMenuBtn;
-    BottomNavigationView bottomNavigationView;
     ImageButton imageButton;
 
     RecyclerView recyclerView;
@@ -68,17 +69,7 @@ public class AllPhotos extends Fragment {
             context = getActivity();
             main = (MainActivity) getActivity();
             myDB = ImageDatabase.getInstance(context);
-            listImagePath = new ArrayList<>();
-            if (main != null) {
-                bottomNavigationView = main.findViewById(R.id.bottomNavigation);
-                imageButton = main.findViewById(R.id.addBtn);
-            }
-
-            Cursor cursor = myDB.getImages("SELECT * FROM " + ImageDatabase.TABLE_NAME);
-            while (cursor.moveToNext()){
-                String path = cursor.getString(2);
-                listImagePath.add(path);
-            }
+            listImagePath = myDB.getAllImages();
         } catch (IllegalStateException ignored) {
         }
     }
@@ -92,6 +83,7 @@ public class AllPhotos extends Fragment {
         selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         subMenuBtn = (Button) view.findViewById(R.id.buttonSubMenu);
 
+        imageButton = (ImageButton) view.findViewById(R.id.addBtn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,13 +104,13 @@ public class AllPhotos extends Fragment {
             public void onPhotoClick(String imagePath, int position) {
                 main.getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frameContent,
-                                ImageViewing.newInstance(imagePath, position),
+                        .replace(R.id.main_layout,
+                                ImageViewing.newInstance(imagePath, position, AllPhotos.ALBUM_ID),
                                 "ImageViewing")
                         .addToBackStack("ImageViewingUI")
                         .commit();
 
-                hideNavAndButton();
+                ((MainActivity)getActivity()).setBottomNavigationVisibility(View.INVISIBLE);
                }
         });
         recyclerView.setAdapter(galleryAdapter);
@@ -137,14 +129,13 @@ public class AllPhotos extends Fragment {
                     String path = getRealPathFromURI(data.getClipData().getItemAt(i).getUri());
                     Log.e("path clip", data.getClipData().getItemAt(i).getUri().toString());
                     String imageName = path.substring(path.lastIndexOf("/") + 1);
-                    Cursor cursor = myDB.getImages("SELECT * FROM " + ImageDatabase.TABLE_NAME +
-                            " WHERE " + ImageDatabase.FIELD_NAME + " = '" + imageName + "';");
+                    ArrayList<String> imagePaths = myDB.getImagesByName(imageName);
 
-                    if (cursor.moveToFirst()) {
-                        Toast.makeText(context, "Image " + imageName + " is exists in gallery ! :)", Toast.LENGTH_SHORT).show();
+                    if (imagePaths.size() != 0) {
+                        Toast.makeText(context, "Image " + imageName + " is exists in gallery :)", Toast.LENGTH_SHORT).show();
                     } else {
                         String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path), path.substring(path.lastIndexOf("/") + 1));
-                        myDB.insertImageData(imageName, newImagePath);
+                        myDB.insertImage(imageName, newImagePath);
 
                         listImagePath.add(newImagePath);
                     }
@@ -154,14 +145,13 @@ public class AllPhotos extends Fragment {
                 String path = getRealPathFromURI(data.getData());
 
                 String imageName = path.substring(path.lastIndexOf("/") + 1);
-                Cursor cursor = myDB.getImages("SELECT * FROM " + ImageDatabase.TABLE_NAME +
-                        " WHERE " + ImageDatabase.FIELD_NAME + " = '" + imageName + "';");
+                ArrayList<String> imagePaths = myDB.getImagesByName(imageName);
 
-                if (cursor.moveToFirst()) {
+                if (imagePaths.size() != 0) {
                     Toast.makeText(context, "Image " + imageName + " is exists in gallery ! :)", Toast.LENGTH_SHORT).show();
                 } else {
                     String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path), path.substring(path.lastIndexOf("/") + 1));
-                    myDB.insertImageData(imageName, newImagePath);
+                    myDB.insertImage(imageName, newImagePath);
 
                     listImagePath.add(newImagePath);
                 }
@@ -238,15 +228,4 @@ public class AllPhotos extends Fragment {
         listImagePath.addAll(newList);
         galleryAdapter.notifyDataSetChanged();
     }
-
-    public void showNavAndButton(){
-        bottomNavigationView.setVisibility(View.VISIBLE);
-        imageButton.setVisibility(View.VISIBLE);
-    }
-
-    public void hideNavAndButton(){
-        bottomNavigationView.setVisibility(View.INVISIBLE);
-        imageButton.setVisibility(View.INVISIBLE);
-    }
-
 }

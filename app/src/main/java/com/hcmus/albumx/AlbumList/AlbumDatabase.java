@@ -28,9 +28,6 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         public static final String FIELD_NAME = "name";
         public static final String FIELD_PATH = "path";
         public static final String FIELD_ALBUM = "album";
-
-        public static final int DEFAULT_TYPE = 0;
-        public static final int USER_TYPE = 1;
     }
 
     private static AlbumDatabase instance;
@@ -66,7 +63,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         return database.rawQuery(sql, null);
     }
 
-    public int insertAlbumData(String name, int type){
+    public int insertAlbum(String name, int type){
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -75,7 +72,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
 
         return (int) database.insert(albumSet.TABLE_NAME, null, contentValues);
     }
-    public void updateAlbumData(int id, String name){
+    public void updateAlbum(int id, String name){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(imageSet.FIELD_NAME, name);
@@ -84,7 +81,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
 
         database.update(albumSet.TABLE_NAME, contentValues, albumSet.FIELD_ID + " = ? ", arg);
     }
-    public void deleteAlbumData(int id){
+    public void deleteAlbum(int id){
         SQLiteDatabase database = this.getWritableDatabase();
         String[] arg = {String.valueOf(id)};
 
@@ -114,6 +111,13 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         }
 
         return paths;
+    }
+
+    public void deleteImage(String path){
+        SQLiteDatabase database = this.getWritableDatabase();
+        String[] arg = {path};
+
+        database.delete(imageSet.TABLE_NAME, "path = ?", arg);
     }
 
     @Override

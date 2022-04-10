@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F0F0"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bạn có muốn xóa ảnh này hoặc loại bỏ khỏi album này không?"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:layout_margin="25dp" />
+
+    <Button
+        android:id="@+id/remove_out_album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xóa khỏi album"
+        android:layout_margin="5dp"
+        android:background="@color/white"
+        />
+    <Button
+        android:id="@+id/remove_out_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Xóa khỏi thư viện"
+        android:textColor="@color/red"
+        android:background="@color/white"
+        />
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Hủy"
+        android:background="@color/white"
+        />
+</LinearLayout>

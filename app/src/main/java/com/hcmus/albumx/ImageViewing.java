@@ -1,6 +1,7 @@
 package com.hcmus.albumx;
 
 
+import android.app.Dialog;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
@@ -28,10 +29,10 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.AlbumList.AlbumInfo;
+import com.hcmus.albumx.AlbumList.AlbumPhotos;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
-import com.hcmus.albumx.AllPhotos.ImagesGallery;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,25 +41,29 @@ import java.util.ArrayList;
 
 
 public class ImageViewing extends Fragment {
+    public static String TAG = "Image Viewing";
+
     private MainActivity main;
     private Context context;
 
     private ViewPager2 viewPager;
-
+    FullScreenImageAdapter adapter;
 
     public static int GALLERY_RESULT = 2;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
     private ArrayList<String> imageArray = new ArrayList<>();
-    private int position = 0;
+    private int pos = 0;
 
     ArrayList<AlbumInfo> albumList;
+    int fromAlbum;
 
-    public static ImageViewing newInstance(String imagePath, int pos) {
+    public static ImageViewing newInstance(String imagePath, int pos, int fromAlbum) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
         bundle.putString("imagePath", imagePath);
         bundle.putInt("position", pos);
+        bundle.putInt("fromAlbum", fromAlbum);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -102,20 +107,36 @@ public class ImageViewing extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            position = bundle.getInt("position");
+            pos = bundle.getInt("position");
         }
 
-        Cursor cursor = ImageDatabase.getInstance(context).getImages("SELECT * FROM " + ImageDatabase.TABLE_NAME);
-        while (cursor.moveToNext()){
-            String path = cursor.getString(2);
-            imageArray.add(path);
+        if(getArguments() != null){
+            fromAlbum = getArguments().getInt("fromAlbum");
+            if(fromAlbum == 0){
+                imageArray = ImageDatabase.getInstance(context).getAllImages();
+            } else {
+                imageArray = AlbumDatabase.getInstance(context)
+                        .getImagesOf(getArguments().getInt("fromAlbum"));
+            }
         }
 
-        FullScreenImageAdapter adapter = new FullScreenImageAdapter(context, imageArray);
+        adapter = new FullScreenImageAdapter(context, imageArray, new FullScreenImageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+            }
+        });
 
         viewPager = view.findViewById(R.id.imageViewPager);
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(position, false);
+        viewPager.setCurrentItem(pos, false);
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                pos = position;
+            }
+        });
 
         CompositePageTransformer transformer = new CompositePageTransformer();
         transformer.addTransformer(new MarginPageTransformer(40));
@@ -138,14 +159,13 @@ public class ImageViewing extends Fragment {
                 //notify();
             }
         });
-        ImagesGallery.listOfImages(context);
 
         Button like = (Button) view.findViewById(R.id.buttonLike);
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlbumDatabase.getInstance(context)
-                        .insertImageToAlbum("", imageArray.get(position), albumList.get(1).id);
+                        .insertImageToAlbum("", imageArray.get(pos), albumList.get(1).id);
 
                 Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show();
             }
@@ -155,7 +175,7 @@ public class ImageViewing extends Fragment {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String path = imageArray.get(position);
+                String path = imageArray.get(pos);
                 Log.d("pathne", path);
 //                Uri uri = getImageContentUri(context, path);
 
@@ -170,7 +190,7 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
                 //Create Img from bitmap and share with text
-                shareImageandText(BitmapFactory.decodeFile(imageArray.get(position)));
+                shareImageandText(BitmapFactory.decodeFile(imageArray.get(pos)));
             }
         });
 
@@ -178,22 +198,56 @@ public class ImageViewing extends Fragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageDatabase db = ImageDatabase.getInstance(getContext());
-                db.deleteImageData(imageArray.get(position));
-                imageArray.remove(position);
+                if(fromAlbum == 0){
+                    Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
+                    dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
 
-                if(position == imageArray.size()){
-                    position--;
-                } else{
-                    position++;
-                }
-
-                if(imageArray.size() > 0){
-                    adapter.notifyDataSetChanged();
-                    viewPager.setCurrentItem(position, false);
+                    Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
+                    removeGallery.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            removeImageFrom(true);
+                            dialog.dismiss();
+                        }
+                    });
+                    Button cancel = dialog.findViewById(R.id.cancel);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 } else {
-                    main.getSupportFragmentManager().popBackStack();
-                    onDetach();
+                    Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.layout_custom_dialog_remove_image_album);
+                    dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
+                    Button removeAlbum = dialog.findViewById(R.id.remove_out_album);
+                    removeAlbum.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            removeImageFrom(false);
+                            dialog.dismiss();
+                        }
+                    });
+                    Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
+                    removeGallery.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            removeImageFrom(true);
+                            dialog.dismiss();
+                        }
+                    });
+                    Button cancel = dialog.findViewById(R.id.cancel);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -213,7 +267,7 @@ public class ImageViewing extends Fragment {
                                 try {
                                     viewPager.getDrawableState();
                                     // set the wallpaper by calling the setResource function
-                                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(imageArray.get(position)));
+                                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(imageArray.get(pos)));
                                     Toast.makeText(context, "Set wallpaper successfully", Toast.LENGTH_SHORT).show();
                                 } catch (IOException e) {
                                     // here the errors can be logged instead of printStackTrace
@@ -232,6 +286,24 @@ public class ImageViewing extends Fragment {
 
         return view;
     }   //View
+
+    private void removeImageFrom(boolean isGallery){
+        if(isGallery){
+            ImageDatabase.getInstance(getContext()).deleteImage(imageArray.get(pos));
+        }
+        AlbumDatabase.getInstance(getContext()).deleteImage(imageArray.get(pos));
+
+        imageArray.remove(pos);
+
+        if(imageArray.size() > 0){
+            adapter.notifyDataSetChanged();
+            viewPager.setCurrentItem(pos, false);
+        } else {
+            main.getSupportFragmentManager().popBackStack();
+            onDetach();
+        }
+    }
+
     private void shareImageandText(Bitmap bitmap) {
         Uri uri = getmageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -276,13 +348,22 @@ public class ImageViewing extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
-                .findFragmentByTag("AllPhotos");
+        ((MainActivity)getActivity()).setBottomNavigationVisibility(View.VISIBLE);
 
-        if (fragment != null) {
-            fragment.showNavAndButton();
-            fragment.notifyChangedListImageOnDelete(imageArray);
+        if(fromAlbum == 0){
+            AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
+                    .findFragmentByTag(AllPhotos.TAG);
+
+            if (fragment != null) {
+                fragment.notifyChangedListImageOnDelete(imageArray);
+            }
+        } else {
+            AlbumPhotos fragment2 = (AlbumPhotos) main.getSupportFragmentManager()
+                    .findFragmentByTag(AlbumPhotos.TAG);
+
+            if (fragment2 != null) {
+                fragment2.notifyChangedListImageOnDelete(imageArray);
+            }
         }
-
     }
 }

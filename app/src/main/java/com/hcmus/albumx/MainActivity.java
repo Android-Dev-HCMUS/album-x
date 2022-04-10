@@ -3,8 +3,6 @@ package com.hcmus.albumx;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,32 +17,28 @@ import com.hcmus.albumx.AllPhotos.AllPhotos;
 
 public class MainActivity extends FragmentActivity {
     private static final int MY_READ_PERMISSION_CODE = 101;
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadFragment(AllPhotos.newInstance("main_layout"), "AllPhotos", "AllPhotosUI");
 
-        ImageButton button = (ImageButton) findViewById(R.id.addBtn);
-
         //Check permission
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_READ_PERMISSION_CODE);
         }
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.menu_album:
-                    button.setVisibility(View.INVISIBLE);
-
-                    loadFragment(AlbumList.newInstance("album"), "AlbumList", "AlbumListUI");
+                    loadFragment(AlbumList.newInstance("album"), AlbumList.TAG, "AlbumListUI");
                     break;
                 case R.id.menu_photo:
                 default:
-                    button.setVisibility(View.VISIBLE);
-                    loadFragment(AllPhotos.newInstance("main_layout"), "AllPhotos", "AllPhotosUI");
+                    loadFragment(AllPhotos.newInstance("main_layout"), AllPhotos.TAG, "AllPhotosUI");
                     break;
                 case R.id.menu_recycleBin:
                     // Do something
@@ -53,7 +47,6 @@ public class MainActivity extends FragmentActivity {
                     // Do something
                     break;
             }
-
             return true;
         });
     }
@@ -63,6 +56,10 @@ public class MainActivity extends FragmentActivity {
                 .beginTransaction()
                 .replace(R.id.frameFragment, fragment, TAG)
                 .commit();
+    }
+
+    public void setBottomNavigationVisibility(int visibility) {
+        bottomNavigationView.setVisibility(visibility);
     }
 
     @Override

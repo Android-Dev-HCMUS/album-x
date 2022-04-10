@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 
+import java.util.ArrayList;
+
 public final class ImageDatabase extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "DataManager";
     public static final int DATABASE_VERSION = 1;
@@ -35,12 +37,33 @@ public final class ImageDatabase extends SQLiteOpenHelper {
             FIELD_NAME + " TEXT, " +
             FIELD_PATH + " TEXT " + ")";
 
-    public Cursor getImages(String sql){
+    public ArrayList<String> getAllImages(){
         SQLiteDatabase database = this.getReadableDatabase();
-        return database.rawQuery(sql, null);
+        ArrayList<String> paths = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + ImageDatabase.TABLE_NAME, null);
+        while(cursor.moveToNext()){
+            paths.add(cursor.getString(2));
+        }
+        return paths;
     }
 
-    public void insertImageData(String name, String path){
+    public ArrayList<String> getImagesByName(String name){
+        SQLiteDatabase database = this.getReadableDatabase();
+        ArrayList<String> paths = new ArrayList<>();
+
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH};
+        String[] arg = {name};
+        Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
+                ImageDatabase.FIELD_NAME +" = ?", arg,
+                null, null, null);
+        while(cursor.moveToNext()){
+            paths.add(cursor.getString(2));
+        }
+
+        return paths;
+    }
+
+    public void insertImage(String name, String path){
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -49,7 +72,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
 
         database.insert(TABLE_NAME, null, contentValues);
     }
-    public void deleteImageData(String path){
+    public void deleteImage(String path){
         SQLiteDatabase database = this.getWritableDatabase();
         String[] arg = {path};
 

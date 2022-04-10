@@ -24,6 +24,8 @@ import com.hcmus.albumx.R;
 import java.util.ArrayList;
 
 public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbumDialogListener, SetNameAlbumDialog.NewAlbumDialogListener{
+    public static String TAG = "Album List";
+
     MainActivity main;
     Context context;
     AlbumListAdapter adapter;
@@ -120,9 +122,9 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                 main.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.album_list_layout,
-                                AlbumPhotos.newInstance(albumList.get(position).id),
-                                "AlbumPhotos")
+                        .replace(R.id.frameFragment,
+                                AlbumPhotos.newInstance(albumList.get(position).id, albumList.get(position).name),
+                                AlbumPhotos.TAG)
                         .addToBackStack("AlbumPhotosUI")
                         .commit();
             }
@@ -147,14 +149,14 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         Log.e("position", String.valueOf(position));
         Log.e("position", String.valueOf(albumList.get(position).id));
 
-        db.deleteAlbumData(albumList.get(position).id);
+        db.deleteAlbum(albumList.get(position).id);
         albumList.remove(position);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void applyNameToNewAlbum(String albumName) {
-        int id = db.insertAlbumData(albumName, 1);
+        int id = db.insertAlbum(albumName, 1);
 
         albumList.add(new AlbumInfo(id, albumName, 1, R.drawable.ic_photo));
         adapter.notifyDataSetChanged();
@@ -163,7 +165,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
     @Override
     public void renameAlbum(String albumName, int position) {
         albumList.get(position).name = albumName;
-        db.updateAlbumData(albumList.get(position).id, albumName);
+        db.updateAlbum(albumList.get(position).id, albumName);
         adapter.notifyDataSetChanged();
     }
 }

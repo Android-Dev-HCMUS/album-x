@@ -17,10 +17,12 @@ import java.util.List;
 public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder> {
     Context context;
     List<String> listImagePath;
+    private OnItemClickListener listenerOnItemClick;
 
-    public FullScreenImageAdapter(Context context, List<String> listImagePath) {
+    public FullScreenImageAdapter(Context context, List<String> listImagePath, OnItemClickListener listenerOnItemClick) {
         this.context = context;
         this.listImagePath = listImagePath;
+        this.listenerOnItemClick = listenerOnItemClick;
     }
 
     @NonNull
@@ -32,7 +34,14 @@ public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImage
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        final int pos = position;
         Glide.with(context).load(listImagePath.get(position)).into(holder.imageView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listenerOnItemClick.onItemClick(pos);
+            }
+        });
     }
 
     @Override
@@ -49,4 +58,7 @@ public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImage
             imageView = itemView.findViewById(R.id.imageViewFull);
         }
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position); }
 }
