@@ -1,7 +1,6 @@
 package com.hcmus.albumx.AllPhotos;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hcmus.albumx.R;
 
 import java.util.List;
@@ -19,11 +19,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private Context context;
     protected PhotoListener photoListener;
 
-    private List<Bitmap> bitmapList;
+    private List<String> listImagePath;
 
-    public GalleryAdapter(Context context, List<Bitmap> bitmapList, PhotoListener photoListener) {
+    public GalleryAdapter(Context context, List<String> listImagePath, PhotoListener photoListener) {
         this.context = context;
-        this.bitmapList = bitmapList;
+        this.listImagePath = listImagePath;
         this.photoListener = photoListener;
     }
 
@@ -38,18 +38,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final int pos =  position;
-        holder.image.setImageBitmap(bitmapList.get(pos));
+        Glide.with(context).load(listImagePath.get(pos)).into(holder.image);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                photoListener.onPhotoClick(bitmapList.get(pos), pos);
+                photoListener.onPhotoClick(listImagePath.get(pos), pos);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return bitmapList.size();
+        return listImagePath.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,6 +64,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     }
     public interface PhotoListener {
 
-        void onPhotoClick(Bitmap bitmap, int position);
+        void onPhotoClick(String imagePath, int position);
     }
 }

@@ -15,14 +15,12 @@ import java.util.ArrayList;
 public class AlbumListAdapter extends BaseAdapter {
     private Context context;
     private int layout;
-    private ArrayList<String> albumList;
-    private ArrayList<Integer> icons;
+    private ArrayList<AlbumInfo> albumList;
 
-    public AlbumListAdapter(Context context, int layout, ArrayList<String> albumList, ArrayList<Integer> icons){
+    public AlbumListAdapter(Context context, int layout, ArrayList<AlbumInfo> albumList){
         this.context = context;
         this.layout = layout;
         this.albumList = albumList;
-        this.icons = icons;
     }
 
     @Override
@@ -62,8 +60,8 @@ public class AlbumListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.imageView.setImageResource(icons.get(i));
-        viewHolder.textView.setText(albumList.get(i));
+        viewHolder.imageView.setImageResource(albumList.get(i).icon);
+        viewHolder.textView.setText(albumList.get(i).name);
 
         return view;
     }

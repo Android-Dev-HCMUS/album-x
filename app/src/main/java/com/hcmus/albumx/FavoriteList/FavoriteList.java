@@ -44,9 +44,9 @@ public class FavoriteList extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View view = (View) inflater.inflate(R.layout.favorite_photos_layout, null);
+        View view = (View) inflater.inflate(R.layout.album_photos_layout, null);
 
-        favoriteGridView = (GridView) view.findViewById(R.id.favorite_gird_view);
+        //favoriteGridView = (GridView) view.findViewById(R.id.favorite_gird_view);
         //favoriteGridView.setAdapter(new FavoriteListAdapter(context, listFavoriteImg));
         favoriteGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
