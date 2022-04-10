@@ -265,7 +265,7 @@ public class ImageViewing extends Fragment {
                             case R.id.menu_wallpaper:
                                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(v.getContext());
                                 try {
-                                    viewPager.getDrawableState();
+                                    //viewPager.getDrawableState();
                                     // set the wallpaper by calling the setResource function
                                     wallpaperManager.setBitmap(BitmapFactory.decodeFile(imageArray.get(pos)));
                                     Toast.makeText(context, "Set wallpaper successfully", Toast.LENGTH_SHORT).show();
