@@ -1,7 +1,6 @@
 package com.hcmus.albumx.AllPhotos;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +9,18 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hcmus.albumx.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder> {
     Context context;
-    ArrayList<Bitmap> bitmapArrayList;
+    List<ImageInfo> listImage;
 
-    public FullScreenImageAdapter(Context context, ArrayList<Bitmap> bitmapArrayList) {
+    public FullScreenImageAdapter(Context context, List<ImageInfo> listImage) {
         this.context = context;
-        this.bitmapArrayList = bitmapArrayList;
+        this.listImage = listImage;
     }
 
     @NonNull
@@ -32,12 +32,13 @@ public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImage
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageView.setImageBitmap(bitmapArrayList.get(position));
+        final int pos = position;
+        Glide.with(context).load(listImage.get(position).path).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return bitmapArrayList.size();
+        return listImage.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

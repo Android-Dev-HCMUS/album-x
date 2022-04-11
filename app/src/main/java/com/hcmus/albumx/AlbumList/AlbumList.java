@@ -1,7 +1,9 @@
 package com.hcmus.albumx.AlbumList;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -16,30 +18,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.hcmus.albumx.AllPhotos.AllPhotos;
-import com.hcmus.albumx.FavoriteList.FavoriteList;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbumDialogListener, SetNameAlbumDialog.NewAlbumDialogListener{
+    public static String TAG = "Album List";
+
     MainActivity main;
     Context context;
     AlbumListAdapter adapter;
     ListView listView;
 
-    private ArrayList<String> albumList = new ArrayList<String>(Arrays.asList("All", "Recent", "Favorite", "Edited"));
-    private ArrayList<Integer> icons = new ArrayList<Integer>(Arrays.asList(R.drawable.ic_photo, R.drawable.ic_recent, R.drawable.ic_favorite,
-            R.drawable.ic_text));
+    AlbumDatabase db;
 
-    public static AlbumList newInstance(String strArg1) {
-        AlbumList fragment = new AlbumList();
-        Bundle bundle = new Bundle();
-        bundle.putString("arg2", strArg1);
-        fragment.setArguments(bundle);
-        return fragment;
+    private static ArrayList<AlbumInfo> albumList;
+
+    public static AlbumList newInstance() {
+        return new AlbumList();
     }
 
     @Override
@@ -48,7 +45,28 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         try {
             context = getActivity();
             main = (MainActivity) getActivity();
+            db = AlbumDatabase.getInstance(context);
 
+            if(albumList == null){
+                albumList = new ArrayList<>();
+
+                Cursor cursor = db.getAlbums();
+                while (cursor.moveToNext()){
+                    int id = cursor.getInt(0);
+                    String name = cursor.getString(1);
+                    int type = cursor.getInt(2);
+
+                    if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
+                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
+                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
+                    } else {
+                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
+                    }
+                }
+            }
         } catch (IllegalStateException ignored) {
         }
     }
@@ -56,8 +74,10 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        int position = info.position;
 
-        if(v.getId() == R.id.listView){
+        if(v.getId() == R.id.listView && position != 0 && position != 1 && position != 2){
             MenuInflater inflater = main.getMenuInflater();
             inflater.inflate(R.menu.menu_list_album, menu);
         }
@@ -71,7 +91,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         switch (item.getItemId()){
             case R.id.delete_album:
                 RemoveAlbumDialog removeAlbumDialog =
-                        new RemoveAlbumDialog(position, (String) listView.getItemAtPosition(position));
+                        new RemoveAlbumDialog(position, albumList.get(position).name);
                 removeAlbumDialog.setTargetFragment(AlbumList.this, 1);
                 removeAlbumDialog.show(getFragmentManager(), "remove album dialog");
                 return true;
@@ -89,8 +109,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View album = inflater.inflate(R.layout.album_list_layout, null);
-        adapter = new AlbumListAdapter(context,
-                R.layout.album_row, albumList,  icons);
+        adapter = new AlbumListAdapter(context, R.layout.album_row, albumList);
 
         listView = album.findViewById(R.id.listView);
         listView.setAdapter(adapter);
@@ -98,29 +117,12 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                switch (position) {
-                    case 0:
-                        main.getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.frameFragment, AllPhotos.newInstance("all photo"))
-                                .commit();
-                        break;
-                    case 1:
-                        // Recent
-                        break;
-                    case 2:
-                        // Favorite
-                        main.getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.frameFragment, FavoriteList.newInstance("favorite"))
-                                .commit();
-                        break;
-                    case 3:
-                        // Edited
-                        break;
-                    default:
-                        break;
-                }
+                main.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frameFragment,
+                                AlbumPhotos.newInstance(albumList.get(position).id, albumList.get(position).name),
+                                AlbumPhotos.TAG)
+                        .addToBackStack("AlbumPhotosUI")
+                        .commit();
             }
         });
 
@@ -140,21 +142,26 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
 
     @Override
     public void deleteAlbum(int position) {
+        Log.e("position", String.valueOf(position));
+        Log.e("position", String.valueOf(albumList.get(position).id));
+
+        db.deleteAlbum(albumList.get(position).id);
         albumList.remove(position);
-        icons.remove(position);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void applyNameToNewAlbum(String albumName) {
-        albumList.add(albumName);
-        icons.add(R.drawable.ic_photo);
+        int id = db.insertAlbum(albumName, 1);
+
+        albumList.add(new AlbumInfo(id, albumName, 1, R.drawable.ic_photo));
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void renameAlbum(String albumName, int position) {
-        albumList.set(position, albumName);
+        albumList.get(position).name = albumName;
+        db.updateAlbum(albumList.get(position).id, albumName);
         adapter.notifyDataSetChanged();
     }
 }

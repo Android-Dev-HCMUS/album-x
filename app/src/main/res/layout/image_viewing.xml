@@ -2,26 +2,48 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/headerBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#dadada"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:background="#F3F1F1"
         android:orientation="horizontal">
 
         <Button
-            style="?android:attr/borderlessButtonStyle"
             android:id="@+id/backButton"
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:drawableLeft="@drawable/ic_arrow_back" />
-    </LinearLayout>
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:drawableLeft="@drawable/ic_arrow_back"
+            android:text="  Tất cả ảnh" />
+
+        <FrameLayout android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp">
+            <Button
+                android:id="@+id/buttonEdit"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="35dp"
+                android:layout_height="35dp"/>
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_edit"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+    </RelativeLayout>
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/imageViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
+        android:background="@color/white"
         android:layout_below="@+id/headerBar"
         android:layout_above="@+id/optionBar"/>
 
@@ -31,11 +53,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#dadada"
+        android:background="#F3F1F1"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:gravity="center">
-
+        <Button
+            android:id="@+id/buttonShare"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/ic_share"
+            android:text="Chia sẻ"
+            android:textColor="@color/black"
+            android:textSize="10sp" />
         <Button
             android:id="@+id/buttonLike"
             style="?android:attr/borderlessButtonStyle"
@@ -47,22 +77,12 @@
             android:textSize="10sp" />
 
         <Button
-            android:id="@+id/buttonEdit"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="81dp"
-            android:layout_height="match_parent"
-            android:drawableTop="@drawable/ic_edit"
-            android:text="Chỉnh sửa"
-            android:textColor="@color/black"
-            android:textSize="10sp" />
-
-        <Button
-            android:id="@+id/buttonShare"
+            android:id="@+id/buttonMore"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:drawableTop="@drawable/ic_share"
-            android:text="Chia sẻ"
+            android:drawableTop="@drawable/ic_more"
+            android:text="Thêm"
             android:textColor="@color/black"
             android:textSize="10sp" />
 
@@ -73,16 +93,6 @@
             android:layout_height="match_parent"
             android:drawableTop="@drawable/ic_delete"
             android:text="Xoá"
-            android:textColor="@color/black"
-            android:textSize="10sp" />
-
-        <Button
-            android:id="@+id/buttonMore"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:drawableTop="@drawable/ic_more"
-            android:text="Thêm"
             android:textColor="@color/black"
             android:textSize="10sp" />
 

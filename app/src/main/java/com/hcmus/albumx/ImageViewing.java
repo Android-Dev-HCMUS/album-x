@@ -1,6 +1,7 @@
 package com.hcmus.albumx;
 
 
+import android.app.Dialog;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
@@ -26,10 +27,13 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.hcmus.albumx.AlbumList.AlbumDatabase;
+import com.hcmus.albumx.AlbumList.AlbumInfo;
+import com.hcmus.albumx.AlbumList.AlbumPhotos;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
-import com.hcmus.albumx.AllPhotos.ImagesGallery;
+import com.hcmus.albumx.AllPhotos.ImageInfo;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,25 +42,33 @@ import java.util.ArrayList;
 
 
 public class ImageViewing extends Fragment {
-    MainActivity main;
-    Context context;
+    public static String TAG = "Image Viewing";
 
-    Button back, more, edit, like, share;
-    ViewPager2 viewPager;
+    private static final String IMAGE_PATH_ARG = "imagePath";
+    private static final String IMAGE_POSITION_ARG = "position";
+    private static final String IMAGE_FROM_ALBUM_ARG = "fromAlbum";
 
+    private MainActivity main;
+    private Context context;
+
+    private ViewPager2 viewPager;
+    FullScreenImageAdapter adapter;
 
     public static int GALLERY_RESULT = 2;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
-    ArrayList<String> imageArray = new ArrayList<>();
-    ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
-    int position = 0;
+    private ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
+    private int pos = 0;
 
-    public static ImageViewing newInstance(Bitmap bitmap, int pos) {
+    private ArrayList<AlbumInfo> albumInfoArrayList;
+    private int fromAlbum;
+
+    public static ImageViewing newInstance(String imagePath, int pos, int fromAlbum) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("bitmap", bitmap);
-        bundle.putInt("position", pos);
+        bundle.putString(IMAGE_PATH_ARG, imagePath);
+        bundle.putInt(IMAGE_POSITION_ARG, pos);
+        bundle.putInt(IMAGE_FROM_ALBUM_ARG, fromAlbum);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -67,6 +79,39 @@ public class ImageViewing extends Fragment {
         try {
             context = getActivity();
             main = (MainActivity) getActivity();
+
+            if(albumInfoArrayList == null){
+                albumInfoArrayList = new ArrayList<>();
+
+                Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
+                while (cursor.moveToNext()){
+                    int id = cursor.getInt(0);
+                    String name = cursor.getString(1);
+                    int type = cursor.getInt(2);
+
+                    if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
+                    } else {
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
+                    }
+                }
+            }
+
+            if (getArguments() != null) {
+                pos = getArguments().getInt(IMAGE_POSITION_ARG);
+
+                fromAlbum = getArguments().getInt(IMAGE_FROM_ALBUM_ARG);
+                if(fromAlbum == 0){
+                    imageInfoArrayList = ImageDatabase.getInstance(context).getAllImages();
+                } else {
+                    imageInfoArrayList = AlbumDatabase.getInstance(context)
+                            .getImagesOf(getArguments().getInt(IMAGE_FROM_ALBUM_ARG));
+                }
+            }
         } catch (IllegalStateException ignored) {
         }
     }
@@ -76,27 +121,18 @@ public class ImageViewing extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = (View) inflater.inflate(R.layout.image_viewing, container, false);
 
-        Bundle bundle = getArguments();
-
-        if (bundle != null) {
-            position = bundle.getInt("position");
-        }
-
-        Cursor cursor = ImageDatabase.getInstance(context).getImages("SELECT * FROM " + ImageDatabase.TABLE_NAME);
-
-        while (cursor.moveToNext()){
-            String name = cursor.getString(1);
-            String path = cursor.getString(2);
-            imageArray.add(path);
-            byte[] image = cursor.getBlob(3);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-            bitmapArrayList.add(bitmap);
-        }
-
+        adapter = new FullScreenImageAdapter(context, imageInfoArrayList);
 
         viewPager = view.findViewById(R.id.imageViewPager);
-        viewPager.setAdapter(new FullScreenImageAdapter(context, bitmapArrayList));
-        viewPager.setCurrentItem(position, false);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(pos, false);
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                pos = position;
+            }
+        });
 
         CompositePageTransformer transformer = new CompositePageTransformer();
         transformer.addTransformer(new MarginPageTransformer(40));
@@ -110,7 +146,7 @@ public class ImageViewing extends Fragment {
         });
         viewPager.setPageTransformer(transformer);
 
-        back = (Button) view.findViewById(R.id.backButton);
+        Button back = (Button) view.findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,25 +155,30 @@ public class ImageViewing extends Fragment {
                 //notify();
             }
         });
-        ImagesGallery.listOfImages(context);
 
-        // Add to favourite album
-        like = (Button) view.findViewById(R.id.buttonLike);
+        Button like = (Button) view.findViewById(R.id.buttonLike);
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
+                if(AlbumDatabase.getInstance(context)
+                        .isImageExistsInAlbum(imageInfoArrayList.get(pos).name,
+                                imageInfoArrayList.get(pos).path,
+                                albumInfoArrayList.get(1).id)){
+                    Toast.makeText(context, "Image exists in Favorite", Toast.LENGTH_SHORT).show();
+                } else{
+                    AlbumDatabase.getInstance(context)
+                            .insertImageToAlbum(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path, albumInfoArrayList.get(1).id);
 
-                Toast.makeText(main.getApplication(), "Added to favourite album", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-
-        edit = (Button) view.findViewById(R.id.buttonEdit);
+        Button edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String path = imageArray.get(position);
+                String path = imageInfoArrayList.get(pos).path;
                 Log.d("pathne", path);
 //                Uri uri = getImageContentUri(context, path);
 
@@ -147,16 +188,74 @@ public class ImageViewing extends Fragment {
             }
         }); //edit onClickListener
 
-        share = (Button) view.findViewById(R.id.buttonShare);
+        Button share = (Button) view.findViewById(R.id.buttonShare);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Create Img from bitmap and share with text
-                shareImageandText(bitmapArrayList.get(position));
+                shareImageandText(BitmapFactory.decodeFile(imageInfoArrayList.get(pos).path));
             }
         });
 
-        more = (Button) view.findViewById(R.id.buttonMore);
+        Button delete = (Button) view.findViewById(R.id.buttonDelete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(fromAlbum == 0){
+                    Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
+                    dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
+                    Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
+                    removeGallery.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            removeImageFrom(true);
+                            dialog.dismiss();
+                        }
+                    });
+                    Button cancel = dialog.findViewById(R.id.cancel);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                } else {
+                    Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.layout_custom_dialog_remove_image_album);
+                    dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
+                    Button removeAlbum = dialog.findViewById(R.id.remove_out_album);
+                    removeAlbum.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            removeImageFrom(false);
+                            dialog.dismiss();
+                        }
+                    });
+                    Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
+                    removeGallery.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            removeImageFrom(true);
+                            dialog.dismiss();
+                        }
+                    });
+                    Button cancel = dialog.findViewById(R.id.cancel);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                }
+            }
+        });
+
+        Button more = (Button) view.findViewById(R.id.buttonMore);
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,9 +268,9 @@ public class ImageViewing extends Fragment {
                             case R.id.menu_wallpaper:
                                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(v.getContext());
                                 try {
-                                    viewPager.getDrawableState();
+                                    //viewPager.getDrawableState();
                                     // set the wallpaper by calling the setResource function
-                                    wallpaperManager.setBitmap(bitmapArrayList.get(position));
+                                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(imageInfoArrayList.get(pos).path));
                                     Toast.makeText(context, "Set wallpaper successfully", Toast.LENGTH_SHORT).show();
                                 } catch (IOException e) {
                                     // here the errors can be logged instead of printStackTrace
@@ -190,6 +289,29 @@ public class ImageViewing extends Fragment {
 
         return view;
     }   //View
+
+    private void removeImageFrom(boolean isRemoveOutOfGallery){
+        if(isRemoveOutOfGallery){
+            ImageDatabase.getInstance(getContext())
+                    .moveImageToRecycleBin(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
+            AlbumDatabase.getInstance(getContext())
+                    .softDeleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
+        } else{
+            AlbumDatabase.getInstance(getContext())
+                    .hardDeleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
+        }
+
+        imageInfoArrayList.remove(pos);
+
+        if(imageInfoArrayList.size() > 0){
+            adapter.notifyDataSetChanged();
+            viewPager.setCurrentItem(pos, false);
+        } else {
+            main.getSupportFragmentManager().popBackStack();
+            onDetach();
+        }
+    }
+
     private void shareImageandText(Bitmap bitmap) {
         Uri uri = getmageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -234,12 +356,22 @@ public class ImageViewing extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
-                .findFragmentByTag("AllPhotos");
-        View view = fragment.getView();
-        if (fragment != null) {
-            fragment.showNavAndButton();
-        }
+        ((MainActivity)getActivity()).setBottomNavigationVisibility(View.VISIBLE);
 
+        if(fromAlbum == 0){
+            AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
+                    .findFragmentByTag(AllPhotos.TAG);
+
+            if (fragment != null) {
+                fragment.notifyChangedListImageOnDelete(imageInfoArrayList);
+            }
+        } else {
+            AlbumPhotos fragment2 = (AlbumPhotos) main.getSupportFragmentManager()
+                    .findFragmentByTag(AlbumPhotos.TAG);
+
+            if (fragment2 != null) {
+                fragment2.notifyChangedListImageOnDelete(imageInfoArrayList);
+            }
+        }
     }
 }

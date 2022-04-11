@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,48 +15,45 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
+import com.hcmus.albumx.RecycleBin.RecycleBinPhotos;
 
 public class MainActivity extends FragmentActivity {
     private static final int MY_READ_PERMISSION_CODE = 101;
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loadFragment(AllPhotos.newInstance("main_layout"), "AllPhotos", "AllPhotosUI");
-
-        ImageButton button = (ImageButton) findViewById(R.id.addBtn);
+        loadFragment(AllPhotos.newInstance(), "AllPhotos", "AllPhotosUI");
 
         //Check permission
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_READ_PERMISSION_CODE);
         }
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.menu_album:
-                    button.setVisibility(View.INVISIBLE);
-
-                    loadFragment(AlbumList.newInstance("album"), "AlbumList", "AlbumListUI");
+                    loadFragment(AlbumList.newInstance(), AlbumList.TAG, "AlbumListUI");
+                    break;
+                case R.id.menu_recycleBin:
+                    loadFragment(RecycleBinPhotos.newInstance(), RecycleBinPhotos.TAG, "RecycleBinUI");
                     break;
                 case R.id.menu_photo:
                 default:
-                    button.setVisibility(View.VISIBLE);
-                    loadFragment(AllPhotos.newInstance("main_layout"), "AllPhotos", "AllPhotosUI");
-                    break;
-                case R.id.menu_recycleBin:
-                    // Do something
+                    loadFragment(AllPhotos.newInstance(), AllPhotos.TAG, "AllPhotosUI");
                     break;
                 case R.id.cloudStorage:
                     Intent cloudIntent = new Intent(this, CloudStorage.class);
                     startActivity(cloudIntent);
                     break;
+
                 case R.id.menu_info:
                     // Do something
                     break;
             }
-
             return true;
         });
     }
@@ -68,6 +63,10 @@ public class MainActivity extends FragmentActivity {
                 .beginTransaction()
                 .replace(R.id.frameFragment, fragment, TAG)
                 .commit();
+    }
+
+    public void setBottomNavigationVisibility(int visibility) {
+        bottomNavigationView.setVisibility(visibility);
     }
 
     @Override
