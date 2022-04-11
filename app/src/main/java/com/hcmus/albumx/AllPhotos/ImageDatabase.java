@@ -102,6 +102,19 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         return (int) database.insert(TABLE_NAME, null, contentValues);
     }
 
+    public boolean isImageExistsInApplication(String name){
+        boolean isExists = false;
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String[] columns = {FIELD_NAME, FIELD_PATH};
+        String[] arg = {name};
+        Cursor cursor = database.query(TABLE_NAME, columns, FIELD_NAME +" = ? ", arg, null, null, null);
+        if(cursor.getCount() > 0){
+            isExists = true;
+        }
+        return isExists;
+    }
+
     public void moveImageToRecycleBin(String name, String path){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

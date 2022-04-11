@@ -125,12 +125,12 @@ public class AllPhotos extends Fragment {
                     String path = getRealPathFromURI(data.getClipData().getItemAt(i).getUri());
                     String imageName = path.substring(path.lastIndexOf("/") + 1);
 
-                    ArrayList<String> imagePaths = myDB.getImagesByPath(path);
-
-                    if (imagePaths.size() != 0) {
-                        Toast.makeText(context, "Image " + imageName + " is exists in gallery :)", Toast.LENGTH_SHORT).show();
+                    if (ImageDatabase.getInstance(context).isImageExistsInApplication(imageName)) {
+                        Toast.makeText(context, "Image " + imageName + " is exists in gallery :)",
+                                Toast.LENGTH_SHORT).show();
                     } else {
-                        String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path), path.substring(path.lastIndexOf("/") + 1));
+                        String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path),
+                                path.substring(path.lastIndexOf("/") + 1));
                         int id = myDB.insertImage(imageName, newImagePath);
 
                         Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
@@ -148,12 +148,13 @@ public class AllPhotos extends Fragment {
                 String path = getRealPathFromURI(data.getData());
 
                 String imageName = path.substring(path.lastIndexOf("/") + 1);
-                ArrayList<String> imagePaths = myDB.getImagesByPath(path);
 
-                if (imagePaths.size() != 0) {
-                    Toast.makeText(context, "Image " + imageName + " is exists in gallery ! :)", Toast.LENGTH_SHORT).show();
+                if (ImageDatabase.getInstance(context).isImageExistsInApplication(imageName)) {
+                    Toast.makeText(context, "Image " + imageName + " is exists in gallery ! :)",
+                            Toast.LENGTH_SHORT).show();
                 } else {
-                    String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path), path.substring(path.lastIndexOf("/") + 1));
+                    String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path),
+                            path.substring(path.lastIndexOf("/") + 1));
                     int id = myDB.insertImage(imageName, newImagePath);
 
                     Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
@@ -173,13 +174,15 @@ public class AllPhotos extends Fragment {
     }
 
     public boolean isStoragePermissionGranted() {
-        boolean checkWritePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        boolean checkWritePermission =
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED;
 
         if (checkWritePermission) {
             return  true;
         } else{
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             return false;
         }
     }
