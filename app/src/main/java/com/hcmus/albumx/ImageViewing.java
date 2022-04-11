@@ -83,22 +83,33 @@ public class ImageViewing extends Fragment {
             if(albumInfoArrayList == null){
                 albumInfoArrayList = new ArrayList<>();
 
-                Cursor cursor = AlbumDatabase.getInstance(context)
-                        .getAlbums("SELECT * FROM " + AlbumDatabase.albumSet.TABLE_NAME);
+                Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
                 while (cursor.moveToNext()){
                     int id = cursor.getInt(0);
                     String name = cursor.getString(1);
                     int type = cursor.getInt(2);
 
-                    if(name.equals("Recent")){
+                    if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
-                    } else if (name.equals("Favorite")){
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
-                    } else if (name.equals("Editor")){
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
                     } else {
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
                     }
+                }
+            }
+
+            if (getArguments() != null) {
+                pos = getArguments().getInt(IMAGE_POSITION_ARG);
+
+                fromAlbum = getArguments().getInt(IMAGE_FROM_ALBUM_ARG);
+                if(fromAlbum == 0){
+                    imageInfoArrayList = ImageDatabase.getInstance(context).getAllImages();
+                } else {
+                    imageInfoArrayList = AlbumDatabase.getInstance(context)
+                            .getImagesOf(getArguments().getInt(IMAGE_FROM_ALBUM_ARG));
                 }
             }
         } catch (IllegalStateException ignored) {
@@ -109,21 +120,6 @@ public class ImageViewing extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = (View) inflater.inflate(R.layout.image_viewing, container, false);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            pos = bundle.getInt("position");
-        }
-
-        if(getArguments() != null){
-            fromAlbum = getArguments().getInt(IMAGE_FROM_ALBUM_ARG);
-            if(fromAlbum == 0){
-                imageInfoArrayList = ImageDatabase.getInstance(context).getAllImages();
-            } else {
-                imageInfoArrayList = AlbumDatabase.getInstance(context)
-                        .getImagesOf(getArguments().getInt(IMAGE_FROM_ALBUM_ARG));
-            }
-        }
 
         adapter = new FullScreenImageAdapter(context, imageInfoArrayList);
 
@@ -164,10 +160,17 @@ public class ImageViewing extends Fragment {
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlbumDatabase.getInstance(context)
-                        .insertImageToAlbum(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path, albumInfoArrayList.get(1).id);
+                if(AlbumDatabase.getInstance(context)
+                        .isImageExistsInAlbum(imageInfoArrayList.get(pos).name,
+                                imageInfoArrayList.get(pos).path,
+                                albumInfoArrayList.get(1).id)){
+                    Toast.makeText(context, "Image exists in Favorite", Toast.LENGTH_SHORT).show();
+                } else{
+                    AlbumDatabase.getInstance(context)
+                            .insertImageToAlbum(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path, albumInfoArrayList.get(1).id);
 
-                Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -287,13 +290,16 @@ public class ImageViewing extends Fragment {
         return view;
     }   //View
 
-    private void removeImageFrom(boolean isGallery){
-        if(isGallery){
+    private void removeImageFrom(boolean isRemoveOutOfGallery){
+        if(isRemoveOutOfGallery){
             ImageDatabase.getInstance(getContext())
                     .moveImageToRecycleBin(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
+            AlbumDatabase.getInstance(getContext())
+                    .softDeleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
+        } else{
+            AlbumDatabase.getInstance(getContext())
+                    .hardDeleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
         }
-        AlbumDatabase.getInstance(getContext())
-                .deleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
 
         imageInfoArrayList.remove(pos);
 

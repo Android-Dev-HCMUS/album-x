@@ -1,10 +1,12 @@
 package com.hcmus.albumx.RecycleBin;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,10 +15,10 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
-import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
@@ -24,6 +26,9 @@ import java.util.ArrayList;
 
 public class ImageViewingRecycleBin extends Fragment {
     public static String TAG = "Image Viewing Recycle Bin";
+
+    private static final String IMAGE_PATH_ARG = "imagePath";
+    private static final String IMAGE_POSITION_ARG = "position";
 
     private MainActivity main;
     private Context context;
@@ -34,12 +39,12 @@ public class ImageViewingRecycleBin extends Fragment {
     private int pos = 0;
 
     private ArrayList<ImageInfo> imageInfoArrayList;
-    ImageDatabase myDB;
 
-    public static ImageViewing newInstance() {
-        ImageViewing fragment = new ImageViewing();
+    public static ImageViewingRecycleBin newInstance(String imagePath, int pos) {
+        ImageViewingRecycleBin fragment = new ImageViewingRecycleBin();
         Bundle bundle = new Bundle();
-
+        bundle.putString(IMAGE_PATH_ARG, imagePath);
+        bundle.putInt(IMAGE_POSITION_ARG, pos);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -51,7 +56,11 @@ public class ImageViewingRecycleBin extends Fragment {
             context = getActivity();
             main = (MainActivity) getActivity();
 
-            imageInfoArrayList = myDB.getImagesInRecycleBin();
+            imageInfoArrayList = ImageDatabase.getInstance(context).getImagesInRecycleBin();
+
+            if (getArguments() != null) {
+                pos = getArguments().getInt(IMAGE_POSITION_ARG);
+            }
         } catch (IllegalStateException ignored) {
         }
     }
@@ -59,8 +68,7 @@ public class ImageViewingRecycleBin extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = (View) inflater.inflate(R.layout.image_viewing, container, false);
+        View view = (View) inflater.inflate(R.layout.image_viewing_recycle_bin, container, false);
 
         adapter = new FullScreenImageAdapter(context, imageInfoArrayList);
 
@@ -87,6 +95,84 @@ public class ImageViewingRecycleBin extends Fragment {
         });
         viewPager.setPageTransformer(transformer);
 
+        Button delete = view.findViewById(R.id.buttonDelete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog dialog = new Dialog(context);
+                dialog.getWindow().setContentView(R.layout.layout_custom_dialog_remove_image_recycle_bin);
+                dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
+                Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
+                removeGallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ImageDatabase.getInstance(getContext())
+                                .deleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
+                        imageInfoArrayList.remove(pos);
+
+                        if(imageInfoArrayList.size() > 0){
+                            adapter.notifyDataSetChanged();
+                            viewPager.setCurrentItem(pos, false);
+                        } else {
+                            main.getSupportFragmentManager().popBackStack();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                Button cancel = dialog.findViewById(R.id.cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+        Button recover = view.findViewById(R.id.buttonRecover);
+        recover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImageDatabase.getInstance(getContext())
+                        .recoverImageFromRecycleBin(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path);
+                AlbumDatabase.getInstance(getContext())
+                        .recoverImage(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path);
+
+                imageInfoArrayList.remove(pos);
+
+                if (imageInfoArrayList.size() > 0) {
+                    adapter.notifyDataSetChanged();
+                    viewPager.setCurrentItem(pos, false);
+                } else {
+                    main.getSupportFragmentManager().popBackStack();
+                }
+            }
+        });
+
+        Button back = (Button) view.findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.getSupportFragmentManager().popBackStack();
+                onDetach();
+            }
+        });
+
         return view;
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ((MainActivity)getActivity()).setBottomNavigationVisibility(View.VISIBLE);
+
+        RecycleBinPhotos fragment = (RecycleBinPhotos) main.getSupportFragmentManager()
+                .findFragmentByTag(RecycleBinPhotos.TAG);
+
+        if (fragment != null) {
+            fragment.notifyChangedListImageOnDelete(imageInfoArrayList);
+        }
+    }
+
 }

@@ -25,6 +25,14 @@ public final class ImageDatabase extends SQLiteOpenHelper {
     public static final String FIELD_CREATE_DATE = "create_at";
     public static final String FIELD_REMOVE_DATE = "remove_at";
 
+    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
+            FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            FIELD_NAME + " TEXT, " +
+            FIELD_PATH + " TEXT, " +
+            FIELD_REMOVE_PROPERTY + " BIT, " +
+            FIELD_CREATE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
+            FIELD_REMOVE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
+
     private static ImageDatabase instance;
 
     private ImageDatabase(Context context) {
@@ -37,14 +45,6 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         }
         return instance;
     }
-
-    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
-            FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            FIELD_NAME + " TEXT, " +
-            FIELD_PATH + " TEXT, " +
-            FIELD_REMOVE_PROPERTY + " BIT, " +
-            FIELD_CREATE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
-            FIELD_REMOVE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
 
     public ArrayList<ImageInfo> getAllImages(){
         SQLiteDatabase database = this.getReadableDatabase();
@@ -106,6 +106,17 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FIELD_REMOVE_PROPERTY, 1);
         contentValues.put(FIELD_REMOVE_DATE, getDateTime());
+
+        String[] arg = {name, path};
+
+        database.update(TABLE_NAME, contentValues,
+                FIELD_NAME + " = ? and " + FIELD_PATH + " = ? ", arg);
+    }
+
+    public void recoverImageFromRecycleBin(String name, String path){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FIELD_REMOVE_PROPERTY, 0);
 
         String[] arg = {name, path};
 

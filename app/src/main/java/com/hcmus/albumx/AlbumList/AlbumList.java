@@ -50,17 +50,17 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
             if(albumList == null){
                 albumList = new ArrayList<>();
 
-                Cursor cursor = db.getAlbums("SELECT * FROM " + AlbumDatabase.albumSet.TABLE_NAME);
+                Cursor cursor = db.getAlbums();
                 while (cursor.moveToNext()){
                     int id = cursor.getInt(0);
                     String name = cursor.getString(1);
                     int type = cursor.getInt(2);
 
-                    if(name.equals("Recent")){
+                    if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
-                    } else if (name.equals("Favorite")){
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
-                    } else if (name.equals("Editor")){
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
                     } else {
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));

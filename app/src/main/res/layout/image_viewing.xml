@@ -6,7 +6,7 @@
         android:id="@+id/headerBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#dadada"
+        android:background="#F3F1F1"
         android:orientation="horizontal">
 
         <Button
@@ -24,14 +24,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="15dp">
             <Button
                 android:id="@+id/buttonEdit"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/black" />
+                android:layout_width="35dp"
+                android:layout_height="35dp"/>
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -55,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#dadada"
+        android:background="#F3F1F1"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:gravity="center">

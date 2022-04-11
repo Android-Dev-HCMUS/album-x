@@ -64,9 +64,9 @@ public class RecycleBinPhotos extends Fragment {
                 main.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_layout,
-                                ImageViewingRecycleBin.newInstance(),
+                                ImageViewingRecycleBin.newInstance(imagePath, position),
                                 ImageViewingRecycleBin.TAG)
-                        .addToBackStack("ImageViewingUI")
+                        .addToBackStack("ImageViewingRecycleBinUI")
                         .commit();
                 ((MainActivity)getActivity()).setBottomNavigationVisibility(View.INVISIBLE);
             }
@@ -74,5 +74,11 @@ public class RecycleBinPhotos extends Fragment {
         recyclerView.setAdapter(galleryAdapter);
 
         return view;
+    }
+
+    public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
+        imageInfoArrayList.clear();
+        imageInfoArrayList.addAll(newList);
+        galleryAdapter.notifyDataSetChanged();
     }
 }

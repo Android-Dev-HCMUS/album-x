@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
@@ -131,7 +132,14 @@ public class AllPhotos extends Fragment {
                         String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path), path.substring(path.lastIndexOf("/") + 1));
                         int id = myDB.insertImage(imageName, newImagePath);
 
-
+                        Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
+                        while (cursor.moveToNext()){
+                            if(cursor.getString(1).equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                                AlbumDatabase.getInstance(context)
+                                        .insertImageToAlbum(imageName, newImagePath, cursor.getInt(0));
+                                break;
+                            }
+                        }
                         imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath));
                     }
                 }
@@ -147,6 +155,14 @@ public class AllPhotos extends Fragment {
                     String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path), path.substring(path.lastIndexOf("/") + 1));
                     int id = myDB.insertImage(imageName, newImagePath);
 
+                    Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
+                    while (cursor.moveToNext()){
+                        if(cursor.getString(1).equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                            AlbumDatabase.getInstance(context)
+                                    .insertImageToAlbum(imageName, newImagePath, cursor.getInt(0));
+                            break;
+                        }
+                    }
                     imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath));
                 }
             }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/headerBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F3F1F1"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/backButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:drawableLeft="@drawable/ic_arrow_back"
+            android:text="  Thùng rác" />
+    </RelativeLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/imageViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_below="@+id/headerBar"
+        android:layout_above="@+id/optionBar"/>
+
+
+    <RelativeLayout
+        android:id="@+id/optionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#F3F1F1"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:gravity="center">
+        <Button
+            android:id="@+id/buttonDelete"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Delete"
+            android:background="@color/imgly_transparent_color"
+            android:textColor="@color/red"
+            android:textAllCaps="false"
+            android:textStyle="normal"
+            android:textSize="13sp" />
+        <Button
+            android:id="@+id/buttonRecover"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="81dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/imgly_transparent_color"
+            android:text="Recover"
+            android:textColor="@color/blue"
+            android:textAllCaps="false"
+            android:textStyle="normal"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+</RelativeLayout>
