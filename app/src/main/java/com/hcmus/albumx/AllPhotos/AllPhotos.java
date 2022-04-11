@@ -153,7 +153,7 @@ public class AllPhotos extends Fragment {
                     Toast.makeText(context, "Image " + imageName + " is exists in gallery ! :)",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path),
+                    String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path),  //decode từ uri 
                             path.substring(path.lastIndexOf("/") + 1));
                     int id = myDB.insertImage(imageName, newImagePath);
 
