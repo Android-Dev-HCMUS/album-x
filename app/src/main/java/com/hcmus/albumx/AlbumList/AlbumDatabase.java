@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.hcmus.albumx.AllPhotos.ImageInfo;
+
 import java.util.ArrayList;
 
 public final class AlbumDatabase extends SQLiteOpenHelper {
@@ -99,25 +101,28 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         database.insert(imageSet.TABLE_NAME, null, contentValues);
     }
 
-    public ArrayList<String> getImagesOf(int albumID){
+    public ArrayList<ImageInfo> getImagesOf(int albumID){
         SQLiteDatabase database = this.getReadableDatabase();
-        ArrayList<String> paths = new ArrayList<>();
+        ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
 
         String[] columns = {imageSet.FIELD_ID, imageSet.FIELD_NAME, imageSet.FIELD_PATH, imageSet.FIELD_ALBUM};
         String[] arg = {String.valueOf(albumID)};
         Cursor cursor = database.query(imageSet.TABLE_NAME, columns, imageSet.FIELD_ALBUM +" = ?", arg, null, null, null);
         while(cursor.moveToNext()){
-            paths.add(cursor.getString(2));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
         }
-
-        return paths;
+        return imageInfoArrayList;
     }
 
-    public void deleteImage(String path){
-        SQLiteDatabase database = this.getWritableDatabase();
-        String[] arg = {path};
 
-        database.delete(imageSet.TABLE_NAME, "path = ?", arg);
+
+    public void deleteImage(String name, String path){
+        SQLiteDatabase database = this.getWritableDatabase();
+        String[] arg = {name, path};
+
+        database.delete(imageSet.TABLE_NAME,
+                imageSet.FIELD_NAME + " = ? and " + imageSet.FIELD_PATH + " = ? ",
+                arg);
     }
 
     @Override

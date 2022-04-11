@@ -2,7 +2,6 @@ package com.hcmus.albumx.AlbumList;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,31 +16,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AllPhotos.GalleryAdapter;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
+import com.hcmus.albumx.AllPhotos.ImageInfo;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class AlbumPhotos extends Fragment {
-    public static String TAG = "Album Photos";
+    public static final String TAG = "Album Photos";
 
-    MainActivity main;
-    Context context;
+    private static final String ALBUM_ID_ARG = "albumID";
+    private static final String ALBUM_NAME_ARG = "albumName";
 
-    RecyclerView recyclerView;
-    GalleryAdapter galleryAdapter;
+    private MainActivity main;
+    private Context context;
 
-    List<String> listImagePath;
-    ImageDatabase myDB;
+    private RecyclerView recyclerView;
+    private GalleryAdapter galleryAdapter;
 
-    int albumID;
+    private ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
+    private ImageDatabase myDB;
+
+    private int albumID;
 
     public static AlbumPhotos newInstance(int albumID, String albumName) {
         AlbumPhotos fragment = new AlbumPhotos();
         Bundle bundle = new Bundle();
-        bundle.putInt("albumID", albumID);
-        bundle.putString("albumName", albumName);
+        bundle.putInt(ALBUM_ID_ARG, albumID);
+        bundle.putString(ALBUM_NAME_ARG, albumName);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -55,10 +58,10 @@ public class AlbumPhotos extends Fragment {
             myDB = ImageDatabase.getInstance(context);
 
             if(getArguments() != null){
-                albumID = getArguments().getInt("albumID");
+                albumID = getArguments().getInt(ALBUM_ID_ARG);
             }
-            Log.e("al", String.valueOf(albumID));
-            listImagePath = AlbumDatabase.getInstance(context).getImagesOf(albumID);
+
+            imageInfoArrayList = AlbumDatabase.getInstance(context).getImagesOf(albumID);
         } catch (IllegalStateException ignored) {
         }
     }
@@ -71,14 +74,14 @@ public class AlbumPhotos extends Fragment {
 
         TextView albumName = view.findViewById(R.id.album_name);
         if(getArguments() != null){
-            albumName.setText(getArguments().getString("albumName"));
+            albumName.setText(getArguments().getString(ALBUM_NAME_ARG));
         }
 
         recyclerView = view.findViewById(R.id.recyclerview_image);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
-        galleryAdapter = new GalleryAdapter(context, listImagePath, new GalleryAdapter.PhotoListener() {
+        galleryAdapter = new GalleryAdapter(context, imageInfoArrayList, new GalleryAdapter.PhotoListener() {
             @Override
             public void onPhotoClick(String imagePath, int position) {
                 main.getSupportFragmentManager()
@@ -104,9 +107,9 @@ public class AlbumPhotos extends Fragment {
         return view;
     }
 
-    public void notifyChangedListImageOnDelete(List<String> newList){
-        listImagePath.clear();
-        listImagePath.addAll(newList);
+    public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
+        imageInfoArrayList.clear();
+        imageInfoArrayList.addAll(newList);
         galleryAdapter.notifyDataSetChanged();
     }
 }

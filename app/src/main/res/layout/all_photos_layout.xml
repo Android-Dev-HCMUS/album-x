@@ -19,31 +19,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tất cả ảnh"
-            android:textSize="35sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_margin="20dp"/>
+            android:layout_margin="15dp"/>
 
         <Button
             android:id="@+id/buttonSelect"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/buttonSubMenu"
             android:text="Chọn"
-            android:layout_marginTop="20dp"
+            android:textAllCaps="false"
+            android:layout_marginTop="13dp"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/buttonSubMenu"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_alignParentRight="true"
+            android:layout_marginTop="13dp"
             android:drawableLeft="@drawable/ic_more" />
     </RelativeLayout>
 

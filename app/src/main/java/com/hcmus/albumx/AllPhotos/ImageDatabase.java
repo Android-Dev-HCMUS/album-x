@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public final class ImageDatabase extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "DataManager";
@@ -18,6 +21,9 @@ public final class ImageDatabase extends SQLiteOpenHelper {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PATH = "path";
+    public static final String FIELD_REMOVE_PROPERTY = "is_remove";
+    public static final String FIELD_CREATE_DATE = "create_at";
+    public static final String FIELD_REMOVE_DATE = "remove_at";
 
     private static ImageDatabase instance;
 
@@ -35,26 +41,33 @@ public final class ImageDatabase extends SQLiteOpenHelper {
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
             FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             FIELD_NAME + " TEXT, " +
-            FIELD_PATH + " TEXT " + ")";
+            FIELD_PATH + " TEXT, " +
+            FIELD_REMOVE_PROPERTY + " BIT, " +
+            FIELD_CREATE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
+            FIELD_REMOVE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
 
-    public ArrayList<String> getAllImages(){
+    public ArrayList<ImageInfo> getAllImages(){
         SQLiteDatabase database = this.getReadableDatabase();
-        ArrayList<String> paths = new ArrayList<>();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + ImageDatabase.TABLE_NAME, null);
+        ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
+
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH};
+        Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
+                ImageDatabase.FIELD_REMOVE_PROPERTY +" = 0", null,
+                null, null, null);
         while(cursor.moveToNext()){
-            paths.add(cursor.getString(2));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
         }
-        return paths;
+        return imageInfoArrayList;
     }
 
-    public ArrayList<String> getImagesByName(String name){
+    public ArrayList<String> getImagesByPath(String path){
         SQLiteDatabase database = this.getReadableDatabase();
         ArrayList<String> paths = new ArrayList<>();
 
         String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH};
-        String[] arg = {name};
+        String[] arg = {path};
         Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
-                ImageDatabase.FIELD_NAME +" = ?", arg,
+                ImageDatabase.FIELD_PATH +" = ? ", arg,
                 null, null, null);
         while(cursor.moveToNext()){
             paths.add(cursor.getString(2));
@@ -63,20 +76,53 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         return paths;
     }
 
-    public void insertImage(String name, String path){
+    public ArrayList<ImageInfo> getImagesInRecycleBin(){
+        SQLiteDatabase database = this.getReadableDatabase();
+        ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
+
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH};
+        Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
+                ImageDatabase.FIELD_REMOVE_PROPERTY +" = 1", null,
+                null, null, null);
+        while(cursor.moveToNext()){
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+        }
+        return imageInfoArrayList;
+    }
+
+    public int insertImage(String name, String path){
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(FIELD_NAME, name);
         contentValues.put(FIELD_PATH, path);
+        contentValues.put(FIELD_REMOVE_PROPERTY, 0);
 
-        database.insert(TABLE_NAME, null, contentValues);
+        return (int) database.insert(TABLE_NAME, null, contentValues);
     }
-    public void deleteImage(String path){
-        SQLiteDatabase database = this.getWritableDatabase();
-        String[] arg = {path};
 
-        database.delete(TABLE_NAME, "path = ?", arg);
+    public void moveImageToRecycleBin(String name, String path){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FIELD_REMOVE_PROPERTY, 1);
+        contentValues.put(FIELD_REMOVE_DATE, getDateTime());
+
+        String[] arg = {name, path};
+
+        database.update(TABLE_NAME, contentValues,
+                FIELD_NAME + " = ? and " + FIELD_PATH + " = ? ", arg);
+    }
+
+    public void deleteImage(String name, String path){
+        SQLiteDatabase database = this.getWritableDatabase();
+        String[] arg = {name, path};
+
+        database.delete(TABLE_NAME, FIELD_NAME + " = ? and " + FIELD_PATH + " = ? ", arg);
+    }
+
+    private String getDateTime() {
+        return new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
     }
 
     @Override

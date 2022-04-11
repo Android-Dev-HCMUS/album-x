@@ -33,6 +33,7 @@ import com.hcmus.albumx.AlbumList.AlbumPhotos;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
+import com.hcmus.albumx.AllPhotos.ImageInfo;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,6 +44,10 @@ import java.util.ArrayList;
 public class ImageViewing extends Fragment {
     public static String TAG = "Image Viewing";
 
+    private static final String IMAGE_PATH_ARG = "imagePath";
+    private static final String IMAGE_POSITION_ARG = "position";
+    private static final String IMAGE_FROM_ALBUM_ARG = "fromAlbum";
+
     private MainActivity main;
     private Context context;
 
@@ -52,18 +57,18 @@ public class ImageViewing extends Fragment {
     public static int GALLERY_RESULT = 2;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
-    private ArrayList<String> imageArray = new ArrayList<>();
+    private ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
     private int pos = 0;
 
-    ArrayList<AlbumInfo> albumList;
-    int fromAlbum;
+    private ArrayList<AlbumInfo> albumInfoArrayList;
+    private int fromAlbum;
 
     public static ImageViewing newInstance(String imagePath, int pos, int fromAlbum) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
-        bundle.putString("imagePath", imagePath);
-        bundle.putInt("position", pos);
-        bundle.putInt("fromAlbum", fromAlbum);
+        bundle.putString(IMAGE_PATH_ARG, imagePath);
+        bundle.putInt(IMAGE_POSITION_ARG, pos);
+        bundle.putInt(IMAGE_FROM_ALBUM_ARG, fromAlbum);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -75,8 +80,8 @@ public class ImageViewing extends Fragment {
             context = getActivity();
             main = (MainActivity) getActivity();
 
-            if(albumList == null){
-                albumList = new ArrayList<>();
+            if(albumInfoArrayList == null){
+                albumInfoArrayList = new ArrayList<>();
 
                 Cursor cursor = AlbumDatabase.getInstance(context)
                         .getAlbums("SELECT * FROM " + AlbumDatabase.albumSet.TABLE_NAME);
@@ -86,13 +91,13 @@ public class ImageViewing extends Fragment {
                     int type = cursor.getInt(2);
 
                     if(name.equals("Recent")){
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
                     } else if (name.equals("Favorite")){
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
                     } else if (name.equals("Editor")){
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
                     } else {
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
                     }
                 }
             }
@@ -111,21 +116,16 @@ public class ImageViewing extends Fragment {
         }
 
         if(getArguments() != null){
-            fromAlbum = getArguments().getInt("fromAlbum");
+            fromAlbum = getArguments().getInt(IMAGE_FROM_ALBUM_ARG);
             if(fromAlbum == 0){
-                imageArray = ImageDatabase.getInstance(context).getAllImages();
+                imageInfoArrayList = ImageDatabase.getInstance(context).getAllImages();
             } else {
-                imageArray = AlbumDatabase.getInstance(context)
-                        .getImagesOf(getArguments().getInt("fromAlbum"));
+                imageInfoArrayList = AlbumDatabase.getInstance(context)
+                        .getImagesOf(getArguments().getInt(IMAGE_FROM_ALBUM_ARG));
             }
         }
 
-        adapter = new FullScreenImageAdapter(context, imageArray, new FullScreenImageAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-
-            }
-        });
+        adapter = new FullScreenImageAdapter(context, imageInfoArrayList);
 
         viewPager = view.findViewById(R.id.imageViewPager);
         viewPager.setAdapter(adapter);
@@ -165,7 +165,7 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
                 AlbumDatabase.getInstance(context)
-                        .insertImageToAlbum("", imageArray.get(pos), albumList.get(1).id);
+                        .insertImageToAlbum(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path, albumInfoArrayList.get(1).id);
 
                 Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show();
             }
@@ -175,7 +175,7 @@ public class ImageViewing extends Fragment {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String path = imageArray.get(pos);
+                String path = imageInfoArrayList.get(pos).path;
                 Log.d("pathne", path);
 //                Uri uri = getImageContentUri(context, path);
 
@@ -190,7 +190,7 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
                 //Create Img from bitmap and share with text
-                shareImageandText(BitmapFactory.decodeFile(imageArray.get(pos)));
+                shareImageandText(BitmapFactory.decodeFile(imageInfoArrayList.get(pos).path));
             }
         });
 
@@ -267,7 +267,7 @@ public class ImageViewing extends Fragment {
                                 try {
                                     //viewPager.getDrawableState();
                                     // set the wallpaper by calling the setResource function
-                                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(imageArray.get(pos)));
+                                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(imageInfoArrayList.get(pos).path));
                                     Toast.makeText(context, "Set wallpaper successfully", Toast.LENGTH_SHORT).show();
                                 } catch (IOException e) {
                                     // here the errors can be logged instead of printStackTrace
@@ -289,13 +289,15 @@ public class ImageViewing extends Fragment {
 
     private void removeImageFrom(boolean isGallery){
         if(isGallery){
-            ImageDatabase.getInstance(getContext()).deleteImage(imageArray.get(pos));
+            ImageDatabase.getInstance(getContext())
+                    .moveImageToRecycleBin(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
         }
-        AlbumDatabase.getInstance(getContext()).deleteImage(imageArray.get(pos));
+        AlbumDatabase.getInstance(getContext())
+                .deleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
 
-        imageArray.remove(pos);
+        imageInfoArrayList.remove(pos);
 
-        if(imageArray.size() > 0){
+        if(imageInfoArrayList.size() > 0){
             adapter.notifyDataSetChanged();
             viewPager.setCurrentItem(pos, false);
         } else {
@@ -355,14 +357,14 @@ public class ImageViewing extends Fragment {
                     .findFragmentByTag(AllPhotos.TAG);
 
             if (fragment != null) {
-                fragment.notifyChangedListImageOnDelete(imageArray);
+                fragment.notifyChangedListImageOnDelete(imageInfoArrayList);
             }
         } else {
             AlbumPhotos fragment2 = (AlbumPhotos) main.getSupportFragmentManager()
                     .findFragmentByTag(AlbumPhotos.TAG);
 
             if (fragment2 != null) {
-                fragment2.notifyChangedListImageOnDelete(imageArray);
+                fragment2.notifyChangedListImageOnDelete(imageInfoArrayList);
             }
         }
     }

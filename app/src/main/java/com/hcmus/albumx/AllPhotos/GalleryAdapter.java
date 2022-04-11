@@ -19,11 +19,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private Context context;
     protected PhotoListener photoListener;
 
-    private List<String> listImagePath;
+    private List<ImageInfo> imageInfoArrayList;
 
-    public GalleryAdapter(Context context, List<String> listImagePath, PhotoListener photoListener) {
+    public GalleryAdapter(Context context, List<ImageInfo> imageInfoArrayList, PhotoListener photoListener) {
         this.context = context;
-        this.listImagePath = listImagePath;
+        this.imageInfoArrayList = imageInfoArrayList;
         this.photoListener = photoListener;
     }
 
@@ -38,19 +38,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final int pos =  position;
-        Glide.with(context).load(listImagePath.get(pos)).into(holder.image);
+        Glide.with(context).load(imageInfoArrayList.get(pos).path).into(holder.image);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                photoListener.onPhotoClick(listImagePath.get(pos), pos);
+                photoListener.onPhotoClick(imageInfoArrayList.get(pos).path, pos);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return listImagePath.size();
+        return imageInfoArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

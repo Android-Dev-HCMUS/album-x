@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
+import com.hcmus.albumx.RecycleBin.RecycleBinPhotos;
 
 public class MainActivity extends FragmentActivity {
     private static final int MY_READ_PERMISSION_CODE = 101;
@@ -22,7 +23,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loadFragment(AllPhotos.newInstance("main_layout"), "AllPhotos", "AllPhotosUI");
+        loadFragment(AllPhotos.newInstance(), "AllPhotos", "AllPhotosUI");
 
         //Check permission
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -34,15 +35,16 @@ public class MainActivity extends FragmentActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.menu_album:
-                    loadFragment(AlbumList.newInstance("album"), AlbumList.TAG, "AlbumListUI");
+                    loadFragment(AlbumList.newInstance(), AlbumList.TAG, "AlbumListUI");
+                    break;
+                case R.id.menu_recycleBin:
+                    loadFragment(RecycleBinPhotos.newInstance(), RecycleBinPhotos.TAG, "RecycleBinUI");
                     break;
                 case R.id.menu_photo:
                 default:
-                    loadFragment(AllPhotos.newInstance("main_layout"), AllPhotos.TAG, "AllPhotosUI");
+                    loadFragment(AllPhotos.newInstance(), AllPhotos.TAG, "AllPhotosUI");
                     break;
-                case R.id.menu_recycleBin:
-                    // Do something
-                    break;
+
                 case R.id.menu_info:
                     // Do something
                     break;

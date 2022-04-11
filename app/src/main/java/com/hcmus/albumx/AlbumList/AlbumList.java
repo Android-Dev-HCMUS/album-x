@@ -35,12 +35,8 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
 
     private static ArrayList<AlbumInfo> albumList;
 
-    public static AlbumList newInstance(String strArg1) {
-        AlbumList fragment = new AlbumList();
-        Bundle bundle = new Bundle();
-        bundle.putString("arg2", strArg1);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static AlbumList newInstance() {
+        return new AlbumList();
     }
 
     @Override

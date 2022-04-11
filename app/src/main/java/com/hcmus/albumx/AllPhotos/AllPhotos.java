@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ import com.hcmus.albumx.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AllPhotos extends Fragment {
     public static String TAG = "ALl Photos";
@@ -51,15 +49,11 @@ public class AllPhotos extends Fragment {
     GalleryAdapter galleryAdapter;
 
     private static final int PICK_IMAGE_CODE = 1;
-    List<String> listImagePath;
+    ArrayList<ImageInfo> imageInfoArrayList;
     ImageDatabase myDB;
 
-    public static AllPhotos newInstance(String strArg1) {
-        AllPhotos fragment = new AllPhotos();
-        Bundle bundle = new Bundle();
-        bundle.putString("arg1", strArg1);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static AllPhotos newInstance() {
+        return new AllPhotos();
     }
 
     @Override
@@ -69,7 +63,7 @@ public class AllPhotos extends Fragment {
             context = getActivity();
             main = (MainActivity) getActivity();
             myDB = ImageDatabase.getInstance(context);
-            listImagePath = myDB.getAllImages();
+            imageInfoArrayList = myDB.getAllImages();
         } catch (IllegalStateException ignored) {
         }
     }
@@ -77,7 +71,7 @@ public class AllPhotos extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = (View) inflater.inflate(R.layout.photos_recyclerview, null);
+        View view = (View) inflater.inflate(R.layout.all_photos_layout, null);
         super.onViewCreated(view, savedInstanceState);
 
         selectBtn = (Button) view.findViewById(R.id.buttonSelect);
@@ -99,7 +93,7 @@ public class AllPhotos extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
-        galleryAdapter = new GalleryAdapter(context, listImagePath, new GalleryAdapter.PhotoListener() {
+        galleryAdapter = new GalleryAdapter(context, imageInfoArrayList, new GalleryAdapter.PhotoListener() {
             @Override
             public void onPhotoClick(String imagePath, int position) {
                 main.getSupportFragmentManager()
@@ -127,33 +121,33 @@ public class AllPhotos extends Fragment {
             if (data.getClipData() != null) {
                 for (int i = 0; i < data.getClipData().getItemCount(); i++) {
                     String path = getRealPathFromURI(data.getClipData().getItemAt(i).getUri());
-                    Log.e("path clip", data.getClipData().getItemAt(i).getUri().toString());
                     String imageName = path.substring(path.lastIndexOf("/") + 1);
-                    ArrayList<String> imagePaths = myDB.getImagesByName(imageName);
+
+                    ArrayList<String> imagePaths = myDB.getImagesByPath(path);
 
                     if (imagePaths.size() != 0) {
                         Toast.makeText(context, "Image " + imageName + " is exists in gallery :)", Toast.LENGTH_SHORT).show();
                     } else {
                         String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path), path.substring(path.lastIndexOf("/") + 1));
-                        myDB.insertImage(imageName, newImagePath);
+                        int id = myDB.insertImage(imageName, newImagePath);
 
-                        listImagePath.add(newImagePath);
+
+                        imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath));
                     }
                 }
             } else {
-                Log.e("path", data.getData().toString());
                 String path = getRealPathFromURI(data.getData());
 
                 String imageName = path.substring(path.lastIndexOf("/") + 1);
-                ArrayList<String> imagePaths = myDB.getImagesByName(imageName);
+                ArrayList<String> imagePaths = myDB.getImagesByPath(path);
 
                 if (imagePaths.size() != 0) {
                     Toast.makeText(context, "Image " + imageName + " is exists in gallery ! :)", Toast.LENGTH_SHORT).show();
                 } else {
                     String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path), path.substring(path.lastIndexOf("/") + 1));
-                    myDB.insertImage(imageName, newImagePath);
+                    int id = myDB.insertImage(imageName, newImagePath);
 
-                    listImagePath.add(newImagePath);
+                    imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath));
                 }
             }
 
@@ -223,9 +217,9 @@ public class AllPhotos extends Fragment {
         return filePath;
     }
 
-    public void notifyChangedListImageOnDelete(List<String> newList){
-        listImagePath.clear();
-        listImagePath.addAll(newList);
+    public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
+        imageInfoArrayList.clear();
+        imageInfoArrayList.addAll(newList);
         galleryAdapter.notifyDataSetChanged();
     }
 }

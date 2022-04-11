@@ -1,4 +1,4 @@
-package com.hcmus.albumx.FavoriteList;
+package com.hcmus.albumx.RecycleBin;
 
 import android.content.Context;
 import android.view.View;
