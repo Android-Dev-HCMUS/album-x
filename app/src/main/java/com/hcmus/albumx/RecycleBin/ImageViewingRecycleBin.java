@@ -1,8 +1,11 @@
 package com.hcmus.albumx.RecycleBin;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,8 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
@@ -22,6 +27,7 @@ import com.hcmus.albumx.AllPhotos.ImageInfo;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ImageViewingRecycleBin extends Fragment {
@@ -109,6 +115,7 @@ public class ImageViewingRecycleBin extends Fragment {
                     public void onClick(View view) {
                         ImageDatabase.getInstance(getContext())
                                 .deleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
+                        deleteImageInStorage(imageInfoArrayList.get(pos).name);
                         imageInfoArrayList.remove(pos);
 
                         if(imageInfoArrayList.size() > 0){
@@ -160,6 +167,33 @@ public class ImageViewingRecycleBin extends Fragment {
         });
 
         return view;
+    }
+
+    public boolean isStoragePermissionGranted() {
+        boolean checkWritePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+
+        if (checkWritePermission) {
+            return  true;
+        } else{
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            return false;
+        }
+    }
+
+    public String deleteImageInStorage(String image_name) {
+        String root = Environment.getExternalStorageDirectory().toString();
+        if (isStoragePermissionGranted()) { // check or ask permission
+            File myDir = new File(root, "/saved_images");
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            File file = new File(myDir, image_name);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+        return null;
     }
 
     @Override
