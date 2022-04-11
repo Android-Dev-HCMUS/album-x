@@ -64,6 +64,7 @@ public class AllPhotos extends Fragment {
             context = getActivity();
             main = (MainActivity) getActivity();
             myDB = ImageDatabase.getInstance(context);
+
             imageInfoArrayList = myDB.getAllImages();
         } catch (IllegalStateException ignored) {
         }
