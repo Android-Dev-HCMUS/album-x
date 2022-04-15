@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'ly.img.android.sdk'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.google.gms.google-services'
 
 imglyConfig {
 
@@ -80,14 +81,21 @@ dependencies {
     // Social accounts
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
 
+    // Firebase
+    implementation 'com.google.firebase:firebase-database:20.0.4'
+    implementation 'com.google.firebase:firebase-storage:20.0.1'
+    implementation 'com.google.firebase:firebase-auth:21.0.3'
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta05'
 
     // display photos
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'
+    implementation 'com.google.android.gms:play-services-base:18.0.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 
     testImplementation 'junit:junit:4.+'
