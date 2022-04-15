@@ -15,6 +15,8 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
+import com.hcmus.albumx.CloudStorage.Authentication;
+import com.hcmus.albumx.CloudStorage.CloudStorage;
 import com.hcmus.albumx.RecycleBin.RecycleBinPhotos;
 
 public class MainActivity extends FragmentActivity {
@@ -46,8 +48,10 @@ public class MainActivity extends FragmentActivity {
                     loadFragment(AllPhotos.newInstance(), AllPhotos.TAG, "AllPhotosUI");
                     break;
                 case R.id.cloudStorage:
-                    Intent cloudIntent = new Intent(this, CloudStorage.class);
-                    startActivity(cloudIntent);
+//                    Intent cloudIntent = new Intent(this, CloudStorage.class);
+//                    startActivity(cloudIntent);
+                    Intent authIntent = new Intent(this, Authentication.class);
+                    startActivity(authIntent);
                     break;
 
                 case R.id.menu_info:

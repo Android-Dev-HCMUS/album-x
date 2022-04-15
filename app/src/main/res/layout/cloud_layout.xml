@@ -11,49 +11,103 @@
         android:background="#dadada"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Cloud ảnh"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
             android:layout_alignParentLeft="true"
             android:gravity="center_vertical"
-            android:paddingHorizontal="15dp"/>
-        <Button
-            android:id="@+id/btnLogOut"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:text="Đăng xuất"/>
+            android:paddingHorizontal="15dp"
+            android:text="Cloud ảnh"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/headerBar"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/googleSignInButton"
+
+        <RelativeLayout
+            android:id="@+id/userInfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/userId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/logoutButton"
+                android:layout_alignBottom="@+id/logoutButton"
+                android:layout_toStartOf="@+id/logoutButton"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="Đăng xuất"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/choose_image_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userInfo"
+            android:text="Chọn ảnh"/>
+
+        <EditText
+            android:id="@+id/enter_file_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userInfo"
+            android:layout_toEndOf="@+id/choose_image_btn"/>
+
+
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/progress_bar"
+            android:layout_below="@+id/enter_file_name"
+            android:layout_marginTop="16dp"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/upload_image_btn"
+            android:layout_alignParentStart="true"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/upload_image_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tải ảnh lên"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
 
         <TextView
-            android:id="@+id/personName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/personEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/personId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/show_image_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/upload_image_btn"
+            android:layout_alignBottom="@+id/upload_image_btn"
+            android:layout_marginStart="25dp"
+            android:layout_toEndOf="@+id/upload_image_btn"
+            android:gravity="center"
+            android:text="Xem ảnh"
+            android:textSize="16sp" />
 
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
