@@ -83,11 +83,13 @@ public class CloudStorage extends Activity {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            mUserId.setText(user.getDisplayName());
+            mUserId.setText(user.getEmail());
+            mStorageRef = FirebaseStorage.getInstance().getReference("images/" + user.getUid());
+            mDatabaseRef = FirebaseDatabase
+                    .getInstance("https://albumx-1649212328488-default-rtdb.asia-southeast1.firebasedatabase.app")
+                    .getReference("images")
+                    .child(user.getUid());
         }
-
-        mStorageRef = FirebaseStorage.getInstance().getReference("images/" + mAuth.getCurrentUser().getUid());
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("images/" + mAuth.getCurrentUser().getUid());
 
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,9 +121,14 @@ public class CloudStorage extends Activity {
         mTextViewShowUploads.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                openCloudImageActivity();
             }
         });
+    }
+
+    private void openCloudImageActivity() {
+        Intent intent = new Intent(this, ImagesActivity.class);
+        startActivity(intent);
     }
 
     private String getFileExtension(Uri uri) {
