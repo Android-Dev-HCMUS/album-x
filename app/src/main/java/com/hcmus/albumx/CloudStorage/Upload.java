@@ -1,8 +1,11 @@
 package com.hcmus.albumx.CloudStorage;
 
+import com.google.firebase.database.Exclude;
+
 public class Upload {
     private String mName;
     private String mImageUrl;
+    private String mKey;
 
     public Upload() { }
 
@@ -29,4 +32,10 @@ public class Upload {
     public void setImageUrl(String imageUrl) {
         this.mImageUrl = imageUrl;
     }
+
+    @Exclude
+    public String getKey() { return mKey; }
+
+    @Exclude
+    public void setKey(String key) { mKey = key; }
 }
