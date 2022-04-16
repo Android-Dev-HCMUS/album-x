@@ -7,13 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInClient;
-import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -42,6 +37,9 @@ public class Authentication extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authentication_layout);
 
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
         // Configure Google sign-in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -49,9 +47,6 @@ public class Authentication extends Activity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
 
         googleSignInButton = (SignInButton) findViewById(R.id.google_signIn);
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +73,8 @@ public class Authentication extends Activity {
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d(TAG, "firebaseAuthWithGoogle: " + account.getId());
-                firebaseAuthWithGoogle(account.getIdToken());
+//                firebaseAuthWithGoogle(account.getIdToken());
+                firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 Log.w(TAG, "Google sign-in failed", e);
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -86,8 +82,8 @@ public class Authentication extends Activity {
         }
     }
 
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -110,12 +106,13 @@ public class Authentication extends Activity {
     }
 
     private void updateUI(FirebaseUser user) {
-        if (user != null) {
-            finish();
+        if (user == null) {
+            Log.d(TAG, "No user is logged in");
+//            Toast.makeText(this, "Sorry auth failed", Toast.LENGTH_SHORT).show();
+        } else {
             Intent cloudIntent = new Intent(this, CloudStorage.class);
             startActivity(cloudIntent);
-        } else {
-            Toast.makeText(this, "Sorry auth failed", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 }

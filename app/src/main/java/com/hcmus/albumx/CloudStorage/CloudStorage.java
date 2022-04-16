@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
@@ -94,9 +96,18 @@ public class CloudStorage extends Activity {
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Firebase sign out
+                mAuth.signOut();
+
+                // Google sign out
+                GoogleSignIn.getClient(
+                        getApplicationContext(),
+                        new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .build())
+                        .signOut();
+
                 finish();
                 startActivity(new Intent(CloudStorage.this, Authentication.class));
-                FirebaseAuth.getInstance().signOut();
             }
         });
 
