@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -193,6 +194,8 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
                 //Create Img from bitmap and share with text
+//                Bitmap bitmap =  MediaStore.Images.Media.getBitmap( , Uri.parse(imageInfoArrayList.get(pos).path));
+//                shareImageandText( MediaStore.Images.Media.getBitmap(c.getContentResolver() , Uri.parse(paths)););
                 shareImageandText(BitmapFactory.decodeFile(imageInfoArrayList.get(pos).path));
             }
         });
@@ -313,7 +316,7 @@ public class ImageViewing extends Fragment {
     }
 
     private void shareImageandText(Bitmap bitmap) {
-        Uri uri = getmageToShare(bitmap);
+        Uri uri = getImageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
 
         // putting uri of image to be shared
@@ -333,7 +336,7 @@ public class ImageViewing extends Fragment {
     }   //ShareImageandText
 
     // Retrieving the url to share
-    private Uri getmageToShare(Bitmap bitmap) {
+    private Uri getImageToShare(Bitmap bitmap) {
         File imagefolder = new File(getActivity().getCacheDir(), "images");
         Uri uri = null;
         try {
