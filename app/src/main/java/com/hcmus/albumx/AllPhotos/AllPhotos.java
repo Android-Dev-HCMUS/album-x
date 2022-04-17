@@ -130,7 +130,7 @@ public class AllPhotos extends Fragment {
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path),
-                                path.substring(path.lastIndexOf("/") + 1));
+                                path.substring(path.lastIndexOf("/") + 1));  //tao bitmap tu uri
                         int id = myDB.insertImage(imageName, newImagePath);
 
                         Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
@@ -145,7 +145,7 @@ public class AllPhotos extends Fragment {
                     }
                 }
             } else {
-                String path = getRealPathFromURI(data.getData());
+                String path = getRealPathFromURI(data.getData());   //context
 
                 String imageName = path.substring(path.lastIndexOf("/") + 1);
 
@@ -173,41 +173,25 @@ public class AllPhotos extends Fragment {
         }
     }
 
-    public boolean isStoragePermissionGranted() {
-        boolean checkWritePermission =
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-
-        if (checkWritePermission) {
-            return  true;
-        } else{
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            return false;
-        }
-    }
-
     public String saveImageBitmap(Bitmap image_bitmap, String image_name) {
         String root = Environment.getExternalStorageDirectory().toString();
-        if (isStoragePermissionGranted()) { // check or ask permission
-            File myDir = new File(root, "/saved_images");
-            if (!myDir.exists()) {
-                myDir.mkdirs();
-            }
-            File file = new File(myDir, image_name);
-            if (file.exists()) {
-                file.delete();
-            }
-            try {
-                file.createNewFile(); // if file already exists will do nothing
-                FileOutputStream out = new FileOutputStream(file);
-                image_bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
-                return file.getAbsolutePath();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        File myDir = new File(root, "/saved_images");
+        if (!myDir.exists()) {
+            myDir.mkdirs();
+        }
+        File file = new File(myDir, image_name);
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            file.createNewFile(); // if file already exists will do nothing
+            FileOutputStream out = new FileOutputStream(file);
+            image_bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+            return file.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
