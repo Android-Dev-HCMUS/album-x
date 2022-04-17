@@ -108,7 +108,7 @@ public class ImagesActivity extends Activity implements ImageAdapter.OnItemClick
         Upload selectedItem = mUploads.get(position);
         String selectedKey = selectedItem.getKey();
 
-        StorageReference imageRef = mStorage.getReferenceFromUrl(selectedItem.getImageUrl());
+        StorageReference imageRef = mStorage.getReference(selectedItem.getImageUrl());
         imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
