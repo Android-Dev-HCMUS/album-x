@@ -281,4 +281,6 @@ public class AllPhotos extends Fragment {
         imageInfoArrayList.addAll(newList);
         galleryAdapter.notifyDataSetChanged();
     }
+
+
 }

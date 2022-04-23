@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
@@ -37,6 +40,8 @@ import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -281,7 +286,9 @@ public class ImageViewing extends Fragment {
                                 }
                                 return true;
                             case R.id.menu_image_info:
-//                                  chua lam
+
+                                showExif(imageInfoArrayList.get(pos).path);
+                                //                                  chua lam
                                 return true;
                             default:
                                 return false;
@@ -380,4 +387,84 @@ public class ImageViewing extends Fragment {
             }
         }
     }
+
+    void showExif(String path){
+        if(path != null){
+
+            ParcelFileDescriptor parcelFileDescriptor = null;
+
+            /*
+            How to convert the Uri to FileDescriptor, refer to the example in the document:
+            https://developer.android.com/guide/topics/providers/document-provider.html
+             */
+            try {
+//                parcelFileDescriptor = main.getContentResolver().openFileDescriptor(photoUri, "r");
+//                FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+
+                /*
+                ExifInterface (FileDescriptor fileDescriptor) added in API level 24
+                 */
+                ExifInterface exifInterface = new ExifInterface(path);
+                String exif="";
+                exif += "\nIMAGE_LENGTH: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+                exif += "\nIMAGE_WIDTH: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+                exif += "\n DATETIME: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+                exif += "\n TAG_MAKE: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_MAKE);
+                exif += "\n TAG_MODEL: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_MODEL);
+                exif += "\n TAG_ORIENTATION: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);
+                exif += "\n TAG_WHITE_BALANCE: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE);
+                exif += "\n TAG_FOCAL_LENGTH: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
+                exif += "\n TAG_FLASH: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_FLASH);
+                exif += "\nGPS related:";
+                exif += "\n TAG_GPS_DATESTAMP: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_GPS_DATESTAMP);
+                exif += "\n TAG_GPS_TIMESTAMP: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
+                exif += "\n TAG_GPS_LATITUDE: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+                exif += "\n TAG_GPS_LATITUDE_REF: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
+                exif += "\n TAG_GPS_LONGITUDE: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+                exif += "\n TAG_GPS_LONGITUDE_REF: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
+                exif += "\n TAG_GPS_PROCESSING_METHOD: " +
+                        exifInterface.getAttribute(ExifInterface.TAG_GPS_PROCESSING_METHOD);
+
+//                parcelFileDescriptor.close();
+
+                Toast.makeText(main.getApplicationContext(),
+                        exif,
+                        Toast.LENGTH_LONG).show();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(main.getApplicationContext(),
+                        "Something wrong:\n" + e.toString(),
+                        Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(main.getApplicationContext(),
+                        "Something wrong:\n" + e.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+
+//            String strPhotoPath = photoUri.getPath();
+
+        }else{
+            Toast.makeText(main.getApplicationContext(),
+                    "photoUri == null",
+                    Toast.LENGTH_LONG).show();
+        }
+    };
+
 }
