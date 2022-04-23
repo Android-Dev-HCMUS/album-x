@@ -97,5 +97,4 @@ public class MainActivity extends FragmentActivity {
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
     }
-
 }

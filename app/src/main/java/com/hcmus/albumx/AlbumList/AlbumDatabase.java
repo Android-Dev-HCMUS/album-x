@@ -128,7 +128,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
                 arg,
                 null, null, null);
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2), false));
         }
         return imageInfoArrayList;
     }

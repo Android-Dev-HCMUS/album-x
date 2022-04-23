@@ -280,6 +280,9 @@ public class ImageViewing extends Fragment {
                                     e.printStackTrace();
                                 }
                                 return true;
+                            case R.id.menu_image_info:
+//                                  chua lam
+                                return true;
                             default:
                                 return false;
                         } //Switch
