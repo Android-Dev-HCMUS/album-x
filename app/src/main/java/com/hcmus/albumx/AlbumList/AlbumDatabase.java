@@ -123,15 +123,15 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
 
         String[] columns = {imageSet.FIELD_ID, imageSet.FIELD_NAME, imageSet.FIELD_PATH, imageSet.FIELD_ALBUM,
-                ImageDatabase.FIELD_CREATE_DATE, ImageDatabase.FIELD_REMOVE_DATE};
+                ImageDatabase.FIELD_CREATED_DATE, ImageDatabase.FIELD_MODIFIED_DATE};
         String[] arg = {String.valueOf(albumID)};
         Cursor cursor = database.query(imageSet.TABLE_NAME, columns,
                 imageSet.FIELD_ALBUM +" = ? and " + imageSet.FIELD_REMOVE_PROPERTY + " = 0",
                 arg,
                 null, null, null);
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2),
-                    new Date(cursor.getString(3)) , new Date(cursor.getString(4))));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),
+                    cursor.getString(2),  cursor.getString(3), cursor.getString(4)));
         }
         return imageInfoArrayList;
     }

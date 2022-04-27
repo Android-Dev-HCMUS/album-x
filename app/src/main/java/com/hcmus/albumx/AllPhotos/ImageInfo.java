@@ -1,16 +1,14 @@
 package com.hcmus.albumx.AllPhotos;
 
-import java.util.Date;
-
 public class ImageInfo {
     public int id;
     public String name;
     public String path;
-    public Date createDate;
-    public Date removeDate;
+    public String createDate;
+    public String removeDate;
     Boolean isSelected = false;
 
-    public ImageInfo(int id, String name, String path, Date createDate, Date removeDate) {
+    public ImageInfo(int id, String name, String path, String createDate, String removeDate) {
         this.id = id;
         this.name = name;
         this.path = path;

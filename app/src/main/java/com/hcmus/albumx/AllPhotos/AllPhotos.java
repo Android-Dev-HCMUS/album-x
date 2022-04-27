@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,10 +35,18 @@ import com.hcmus.albumx.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 public class AllPhotos extends Fragment {
     public static String TAG = "ALl Photos";
@@ -53,6 +62,8 @@ public class AllPhotos extends Fragment {
 
     private static final int PICK_IMAGE_CODE = 1;
     ArrayList<ImageInfo> imageInfoArrayList;
+    List<ListItem> listItems;
+    HashMap<String, List<ImageInfo>> listImageGroupByDate;
     ImageDatabase myDB;
 
     public static AllPhotos newInstance() {
@@ -68,7 +79,63 @@ public class AllPhotos extends Fragment {
             myDB = ImageDatabase.getInstance(context);
 
             imageInfoArrayList = myDB.getAllImages();
+            listItems = new ArrayList<>();
+            listImageGroupByDate = new HashMap<>();
+            prepareData();
         } catch (IllegalStateException ignored) {
+        }
+    }
+
+    private void prepareData(){
+        SimpleDateFormat formatterOut = new SimpleDateFormat("dd MMM, yyyy");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (ImageInfo item : imageInfoArrayList){
+            if(item != null){
+                try {
+                    String d = formatterOut.format(Objects.requireNonNull(df.parse(item.createDate)));
+                    if(listImageGroupByDate.containsKey(d)){
+                        Objects.requireNonNull(listImageGroupByDate.get(d)).add(item);
+                    } else {
+                        List<ImageInfo> list = new ArrayList<>();
+                        list.add(item);
+                        listImageGroupByDate.put(d, list);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        List<String> l = new ArrayList<>(listImageGroupByDate.keySet());
+        Collections.sort(l, new Comparator<String>()
+        {
+            public int compare(String o1, String o2) {
+                DateFormat df = new SimpleDateFormat("dd MMM, yyyy");
+                Date d1 = null;
+                Date d2 = null;
+                try {
+                    d1 = df.parse(o1);
+                    d2 = df.parse(o2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                int rs = d1.compareTo(d2);
+
+                return rs;
+            }
+        });
+
+        l.sort(Collections.reverseOrder());
+
+        if(!listItems.isEmpty()){
+            listItems.clear();
+        }
+        for(String date : l){
+            listItems.add(new DateItem(date));
+            for(ImageInfo item : listImageGroupByDate.get(date)){
+                listItems.add(new GroupImageItem(item));
+            }
         }
     }
 
@@ -162,7 +229,7 @@ public class AllPhotos extends Fragment {
             }
         });
 
-        galleryAdapter.setData(convertToListItem());
+        galleryAdapter.setData(listItems);
 
         recyclerView = view.findViewById(R.id.recycleview_gallery_images);
         recyclerView.setHasFixedSize(true);
@@ -187,38 +254,62 @@ public class AllPhotos extends Fragment {
         return view;
     }
 
-    private List<ListItem> convertToListItem(){
-        HashMap<String, List<ImageInfo>> listImageGroupByDate = new HashMap<>();
+    private void addDataToListItem(ImageInfo imgInfo){
         SimpleDateFormat formatterOut = new SimpleDateFormat("dd MMM, yyyy");
-        for (ImageInfo item : imageInfoArrayList){
-            if(item != null){
-                String d = formatterOut.format(item.createDate);
-
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(imgInfo != null){
+            try {
+                String d = formatterOut.format(Objects.requireNonNull(df.parse(imgInfo.createDate)));
                 if(listImageGroupByDate.containsKey(d)){
-                    listImageGroupByDate.get(d).add(item);
+                    Objects.requireNonNull(listImageGroupByDate.get(d)).add(imgInfo);
                 } else {
                     List<ImageInfo> list = new ArrayList<>();
-                    list.add(item);
+                    list.add(imgInfo);
                     listImageGroupByDate.put(d, list);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            List<String> l = new ArrayList<>(listImageGroupByDate.keySet());
+            Collections.sort(l, new Comparator<String>()
+            {
+                public int compare(String o1, String o2) {
+                    DateFormat df = new SimpleDateFormat("dd MMM, yyyy");
+                    Date d1 = null;
+                    Date d2 = null;
+                    try {
+                        d1 = df.parse(o1);
+                        d2 = df.parse(o2);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    int rs = d1.compareTo(d2);
+
+                    return rs;
+                }
+            });
+
+            l.sort(Collections.reverseOrder());
+
+            if(!listItems.isEmpty()){
+                listItems.clear();
+            }
+            for(String date : l){
+                listItems.add(new DateItem(date));
+                for(ImageInfo item : listImageGroupByDate.get(date)){
+                    listItems.add(new GroupImageItem(item));
                 }
             }
         }
-
-        List<ListItem> listImage = new ArrayList<>();
-
-        for(String date : listImageGroupByDate.keySet()){
-            listImage.add(new DateItem(date));
-            for(ImageInfo item : listImageGroupByDate.get(date)){
-                listImage.add(new GroupImageItem(item));
-            }
-        }
-
-        return listImage;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        ExifInterface exifInterface = null;
+        String date = null;
 
         if(requestCode == PICK_IMAGE_CODE && resultCode == Activity.RESULT_OK) {
 
@@ -226,14 +317,26 @@ public class AllPhotos extends Fragment {
                 for (int i = 0; i < data.getClipData().getItemCount(); i++) {
                     String path = getRealPathFromURI(data.getClipData().getItemAt(i).getUri());
                     String imageName = path.substring(path.lastIndexOf("/") + 1);
+                    try {
+                        exifInterface = new ExifInterface(path);
+                        String EXIFdateString = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
+                        DateFormat df = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                        Date d = df.parse(EXIFdateString);
+                        date = new SimpleDateFormat(
+                                "yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(d);
+                    } catch (IOException |ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     if (ImageDatabase.getInstance(context).isImageExistsInApplication(imageName)) {
                         Toast.makeText(context, "Image " + imageName + " is exists in gallery :)",
                                 Toast.LENGTH_SHORT).show();
                     } else {
+
+
                         String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path),
                                 path.substring(path.lastIndexOf("/") + 1));  //tao bitmap tu uri
-                        int id = myDB.insertImage(imageName, newImagePath);
+                        int id = myDB.insertImage(imageName, newImagePath, date);
 
                         Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
                         while (cursor.moveToNext()){
@@ -243,11 +346,24 @@ public class AllPhotos extends Fragment {
                                 break;
                             }
                         }
-                        imageInfoArrayList.add(myDB.getImage(id));
+
+                        ImageInfo imgInfo = myDB.getImage(id);
+                        imageInfoArrayList.add(imgInfo);
+                        addDataToListItem(imgInfo);
                     }
                 }
             } else {
                 String path = getRealPathFromURI(data.getData());   //context
+                try {
+                    exifInterface = new ExifInterface(path);
+                    String EXIFdateString = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
+                    DateFormat df = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                    Date d = df.parse(EXIFdateString);
+                    date = new SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(d);
+                } catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
 
                 String imageName = path.substring(path.lastIndexOf("/") + 1);
 
@@ -257,7 +373,7 @@ public class AllPhotos extends Fragment {
                 } else {
                     String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path),  //decode từ uri
                             path.substring(path.lastIndexOf("/") + 1));
-                    int id = myDB.insertImage(imageName, newImagePath);
+                    int id = myDB.insertImage(imageName, newImagePath, date);
 
                     Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
                     while (cursor.moveToNext()){
@@ -267,7 +383,10 @@ public class AllPhotos extends Fragment {
                             break;
                         }
                     }
-                    imageInfoArrayList.add(myDB.getImage(id));
+
+                    ImageInfo imgInfo = myDB.getImage(id);
+                    imageInfoArrayList.add(imgInfo);
+                    addDataToListItem(imgInfo);
                 }
             }
 
