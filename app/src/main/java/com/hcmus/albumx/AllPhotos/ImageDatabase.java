@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,13 +53,24 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
 
-        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH};
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH,
+                ImageDatabase.FIELD_CREATE_DATE, ImageDatabase.FIELD_REMOVE_DATE};
         Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
                 ImageDatabase.FIELD_REMOVE_PROPERTY +" = 0", null,
                 null, null, null);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2),false));
+
+            try {
+                imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),
+                        cursor.getString(2),  format.parse(cursor.getString(3)),
+                        format.parse(cursor.getString(4))));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
+
         return imageInfoArrayList;
     }
 
@@ -81,12 +94,19 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
 
-        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH};
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH,
+                ImageDatabase.FIELD_CREATE_DATE, ImageDatabase.FIELD_REMOVE_DATE};
         Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
                 ImageDatabase.FIELD_REMOVE_PROPERTY +" = 1", null,
                 null, null, null);
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2), false));
+            try {
+                imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2),
+                        DateFormat.getDateInstance().parse(cursor.getString(3)),
+                        DateFormat.getDateInstance().parse(cursor.getString(4))));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         return imageInfoArrayList;
     }
@@ -98,8 +118,36 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         contentValues.put(FIELD_NAME, name);
         contentValues.put(FIELD_PATH, path);
         contentValues.put(FIELD_REMOVE_PROPERTY, 0);
+        contentValues.put(FIELD_CREATE_DATE, getDateTime());
+        contentValues.put(FIELD_REMOVE_DATE, getDateTime());
 
         return (int) database.insert(TABLE_NAME, null, contentValues);
+    }
+
+    public ImageInfo getImage(int id) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH,
+        ImageDatabase.FIELD_CREATE_DATE, ImageDatabase.FIELD_REMOVE_DATE};
+
+        Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
+                ImageDatabase.FIELD_REMOVE_PROPERTY +" = 1", null,
+                null, null, null);
+
+        ImageInfo imageInfo = null;
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        while(cursor.moveToNext()){
+            try {
+                imageInfo = new ImageInfo(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
+                        format.parse(cursor.getString(3)),
+                        format.parse(cursor.getString(4)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return imageInfo;
     }
 
     public boolean isImageExistsInApplication(String name){

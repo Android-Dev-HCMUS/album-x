@@ -22,10 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,8 +34,10 @@ import com.hcmus.albumx.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class AllPhotos extends Fragment {
     public static String TAG = "ALl Photos";
@@ -127,11 +126,9 @@ public class AllPhotos extends Fragment {
             }
         });
 
-        recyclerView = view.findViewById(R.id.recycleview_gallery_images);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
-        galleryAdapter = new GalleryAdapter(context, imageInfoArrayList, new GalleryAdapter.PhotoListener() {
+
+        galleryAdapter = new GalleryAdapter(context, new GalleryAdapter.PhotoListener() {
             @Override
             public void onPhotoClick(String imagePath, int position) {
                 main.getSupportFragmentManager()
@@ -164,9 +161,59 @@ public class AllPhotos extends Fragment {
 
             }
         });
+
+        galleryAdapter.setData(convertToListItem());
+
+        recyclerView = view.findViewById(R.id.recycleview_gallery_images);
+        recyclerView.setHasFixedSize(true);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (galleryAdapter.getItemViewType(position)){
+                    case ListItem.TYPE_DATE:
+                        return 3;
+                    default:
+                        return 1;
+                }
+            }
+        });
+        recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.setAdapter(galleryAdapter);
 
+
         return view;
+    }
+
+    private List<ListItem> convertToListItem(){
+        HashMap<String, List<ImageInfo>> listImageGroupByDate = new HashMap<>();
+        SimpleDateFormat formatterOut = new SimpleDateFormat("dd MMM, yyyy");
+        for (ImageInfo item : imageInfoArrayList){
+            if(item != null){
+                String d = formatterOut.format(item.createDate);
+
+                if(listImageGroupByDate.containsKey(d)){
+                    listImageGroupByDate.get(d).add(item);
+                } else {
+                    List<ImageInfo> list = new ArrayList<>();
+                    list.add(item);
+                    listImageGroupByDate.put(d, list);
+                }
+            }
+        }
+
+        List<ListItem> listImage = new ArrayList<>();
+
+        for(String date : listImageGroupByDate.keySet()){
+            listImage.add(new DateItem(date));
+            for(ImageInfo item : listImageGroupByDate.get(date)){
+                listImage.add(new GroupImageItem(item));
+            }
+        }
+
+        return listImage;
     }
 
     @Override
@@ -196,7 +243,7 @@ public class AllPhotos extends Fragment {
                                 break;
                             }
                         }
-                        imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath, false));
+                        imageInfoArrayList.add(myDB.getImage(id));
                     }
                 }
             } else {
@@ -220,7 +267,7 @@ public class AllPhotos extends Fragment {
                             break;
                         }
                     }
-                    imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath, false));
+                    imageInfoArrayList.add(myDB.getImage(id));
                 }
             }
 

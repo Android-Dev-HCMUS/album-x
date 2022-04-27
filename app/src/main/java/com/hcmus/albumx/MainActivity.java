@@ -12,20 +12,24 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.CloudStorage.Authentication;
-import com.hcmus.albumx.CloudStorage.CloudStorage;
 import com.hcmus.albumx.RecycleBin.RecycleBinPhotos;
 
 public class MainActivity extends FragmentActivity {
     private static final int MY_READ_PERMISSION_CODE = 101;
     BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Fresco.initialize(this);
+
         loadFragment(AllPhotos.newInstance(), "AllPhotos", "AllPhotosUI");
 
         //Check permission
