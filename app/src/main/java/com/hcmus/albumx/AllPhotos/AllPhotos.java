@@ -1,10 +1,8 @@
 package com.hcmus.albumx.AllPhotos;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,14 +12,18 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -35,6 +37,7 @@ import com.hcmus.albumx.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AllPhotos extends Fragment {
@@ -77,7 +80,40 @@ public class AllPhotos extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         selectBtn = (Button) view.findViewById(R.id.buttonSelect);
+
         subMenuBtn = (Button) view.findViewById(R.id.buttonSubMenu);
+
+        subMenuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getActivity().getApplicationContext(), v);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+
+                            case R.id.menu_change_theme:
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                                Toast.makeText(context, "zo dayk", Toast.LENGTH_SHORT).show();
+//                                if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
+//                                    context.setTheme(R.style.DarkTheme);
+//                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//                                    Toast.makeText(context, "Set dark", Toast.LENGTH_SHORT).show();
+//                                }else{
+//                                    AppCompatDelegate.setDefault'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''NightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//                                    context.setTheme(R.style.DarkTheme);
+//                                    Toast.makeText(context, "Set light", Toast.LENGTH_SHORT).show();
+//                                }
+                                return true;
+                            default:
+                                return false;
+                        } //Switch
+                    }
+                }); //setOnMenuItemClickListener
+                popup.inflate(R.menu.menu_image_submenu);
+                popup.show();
+            }
+        }); //subMenu onClickListener
 
         imageButton = (ImageButton) view.findViewById(R.id.addBtn);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +143,26 @@ public class AllPhotos extends Fragment {
                         .commit();
 
                 ((MainActivity)getActivity()).setBottomNavigationVisibility(View.INVISIBLE);
-               }
+            }
+
+            @Override
+            public boolean onLongClick(String imagePath, int position) {
+                main.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_layout,
+                                ImageViewing.newInstance(imagePath, position, AllPhotos.ALBUM_ID),
+                                "ImageViewing")
+                        .addToBackStack("ImageViewingUI")
+                        .commit();
+
+                ((MainActivity)getActivity()).setBottomNavigationVisibility(View.INVISIBLE);
+                return true;
+            }
+
+            @Override
+            public void onImageAction(Boolean isSelected) {
+
+            }
         });
         recyclerView.setAdapter(galleryAdapter);
 
@@ -130,7 +185,7 @@ public class AllPhotos extends Fragment {
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         String newImagePath = saveImageBitmap(BitmapFactory.decodeFile(path),
-                                path.substring(path.lastIndexOf("/") + 1));
+                                path.substring(path.lastIndexOf("/") + 1));  //tao bitmap tu uri
                         int id = myDB.insertImage(imageName, newImagePath);
 
                         Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
@@ -141,11 +196,11 @@ public class AllPhotos extends Fragment {
                                 break;
                             }
                         }
-                        imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath));
+                        imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath, false));
                     }
                 }
             } else {
-                String path = getRealPathFromURI(data.getData());
+                String path = getRealPathFromURI(data.getData());   //context
 
                 String imageName = path.substring(path.lastIndexOf("/") + 1);
 
@@ -165,7 +220,7 @@ public class AllPhotos extends Fragment {
                             break;
                         }
                     }
-                    imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath));
+                    imageInfoArrayList.add(new ImageInfo(id, imageName, newImagePath, false));
                 }
             }
 
@@ -173,41 +228,25 @@ public class AllPhotos extends Fragment {
         }
     }
 
-    public boolean isStoragePermissionGranted() {
-        boolean checkWritePermission =
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-
-        if (checkWritePermission) {
-            return  true;
-        } else{
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            return false;
-        }
-    }
-
     public String saveImageBitmap(Bitmap image_bitmap, String image_name) {
         String root = Environment.getExternalStorageDirectory().toString();
-        if (isStoragePermissionGranted()) { // check or ask permission
-            File myDir = new File(root, "/saved_images");
-            if (!myDir.exists()) {
-                myDir.mkdirs();
-            }
-            File file = new File(myDir, image_name);
-            if (file.exists()) {
-                file.delete();
-            }
-            try {
-                file.createNewFile(); // if file already exists will do nothing
-                FileOutputStream out = new FileOutputStream(file);
-                image_bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
-                return file.getAbsolutePath();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        File myDir = new File(root, "/saved_images");
+        if (!myDir.exists()) {
+            myDir.mkdirs();
+        }
+        File file = new File(myDir, image_name);
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            file.createNewFile(); // if file already exists will do nothing
+            FileOutputStream out = new FileOutputStream(file);
+            image_bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+            return file.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -242,4 +281,6 @@ public class AllPhotos extends Fragment {
         imageInfoArrayList.addAll(newList);
         galleryAdapter.notifyDataSetChanged();
     }
+
+
 }

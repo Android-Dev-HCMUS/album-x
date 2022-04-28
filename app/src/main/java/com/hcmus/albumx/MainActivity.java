@@ -85,6 +85,16 @@ public class MainActivity extends FragmentActivity {
                 Toast.makeText(this, "Read external storage permission denied", Toast.LENGTH_SHORT).show();
             }
         }
-    }
 
+        boolean checkWritePermission =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED;
+
+        if (checkWritePermission) {
+            Toast.makeText(this, "Write external storage permission granted", Toast.LENGTH_SHORT).show();
+        } else{
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+    }
 }

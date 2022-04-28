@@ -56,7 +56,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
                 ImageDatabase.FIELD_REMOVE_PROPERTY +" = 0", null,
                 null, null, null);
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2),false));
         }
         return imageInfoArrayList;
     }
@@ -86,7 +86,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
                 ImageDatabase.FIELD_REMOVE_PROPERTY +" = 1", null,
                 null, null, null);
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2), false));
         }
         return imageInfoArrayList;
     }
