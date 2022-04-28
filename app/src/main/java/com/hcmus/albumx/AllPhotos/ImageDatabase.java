@@ -103,7 +103,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         contentValues.put(FIELD_NAME, name);
         contentValues.put(FIELD_PATH, path);
         contentValues.put(FIELD_REMOVE_PROPERTY, 0);
-        if(!"".equals(date)){
+        if(date != null){
             contentValues.put(FIELD_CREATED_DATE, date);
         } else {
             contentValues.put(FIELD_CREATED_DATE, getDateTime());

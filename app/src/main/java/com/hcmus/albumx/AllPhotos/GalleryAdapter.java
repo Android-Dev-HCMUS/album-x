@@ -61,7 +61,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else if(TYPE_IMAGE == holder.getItemViewType()){
             GroupImageItem groupImageItem = (GroupImageItem) item;
             ViewHolder viewHolder = (ViewHolder) holder;
-            Glide.with(context).load(groupImageItem.getImageInfo().path).into(viewHolder.image);
+            Glide.with(context)
+                    .load(groupImageItem.getImageInfo().path)
+                    .into(viewHolder.image);
 
         }
 
@@ -77,7 +79,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //photoListener.onPhotoClick(imageInfoArrayList.get(pos).path, pos);
+                ListItem item = listItem.get(pos);
+                if(item.getType() == ListItem.TYPE_IMAGE){
+                    GroupImageItem image = (GroupImageItem) item;
+                    photoListener.onPhotoClick(image.getImageInfo().path, pos);
+                }
             }
         });
     }
@@ -123,7 +129,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
 
             image = itemView.findViewById(R.id.draweeView);
-
         }
 
 //        void  bindImageShow(final ImageInfo imageShow){

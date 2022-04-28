@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +37,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         public static final String FIELD_NAME = "name";
         public static final String FIELD_PATH = "path";
         public static final String FIELD_REMOVE_PROPERTY = "is_remove";
-        public static final String FIELD_CREATE_DATE = "create_at";
+        public static final String FIELD_CREATED_DATE = "created_at";
         public static final String FIELD_ALBUM = "album";
     }
 
@@ -52,7 +51,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
             imageSet.FIELD_NAME + " TEXT, " +
             imageSet.FIELD_PATH + " TEXT, " +
             imageSet.FIELD_REMOVE_PROPERTY + " BIT, " +
-            imageSet.FIELD_CREATE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+            imageSet.FIELD_CREATED_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, " +
             imageSet.FIELD_ALBUM + " INTEGER " + ")";
 
     public static final String GENERATE_INITIAL_DATA_1 = "INSERT INTO " + albumSet.TABLE_NAME +
@@ -112,7 +111,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         contentValues.put(imageSet.FIELD_NAME, name);
         contentValues.put(imageSet.FIELD_PATH, path);
         contentValues.put(imageSet.FIELD_REMOVE_PROPERTY, 0);
-        contentValues.put(imageSet.FIELD_CREATE_DATE, getDateTime());
+        contentValues.put(imageSet.FIELD_CREATED_DATE, getDateTime());
         contentValues.put(imageSet.FIELD_ALBUM, albumRef);
 
         database.insert(imageSet.TABLE_NAME, null, contentValues);
@@ -123,7 +122,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
 
         String[] columns = {imageSet.FIELD_ID, imageSet.FIELD_NAME, imageSet.FIELD_PATH, imageSet.FIELD_ALBUM,
-                ImageDatabase.FIELD_CREATED_DATE, ImageDatabase.FIELD_MODIFIED_DATE};
+                imageSet.FIELD_CREATED_DATE};
         String[] arg = {String.valueOf(albumID)};
         Cursor cursor = database.query(imageSet.TABLE_NAME, columns,
                 imageSet.FIELD_ALBUM +" = ? and " + imageSet.FIELD_REMOVE_PROPERTY + " = 0",
