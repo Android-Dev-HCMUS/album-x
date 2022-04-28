@@ -17,6 +17,7 @@ import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.CloudStorage.Authentication;
 import com.hcmus.albumx.CloudStorage.CloudStorage;
+import com.hcmus.albumx.InfoMembers.InfoMembers;
 import com.hcmus.albumx.RecycleBin.RecycleBinPhotos;
 
 public class MainActivity extends FragmentActivity {
@@ -55,7 +56,7 @@ public class MainActivity extends FragmentActivity {
                     break;
 
                 case R.id.menu_info:
-                    // Do something
+                    loadFragment(InfoMembers.newInstance(), InfoMembers.TAG, "InfoMembers");
                     break;
             }
             return true;
