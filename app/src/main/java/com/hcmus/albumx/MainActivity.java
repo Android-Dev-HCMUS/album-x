@@ -49,10 +49,7 @@ public class MainActivity extends FragmentActivity {
                     loadFragment(AllPhotos.newInstance(), AllPhotos.TAG, "AllPhotosUI");
                     break;
                 case R.id.cloudStorage:
-//                    Intent cloudIntent = new Intent(this, CloudStorage.class);
-//                    startActivity(cloudIntent);
-                    Intent authIntent = new Intent(this, Authentication.class);
-                    startActivity(authIntent);
+                    loadFragment(Authentication.newInstance(), Authentication.TAG, "AuthenticationUI");
                     break;
 
                 case R.id.menu_info:
