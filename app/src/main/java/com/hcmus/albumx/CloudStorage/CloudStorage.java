@@ -1,13 +1,18 @@
 package com.hcmus.albumx.CloudStorage;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -35,11 +43,15 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
-public class CloudStorage extends Activity {
+public class CloudStorage extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 001;
+
+    MainActivity main;
+    Context context;
 
     private Button mButtonChooseImage;
     private Button mButtonUpload;
@@ -61,12 +73,26 @@ public class CloudStorage extends Activity {
 
     private StorageTask mUploadTask;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.cloud_layout);
+    public static CloudStorage newInstance() { return new CloudStorage(); }
 
-        FirebaseApp.initializeApp(/*context=*/ this);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        try {
+            context = getActivity();
+            main = (MainActivity) getActivity();
+        }
+        catch (IllegalStateException ignored) { }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = (View) inflater.inflate(R.layout.cloud_layout, null);
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        FirebaseApp.initializeApp(/*context=*/ context);
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
                 SafetyNetAppCheckProviderFactory.getInstance()
@@ -75,14 +101,14 @@ public class CloudStorage extends Activity {
         // Firebase authentication
         mAuth = FirebaseAuth.getInstance();
 
-        mButtonChooseImage = findViewById(R.id.choose_image_btn);
-        mButtonUpload = findViewById(R.id.upload_image_btn);
-        mTextViewShowUploads = findViewById(R.id.show_image_btn);
-        mEditTextFileName = findViewById(R.id.enter_file_name);
-        mImageView = findViewById(R.id.image_view);
-        mProgressBar = findViewById(R.id.progress_bar);
-        mUserId = findViewById(R.id.userId);
-        mLogoutButton = findViewById(R.id.logoutButton);
+        mButtonChooseImage = view.findViewById(R.id.choose_image_btn);
+        mButtonUpload = view.findViewById(R.id.upload_image_btn);
+        mTextViewShowUploads = view.findViewById(R.id.show_image_btn);
+        mEditTextFileName = view.findViewById(R.id.enter_file_name);
+        mImageView = view.findViewById(R.id.image_view);
+        mProgressBar = view.findViewById(R.id.progress_bar);
+        mUserId = view.findViewById(R.id.userId);
+        mLogoutButton = view.findViewById(R.id.logoutButton);
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
@@ -102,13 +128,15 @@ public class CloudStorage extends Activity {
 
                 // Google sign out
                 GoogleSignIn.getClient(
-                        getApplicationContext(),
+                        main,
                         new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                                 .build())
                         .signOut();
 
-                finish();
-                startActivity(new Intent(CloudStorage.this, Authentication.class));
+                // Back to the previous fragment
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.frameFragment, Authentication.newInstance(), "AuthenticationUI");
+                fr.commit();
             }
         });
 
@@ -123,7 +151,7 @@ public class CloudStorage extends Activity {
             @Override
             public void onClick(View view) {
                 if (mUploadTask != null && mUploadTask.isInProgress()) {
-                    Toast.makeText(CloudStorage.this, "Upload in progress", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Upload in progress", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadFile();
                 }
@@ -136,15 +164,18 @@ public class CloudStorage extends Activity {
                 openCloudImageActivity();
             }
         });
+
+        return view;
     }
 
     private void openCloudImageActivity() {
-        Intent intent = new Intent(this, ImagesActivity.class);
-        startActivity(intent);
+        FragmentTransaction fr = getFragmentManager().beginTransaction();
+        fr.replace(R.id.frameFragment, ImagesActivity.newInstance(), "ImagesActivityUI");
+        fr.commit();
     }
 
     private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
+        ContentResolver cR = context.getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
@@ -164,7 +195,7 @@ public class CloudStorage extends Activity {
                                     mProgressBar.setProgress(0);
                                 }
                             }, 500);
-                            Toast.makeText(CloudStorage.this, "Upload successful", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Upload successful", Toast.LENGTH_LONG).show();
                             Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
                                     taskSnapshot.getMetadata().getReference().getPath());
 //                            Log.d("GoogleActivity", taskSnapshot.getMetadata().getReference().getPath());
@@ -175,7 +206,7 @@ public class CloudStorage extends Activity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(CloudStorage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -187,7 +218,7 @@ public class CloudStorage extends Activity {
                         }
                     });
         } else {
-            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "No file selected", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -199,14 +230,14 @@ public class CloudStorage extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             mImageUri = data.getData();
-//            Picasso.with(this).load(mImageUri).into(mImageView);
-            Glide.with(this).load(mImageUri).into(mImageView);
+//            Picasso.with(context).load(mImageUri).into(mImageView);
+            Glide.with(context).load(mImageUri).into(mImageView);
         }
     }
 }

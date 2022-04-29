@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".CloudStorage.ImagesActivity">
 
+    <RelativeLayout
+        android:id="@+id/headerBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#dadada">
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_arrow_back"/>
+    </RelativeLayout>
+
     <ProgressBar
         android:id="@+id/progress_circle"
         android:layout_width="wrap_content"
@@ -14,6 +27,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_cloud_image"
+        android:layout_below="@+id/headerBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </androidx.recyclerview.widget.RecyclerView>

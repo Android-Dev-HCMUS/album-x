@@ -1,12 +1,20 @@
 package com.hcmus.albumx.CloudStorage;
 
 import android.app.Activity;
+import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,13 +29,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImagesActivity extends Activity implements ImageAdapter.OnItemClickListener {
+public class ImagesActivity extends Fragment implements ImageAdapter.OnItemClickListener {
 
+    Context context;
+    MainActivity main;
+
+    private Button mBackButton;
     private ProgressBar mProgressCircle;
     private RecyclerView mRecyclerView;
     private ImageAdapter mAdapter;
@@ -37,19 +50,34 @@ public class ImagesActivity extends Activity implements ImageAdapter.OnItemClick
     private ValueEventListener mDBListener;
     private List<Upload> mUploads;
 
+    public static ImagesActivity newInstance() { return new ImagesActivity(); }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cloud_images);
 
-        mProgressCircle = (ProgressBar) findViewById(R.id.progress_circle);
+        try {
+            context = getActivity();
+            main = (MainActivity) getActivity();
+        }
+        catch (IllegalStateException ignored) { }
+    }
 
-        mRecyclerView = findViewById(R.id.recyclerview_cloud_image);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = (View) inflater.inflate(R.layout.activity_cloud_images, null);
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        mBackButton = (Button) view.findViewById(R.id.backButton);
+        mProgressCircle = (ProgressBar) view.findViewById(R.id.progress_circle);
+
+        mRecyclerView = view.findViewById(R.id.recyclerview_cloud_image);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         mUploads = new ArrayList<>();
-        mAdapter = new ImageAdapter(ImagesActivity.this, mUploads);
+        mAdapter = new ImageAdapter(context, mUploads);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(ImagesActivity.this);
 
@@ -80,27 +108,37 @@ public class ImagesActivity extends Activity implements ImageAdapter.OnItemClick
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(ImagesActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 mProgressCircle.setVisibility(View.INVISIBLE);
             }
         });
 
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.frameFragment, CloudStorage.newInstance(), "CloudStorageUI");
+                fr.commit();
+            }
+        });
+
+        return view;
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         mDatabaseRef.removeEventListener(mDBListener);
     }
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(this, "Normal click at position " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Normal click at position " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onWhatEverClick(int position) {
-        Toast.makeText(this, "Whatever click at position " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Whatever click at position " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -113,7 +151,7 @@ public class ImagesActivity extends Activity implements ImageAdapter.OnItemClick
             @Override
             public void onSuccess(Void unused) {
                 mDatabaseRef.child(selectedKey).removeValue();
-                Toast.makeText(ImagesActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
             }
         });
     }
