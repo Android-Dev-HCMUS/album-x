@@ -87,8 +87,10 @@ public class RecycleBinPhotos extends Fragment {
     }
 
     public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
+        ArrayList<ImageInfo> nl = (ArrayList<ImageInfo>) newList.clone();
+
         imageInfoArrayList.clear();
-        imageInfoArrayList.addAll(newList);
+        imageInfoArrayList.addAll(nl);
         albumPhotoAdapter.notifyDataSetChanged();
     }
 }

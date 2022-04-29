@@ -87,7 +87,7 @@ public class AlbumPhotos extends Fragment {
                 main.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_layout,
-                                ImageViewing.newInstance(imagePath, imageInfoArrayList, position, albumID),
+                                ImageViewing.newInstance(imagePath, imageInfoArrayList, position,  albumID),
                                 ImageViewing.TAG)
                         .addToBackStack("ImageViewingUI")
                         .commit();
@@ -104,7 +104,6 @@ public class AlbumPhotos extends Fragment {
 
             }
         });
-
         recyclerView.setAdapter(albumPhotoAdapter);
 
         Button back = (Button) view.findViewById(R.id.backButton);
@@ -112,17 +111,17 @@ public class AlbumPhotos extends Fragment {
             @Override
             public void onClick(View view) {
                 main.getSupportFragmentManager().popBackStack();
+                onDetach();
             }
         });
         return view;
     }
 
     public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
-        if(!imageInfoArrayList.isEmpty()){
-            Log.e(TAG, "Notify");
-            imageInfoArrayList.clear();
-            imageInfoArrayList.addAll(newList);
-            albumPhotoAdapter.notifyDataSetChanged();
-        }
+        ArrayList<ImageInfo> nl = (ArrayList<ImageInfo>) newList.clone();
+
+        imageInfoArrayList.clear();
+        imageInfoArrayList.addAll(nl);
+        albumPhotoAdapter.notifyDataSetChanged();
     }
 }
