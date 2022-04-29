@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hcmus.albumx.AllPhotos.GalleryAdapter;
+import com.hcmus.albumx.AlbumList.AlbumPhotoAdapter;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 import com.hcmus.albumx.MainActivity;
@@ -27,7 +27,7 @@ public class RecycleBinPhotos extends Fragment {
     Context context;
 
     RecyclerView recyclerView;
-    GalleryAdapter galleryAdapter;
+    AlbumPhotoAdapter albumPhotoAdapter;
 
     private ArrayList<ImageInfo> imageInfoArrayList;
     ImageDatabase myDB;
@@ -58,7 +58,7 @@ public class RecycleBinPhotos extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
-        galleryAdapter = new GalleryAdapter(context, imageInfoArrayList, new GalleryAdapter.PhotoListener() {
+        albumPhotoAdapter = new AlbumPhotoAdapter(context, imageInfoArrayList, new AlbumPhotoAdapter.PhotoListener() {
             @Override
             public void onPhotoClick(String imagePath, int position) {
                 main.getSupportFragmentManager()
@@ -81,14 +81,16 @@ public class RecycleBinPhotos extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(galleryAdapter);
+        recyclerView.setAdapter(albumPhotoAdapter);
 
         return view;
     }
 
     public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
+        ArrayList<ImageInfo> nl = (ArrayList<ImageInfo>) newList.clone();
+
         imageInfoArrayList.clear();
-        imageInfoArrayList.addAll(newList);
-        galleryAdapter.notifyDataSetChanged();
+        imageInfoArrayList.addAll(nl);
+        albumPhotoAdapter.notifyDataSetChanged();
     }
 }

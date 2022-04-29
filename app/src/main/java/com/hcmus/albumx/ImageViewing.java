@@ -11,14 +11,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -40,7 +38,6 @@ import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,6 +48,7 @@ public class ImageViewing extends Fragment {
     public static String TAG = "Image Viewing";
 
     private static final String IMAGE_PATH_ARG = "imagePath";
+    private static final String IMAGE_ARRAY_ARG = "imageArray";
     private static final String IMAGE_POSITION_ARG = "position";
     private static final String IMAGE_FROM_ALBUM_ARG = "fromAlbum";
 
@@ -69,12 +67,13 @@ public class ImageViewing extends Fragment {
     private ArrayList<AlbumInfo> albumInfoArrayList;
     private int fromAlbum;
 
-    public static ImageViewing newInstance(String imagePath, int pos, int fromAlbum) {
+    public static ImageViewing newInstance(String imagePath, ArrayList<ImageInfo> imageInfoArrayList, int pos, int fromAlbum) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
         bundle.putString(IMAGE_PATH_ARG, imagePath);
         bundle.putInt(IMAGE_POSITION_ARG, pos);
         bundle.putInt(IMAGE_FROM_ALBUM_ARG, fromAlbum);
+        bundle.putSerializable(IMAGE_ARRAY_ARG, imageInfoArrayList);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -111,12 +110,8 @@ public class ImageViewing extends Fragment {
                 pos = getArguments().getInt(IMAGE_POSITION_ARG);
 
                 fromAlbum = getArguments().getInt(IMAGE_FROM_ALBUM_ARG);
-                if(fromAlbum == 0){
-                    imageInfoArrayList = ImageDatabase.getInstance(context).getAllImages();
-                } else {
-                    imageInfoArrayList = AlbumDatabase.getInstance(context)
-                            .getImagesOf(getArguments().getInt(IMAGE_FROM_ALBUM_ARG));
-                }
+
+                imageInfoArrayList = (ArrayList<ImageInfo>) getArguments().getSerializable(IMAGE_ARRAY_ARG);
             }
         } catch (IllegalStateException ignored) {
         }
@@ -157,7 +152,6 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
                 main.getSupportFragmentManager().popBackStack();
-                onDetach();
                 //notify();
             }
         });
@@ -230,7 +224,8 @@ public class ImageViewing extends Fragment {
                         }
                     });
                     dialog.show();
-                } else {
+                }
+                else {
                     Dialog dialog = new Dialog(context);
                     dialog.setContentView(R.layout.layout_custom_dialog_remove_image_album);
                     dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);

@@ -2,6 +2,7 @@ package com.hcmus.albumx.AlbumList;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hcmus.albumx.AllPhotos.GalleryAdapter;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 import com.hcmus.albumx.ImageViewing;
@@ -33,7 +33,7 @@ public class AlbumPhotos extends Fragment {
     private Context context;
 
     private RecyclerView recyclerView;
-    private GalleryAdapter galleryAdapter;
+    private AlbumPhotoAdapter albumPhotoAdapter;
 
     private ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
     private ImageDatabase myDB;
@@ -81,13 +81,13 @@ public class AlbumPhotos extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
-        galleryAdapter = new GalleryAdapter(context, imageInfoArrayList, new GalleryAdapter.PhotoListener() {
+        albumPhotoAdapter = new AlbumPhotoAdapter(context, imageInfoArrayList, new AlbumPhotoAdapter.PhotoListener() {
             @Override
             public void onPhotoClick(String imagePath, int position) {
                 main.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_layout,
-                                ImageViewing.newInstance(imagePath, position, albumID),
+                                ImageViewing.newInstance(imagePath, imageInfoArrayList, position,  albumID),
                                 ImageViewing.TAG)
                         .addToBackStack("ImageViewingUI")
                         .commit();
@@ -104,7 +104,7 @@ public class AlbumPhotos extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(galleryAdapter);
+        recyclerView.setAdapter(albumPhotoAdapter);
 
         Button back = (Button) view.findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
@@ -118,8 +118,10 @@ public class AlbumPhotos extends Fragment {
     }
 
     public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
+        ArrayList<ImageInfo> nl = (ArrayList<ImageInfo>) newList.clone();
+
         imageInfoArrayList.clear();
-        imageInfoArrayList.addAll(newList);
-        galleryAdapter.notifyDataSetChanged();
+        imageInfoArrayList.addAll(nl);
+        albumPhotoAdapter.notifyDataSetChanged();
     }
 }

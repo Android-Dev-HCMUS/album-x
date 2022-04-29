@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 
@@ -23,16 +22,16 @@ public final class ImageDatabase extends SQLiteOpenHelper {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PATH = "path";
     public static final String FIELD_REMOVE_PROPERTY = "is_remove";
-    public static final String FIELD_CREATE_DATE = "create_at";
-    public static final String FIELD_REMOVE_DATE = "remove_at";
+    public static final String FIELD_CREATED_DATE = "created_at";
+    public static final String FIELD_MODIFIED_DATE = "modified_at";
 
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
             FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             FIELD_NAME + " TEXT, " +
             FIELD_PATH + " TEXT, " +
             FIELD_REMOVE_PROPERTY + " BIT, " +
-            FIELD_CREATE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
-            FIELD_REMOVE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
+            FIELD_CREATED_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
+            FIELD_MODIFIED_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
 
     private static ImageDatabase instance;
 
@@ -51,13 +50,17 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
 
-        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH};
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH,
+                ImageDatabase.FIELD_CREATED_DATE, ImageDatabase.FIELD_MODIFIED_DATE};
         Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
                 ImageDatabase.FIELD_REMOVE_PROPERTY +" = 0", null,
                 null, null, null);
+
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2),false));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),
+                    cursor.getString(2),  cursor.getString(3), cursor.getString(4)));
         }
+
         return imageInfoArrayList;
     }
 
@@ -69,7 +72,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         String[] arg = {path};
         Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
                 ImageDatabase.FIELD_PATH +" = ? ", arg,
-                null, null, null);
+                null, null, ImageDatabase.FIELD_ID+" DESC");
         while(cursor.moveToNext()){
             paths.add(cursor.getString(2));
         }
@@ -81,25 +84,54 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
 
-        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH};
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH,
+                ImageDatabase.FIELD_CREATED_DATE, ImageDatabase.FIELD_MODIFIED_DATE};
         Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
                 ImageDatabase.FIELD_REMOVE_PROPERTY +" = 1", null,
                 null, null, null);
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2), false));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),
+                    cursor.getString(2),  cursor.getString(3), cursor.getString(4)));
         }
         return imageInfoArrayList;
     }
 
-    public int insertImage(String name, String path){
+    public int insertImage(String name, String path, String date){
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(FIELD_NAME, name);
         contentValues.put(FIELD_PATH, path);
         contentValues.put(FIELD_REMOVE_PROPERTY, 0);
+        if(date != null){
+            contentValues.put(FIELD_CREATED_DATE, date);
+        } else {
+            contentValues.put(FIELD_CREATED_DATE, getDateTime());
+        }
+
+        contentValues.put(FIELD_MODIFIED_DATE, getDateTime());
 
         return (int) database.insert(TABLE_NAME, null, contentValues);
+    }
+
+    public ImageInfo getImage(int id) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH,
+        ImageDatabase.FIELD_CREATED_DATE, ImageDatabase.FIELD_MODIFIED_DATE};
+        String[] arg = {String.valueOf(id)};
+        Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
+                ImageDatabase.FIELD_ID +" = ?", arg,
+                null, null, null);
+
+        ImageInfo imageInfo = null;
+
+        while(cursor.moveToNext()){
+            imageInfo = new ImageInfo(cursor.getInt(0),cursor.getString(1),
+                    cursor.getString(2),  cursor.getString(3), cursor.getString(4));
+        }
+
+        return imageInfo;
     }
 
     public boolean isImageExistsInApplication(String name){
@@ -119,7 +151,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(FIELD_REMOVE_PROPERTY, 1);
-        contentValues.put(FIELD_REMOVE_DATE, getDateTime());
+        contentValues.put(FIELD_MODIFIED_DATE, getDateTime());
 
         String[] arg = {name, path};
 
@@ -131,6 +163,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(FIELD_REMOVE_PROPERTY, 0);
+        contentValues.put(FIELD_MODIFIED_DATE, getDateTime());
 
         String[] arg = {name, path};
 
