@@ -50,16 +50,16 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleview_gallery_images"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycleview_gallery_images"
         android:layout_below="@+id/headerBar"
+        android:background="@color/white"
+        android:gravity="center"
         android:horizontalSpacing="5dp"
         android:numColumns="3"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
-        android:gravity="center"
-        android:background="@color/white"/>
+        android:verticalSpacing="5dp" />
 
     <ImageButton
         android:id="@+id/addBtn"

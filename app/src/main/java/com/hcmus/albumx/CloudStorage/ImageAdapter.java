@@ -26,6 +26,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private List<Upload> mUploads;
     private OnItemClickListener mListener;
 
+    private final String preUrl = "https://firebasestorage.googleapis.com/v0/b/albumx-1649212328488.appspot.com/o/";
+    private final String postUrl = "?alt=media&token=";
+
+
     public ImageAdapter(Context context, List<Upload> uploads) {
         mContext = context;
         mUploads = uploads;
@@ -43,8 +47,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         Upload uploadCurrent = mUploads.get(position);
         holder.textViewName.setText(uploadCurrent.getName());
 
+        String imageUrl = uploadCurrent.getImageUrl();
+        imageUrl = preUrl + imageUrl.substring(0, imageUrl.length()).replaceAll("[/]", "%2F")
+                + postUrl + uploadCurrent.getAccessToken();
+
         Picasso.with(mContext)
-                .load(uploadCurrent.getImageUrl())
+                .load(imageUrl)
                 .placeholder(R.drawable.ic_launcher_background)
                 .fit()
                 .centerCrop()
