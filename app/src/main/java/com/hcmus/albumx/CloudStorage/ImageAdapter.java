@@ -1,6 +1,7 @@
 package com.hcmus.albumx.CloudStorage;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,8 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.hcmus.albumx.R;
 import com.squareup.picasso.Picasso;
 
@@ -43,8 +42,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         Upload uploadCurrent = mUploads.get(position);
         holder.textViewName.setText(uploadCurrent.getName());
+
         Picasso.with(mContext)
-                // Error image url
                 .load(uploadCurrent.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
                 .fit()

@@ -2,7 +2,6 @@ package com.hcmus.albumx.CloudStorage;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
@@ -196,9 +196,12 @@ public class CloudStorage extends Fragment {
                                 }
                             }, 500);
                             Toast.makeText(context, "Upload successful", Toast.LENGTH_LONG).show();
+
+                            Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uri.isComplete());
+
                             Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
-                                    taskSnapshot.getMetadata().getReference().getPath());
-//                            Log.d("GoogleActivity", taskSnapshot.getMetadata().getReference().getPath());
+                                    uri.getResult().toString());
                             String uploadId = mDatabaseRef.push().getKey();
                             mDatabaseRef.child(uploadId).setValue(upload);
                         }
