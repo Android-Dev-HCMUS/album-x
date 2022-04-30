@@ -1,5 +1,6 @@
 package com.hcmus.albumx.AllPhotos;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,6 +50,7 @@ public class AllPhotos extends Fragment {
     Context context;
     Button selectBtn, subMenuBtn;
     ImageButton imageButton;
+    RelativeLayout longClickBar;
 
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
@@ -79,6 +82,8 @@ public class AllPhotos extends Fragment {
         View view = (View) inflater.inflate(R.layout.all_photos_layout, null);
         super.onViewCreated(view, savedInstanceState);
 
+        longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
+
         selectBtn = (Button) view.findViewById(R.id.buttonSelect);
 
         subMenuBtn = (Button) view.findViewById(R.id.buttonSubMenu);
@@ -94,7 +99,7 @@ public class AllPhotos extends Fragment {
 
                             case R.id.menu_change_theme:
                                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                                Toast.makeText(context, "zo dayk", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Change theme", Toast.LENGTH_SHORT).show();
 //                                if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
 //                                    context.setTheme(R.style.DarkTheme);
 //                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -146,16 +151,48 @@ public class AllPhotos extends Fragment {
             }
 
             @Override
-            public boolean onLongClick(String imagePath, int position) {
-                main.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_layout,
-                                ImageViewing.newInstance(imagePath, position, AllPhotos.ALBUM_ID),
-                                "ImageViewing")
-                        .addToBackStack("ImageViewingUI")
-                        .commit();
+            public boolean onLongClick(String imagePath, int position, boolean state) {
+                // Process handling here
+                if (state) {
+                    longClickBar.animate()
+                            .alpha(1f)
+                            .setDuration(500)
+                            .setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animator) {
+                                    longClickBar.setVisibility(View.VISIBLE);
+                                }
 
-                ((MainActivity)getActivity()).setBottomNavigationVisibility(View.INVISIBLE);
+                                @Override
+                                public void onAnimationEnd(Animator animator) { }
+
+                                @Override
+                                public void onAnimationCancel(Animator animator) { }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animator) { }
+                            });
+                }
+                else {
+                    longClickBar.animate()
+                            .alpha(0f)
+                            .setDuration(500)
+                            .setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animator) { }
+
+                                @Override
+                                public void onAnimationEnd(Animator animator) {
+                                    longClickBar.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animator) { }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animator) { }
+                            });
+                }
                 return true;
             }
 

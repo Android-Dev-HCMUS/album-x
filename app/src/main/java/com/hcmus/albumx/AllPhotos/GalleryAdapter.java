@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,7 +48,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                holder.bindImageShow(imageInfoArrayList.get(pos));
+                holder.bindImageShow(imageInfoArrayList.get(pos), pos);
 //                photoListener.onLongClick(imageInfoArrayList.get(pos).path, pos);
                 return false;
             }
@@ -92,7 +93,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             viewBackground = itemView.findViewById(R.id.viewBackground);
         }
 
-        void  bindImageShow(final ImageInfo imageShow){
+        void  bindImageShow(final ImageInfo imageShow, int pos){
             if(imageShow.isSelected){
                 viewBackground.setBackgroundResource(R.drawable.image_selected_background);
                 imageSelected.setVisibility(View.VISIBLE);
@@ -109,6 +110,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         imageSelected.setVisibility(View.GONE);
                         imageShow.isSelected = false;
                         if(getSelectedImages().size() == 0){
+                            photoListener.onLongClick(imageShow.path, pos, false);
                             photoListener.onImageAction(false);
                         }
 
@@ -116,6 +118,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         viewBackground.setBackgroundResource(R.drawable.image_selected_background);
                         imageSelected.setVisibility(View.VISIBLE);
                         imageShow.isSelected =true;
+                        photoListener.onLongClick(imageShow.path, pos, true);
                         photoListener.onImageAction(true);
                     }
                     return true;
@@ -127,7 +130,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public interface PhotoListener {
 
         void onPhotoClick(String imagePath, int position);
-        boolean onLongClick(String imagePath, int position);
+        boolean onLongClick(String imagePath, int position, boolean state);
         void onImageAction(Boolean isSelected);
     }
 }
