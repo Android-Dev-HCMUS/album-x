@@ -142,7 +142,6 @@ public class ImagesActivity extends Fragment implements ImageAdapter.OnItemClick
     public void onDeleteClick(int position) {
         Upload selectedItem = mUploads.get(position);
         String selectedKey = selectedItem.getKey();
-
         StorageReference imageRef = mStorage.getReference(selectedItem.getImageUrl());
         imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

@@ -201,7 +201,9 @@ public class CloudStorage extends Fragment {
                             while (!uri.isComplete());
 
                             Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
-                                    uri.getResult().toString());
+                                    taskSnapshot.getMetadata().getPath().toString(),
+                                    uri.getResult().toString().split("token=")[1]);
+
                             String uploadId = mDatabaseRef.push().getKey();
                             mDatabaseRef.child(uploadId).setValue(upload);
                         }
