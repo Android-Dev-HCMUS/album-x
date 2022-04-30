@@ -22,7 +22,7 @@
         tools:ignore="MissingConStraints"
         tools:layout_editor_absoluteX="1dp"
         app:layout_constraintDimensionRatio="1"
-        app:riv_corner_radius="6dp"
+        app:riv_corner_radius="1dp"
         android:id="@+id/image"/>
     <ImageView
         android:layout_width="match_parent"
