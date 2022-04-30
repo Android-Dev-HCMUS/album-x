@@ -95,7 +95,7 @@ public class AlbumPhotos extends Fragment {
             }
 
             @Override
-            public boolean onLongClick(String imagePath, int position) {
+            public boolean onLongClick(String imagePath, int position, boolean state) {
                 return false;
             }
 
