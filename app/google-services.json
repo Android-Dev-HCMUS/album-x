@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "671602337079-u79djom1mkqqndvu039io1br3d8fhn6f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hcmus.albumx",
+            "certificate_hash": "c2cc771d88fff8737dbde728e97fb1c53c1b624b"
+          }
+        },
+        {
           "client_id": "671602337079-vv5g2cj796c70k0ajil2mu1hj7nda9kr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
