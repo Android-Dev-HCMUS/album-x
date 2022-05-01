@@ -1,6 +1,8 @@
 package com.hcmus.albumx.AllPhotos;
 
-public class ImageInfo {
+import java.io.Serializable;
+
+public class ImageInfo implements Serializable {
     public int id;
     public String name;
     public String path;

@@ -186,6 +186,7 @@ public class ImageViewing extends Fragment {
                 Uri selectedUri = Uri.fromFile(new File(path));
                 EditImage editImage = new EditImage(getActivity());
                 editImage.openEditor(selectedUri);
+                getFragmentManager().popBackStackImmediate();
             }
         }); //edit onClickListener
 
