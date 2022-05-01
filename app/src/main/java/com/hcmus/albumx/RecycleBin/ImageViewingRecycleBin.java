@@ -34,6 +34,7 @@ public class ImageViewingRecycleBin extends Fragment {
     public static String TAG = "Image Viewing Recycle Bin";
 
     private static final String IMAGE_PATH_ARG = "imagePath";
+    private static final String IMAGE_ARRAY_ARG = "imageArray";
     private static final String IMAGE_POSITION_ARG = "position";
 
     private MainActivity main;
@@ -46,11 +47,12 @@ public class ImageViewingRecycleBin extends Fragment {
 
     private ArrayList<ImageInfo> imageInfoArrayList;
 
-    public static ImageViewingRecycleBin newInstance(String imagePath, int pos) {
+    public static ImageViewingRecycleBin newInstance(String imagePath, ArrayList<ImageInfo> imageInfoArrayList, int pos) {
         ImageViewingRecycleBin fragment = new ImageViewingRecycleBin();
         Bundle bundle = new Bundle();
         bundle.putString(IMAGE_PATH_ARG, imagePath);
         bundle.putInt(IMAGE_POSITION_ARG, pos);
+        bundle.putSerializable(IMAGE_ARRAY_ARG, imageInfoArrayList);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -66,6 +68,7 @@ public class ImageViewingRecycleBin extends Fragment {
 
             if (getArguments() != null) {
                 pos = getArguments().getInt(IMAGE_POSITION_ARG);
+                imageInfoArrayList = (ArrayList<ImageInfo>) getArguments().getSerializable(IMAGE_ARRAY_ARG);
             }
         } catch (IllegalStateException ignored) {
         }

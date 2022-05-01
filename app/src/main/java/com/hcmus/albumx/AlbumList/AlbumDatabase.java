@@ -37,7 +37,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         public static final String FIELD_NAME = "name";
         public static final String FIELD_PATH = "path";
         public static final String FIELD_REMOVE_PROPERTY = "is_remove";
-        public static final String FIELD_CREATE_DATE = "create_at";
+        public static final String FIELD_CREATED_DATE = "created_at";
         public static final String FIELD_ALBUM = "album";
     }
 
@@ -51,7 +51,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
             imageSet.FIELD_NAME + " TEXT, " +
             imageSet.FIELD_PATH + " TEXT, " +
             imageSet.FIELD_REMOVE_PROPERTY + " BIT, " +
-            imageSet.FIELD_CREATE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+            imageSet.FIELD_CREATED_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, " +
             imageSet.FIELD_ALBUM + " INTEGER " + ")";
 
     public static final String GENERATE_INITIAL_DATA_1 = "INSERT INTO " + albumSet.TABLE_NAME +
@@ -111,7 +111,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         contentValues.put(imageSet.FIELD_NAME, name);
         contentValues.put(imageSet.FIELD_PATH, path);
         contentValues.put(imageSet.FIELD_REMOVE_PROPERTY, 0);
-        contentValues.put(imageSet.FIELD_CREATE_DATE, getDateTime());
+        contentValues.put(imageSet.FIELD_CREATED_DATE, getDateTime());
         contentValues.put(imageSet.FIELD_ALBUM, albumRef);
 
         database.insert(imageSet.TABLE_NAME, null, contentValues);
@@ -121,14 +121,15 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
 
-        String[] columns = {imageSet.FIELD_ID, imageSet.FIELD_NAME, imageSet.FIELD_PATH, imageSet.FIELD_ALBUM};
+        String[] columns = {imageSet.FIELD_ID, imageSet.FIELD_NAME, imageSet.FIELD_PATH, imageSet.FIELD_CREATED_DATE};
         String[] arg = {String.valueOf(albumID)};
         Cursor cursor = database.query(imageSet.TABLE_NAME, columns,
                 imageSet.FIELD_ALBUM +" = ? and " + imageSet.FIELD_REMOVE_PROPERTY + " = 0",
                 arg,
                 null, null, null);
         while(cursor.moveToNext()){
-            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),cursor.getString(2), false));
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),
+                    cursor.getString(2),  cursor.getString(3), cursor.getString(3)));
         }
         return imageInfoArrayList;
     }

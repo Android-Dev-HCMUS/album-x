@@ -15,13 +15,22 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AllPhotos.GalleryAdapter;
+import com.hcmus.albumx.AllPhotos.GroupImageItem;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
+import com.hcmus.albumx.AllPhotos.ListItem;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class AlbumPhotos extends Fragment {
     public static final String TAG = "Album Photos";
@@ -36,6 +45,7 @@ public class AlbumPhotos extends Fragment {
     private GalleryAdapter galleryAdapter;
 
     private ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
+    List<ListItem> listItems;
     private ImageDatabase myDB;
 
     private int albumID;
@@ -62,6 +72,9 @@ public class AlbumPhotos extends Fragment {
             }
 
             imageInfoArrayList = AlbumDatabase.getInstance(context).getImagesOf(albumID);
+
+            listItems = new ArrayList<>();
+            prepareData();
         } catch (IllegalStateException ignored) {
         }
     }
@@ -77,9 +90,14 @@ public class AlbumPhotos extends Fragment {
             albumName.setText(getArguments().getString(ALBUM_NAME_ARG));
         }
 
-        recyclerView = view.findViewById(R.id.recyclerview_image);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+        Button back = (Button) view.findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.getSupportFragmentManager().popBackStack();
+                onDetach();
+            }
+        });
 
         galleryAdapter = new GalleryAdapter(context, imageInfoArrayList, new GalleryAdapter.PhotoListener() {
             @Override
@@ -87,7 +105,7 @@ public class AlbumPhotos extends Fragment {
                 main.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_layout,
-                                ImageViewing.newInstance(imagePath, position, albumID),
+                                ImageViewing.newInstance(imagePath, imageInfoArrayList, position, albumID),
                                 ImageViewing.TAG)
                         .addToBackStack("ImageViewingUI")
                         .commit();
@@ -104,22 +122,57 @@ public class AlbumPhotos extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(galleryAdapter);
+        galleryAdapter.setData(listItems);
 
-        Button back = (Button) view.findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
+        recyclerView = view.findViewById(R.id.recyclerview_image);
+        recyclerView.setHasFixedSize(true);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            public void onClick(View view) {
-                main.getSupportFragmentManager().popBackStack();
-                onDetach();
+            public int getSpanSize(int position) {
+                switch (galleryAdapter.getItemViewType(position)){
+                    case ListItem.TYPE_DATE:
+                        return 3;
+                    default:
+                        return 1;
+                }
             }
         });
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setAdapter(galleryAdapter);
+
         return view;
     }
 
+    private void prepareData(){
+        imageInfoArrayList.sort(new Comparator<ImageInfo>() {
+            @Override
+            public int compare(ImageInfo o1, ImageInfo o2) {
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                Date d1 = null;
+                Date d2 = null;
+                try {
+                    d1 = df.parse(o1.createdDate);
+                    d2 = df.parse(o2.createdDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                return d1.compareTo(d2);
+            }
+        });
+
+        for(ImageInfo item : imageInfoArrayList){
+            listItems.add(new GroupImageItem(item));
+        }
+    }
+
     public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
-        imageInfoArrayList.clear();
-        imageInfoArrayList.addAll(newList);
-        galleryAdapter.notifyDataSetChanged();
+        imageInfoArrayList = newList;
+        listItems = new ArrayList<>();
+        prepareData();
+        galleryAdapter.setData(listItems);
     }
 }

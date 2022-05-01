@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,12 +18,21 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     protected PhotoListener photoListener;
 
+    public static final int TYPE_DATE = 0;
+    public static final int TYPE_IMAGE = 1;
+
     private List<ImageInfo> imageInfoArrayList;
+
+    private List<ListItem> listItem;
+    public void setData(List<ListItem> listItem){
+        this.listItem = listItem;
+        notifyDataSetChanged();
+    }
 
     public GalleryAdapter(Context context, List<ImageInfo> imageInfoArrayList, PhotoListener photoListener) {
         this.context = context;
@@ -32,45 +42,76 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(
-                LayoutInflater.from(context).inflate(R.layout.gallery_item, parent, false)
-        );
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(TYPE_DATE == viewType){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.all_photo_item_date, parent, false);
+            return new HeaderViewHolder(view);
+        } else if(TYPE_IMAGE == viewType){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gallery_item, parent, false);
+            return new ImageViewHolder(view);
+        }
+
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final int pos =  position;
-        Glide.with(context).load(imageInfoArrayList.get(pos).path).into(holder.image);
+        ListItem item = listItem.get(position);
+        if(item == null){
+            return;
+        }
+        if(TYPE_DATE == holder.getItemViewType()){
+            DateItem dateItem = (DateItem) item;
+            HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+            headerViewHolder.dateHeader.setText(dateItem.getDate());
+        }
+        else if(TYPE_IMAGE == holder.getItemViewType()){
+            GroupImageItem groupImageItem = (GroupImageItem) item;
+            ImageViewHolder viewHolder = (ImageViewHolder) holder;
+            Glide.with(context)
+                    .load(groupImageItem.getImageInfo().path)
+                    .into(viewHolder.image);
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                holder.bindImageShow(imageInfoArrayList.get(pos), pos);
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    viewHolder.bindImageShow(imageInfoArrayList.get(pos), pos);
 //                photoListener.onLongClick(imageInfoArrayList.get(pos).path, pos);
-                return false;
-            }
-        });
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<ImageInfo> selectedImages = new ArrayList<>();
-                selectedImages = getSelectedImages();
-
-                if(selectedImages.size() == 0){
-                    photoListener.onPhotoClick(imageInfoArrayList.get(pos).path, pos);
-
-                }else {
-                    holder.bindImageShow(imageInfoArrayList.get(pos), pos);
+                    return false;
                 }
-            }
-        });
+            });
+
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ListItem item = listItem.get(pos);
+                    GroupImageItem image = (GroupImageItem) item;
+                    List<ImageInfo> selectedImages = new ArrayList<>();
+                    selectedImages = getSelectedImages();
+
+                    if(selectedImages.size() == 0 && item.getType() == ListItem.TYPE_IMAGE){
+
+                        photoListener.onPhotoClick(image.getImageInfo().path, pos);
+                    }else {
+                        viewHolder.bindImageShow(image.getImageInfo(), pos);
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return imageInfoArrayList.size();
+        if(listItem != null){
+            return listItem.size();
+        }
+        return  0;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return listItem.get(position).getType();
     }
 
     public List<ImageInfo> getSelectedImages() {
@@ -84,13 +125,23 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         return selectedImages;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class HeaderViewHolder extends RecyclerView.ViewHolder{
+        private TextView dateHeader;
+
+        public HeaderViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            dateHeader = itemView.findViewById(R.id.dateTextView);
+        }
+    }
+
+    public class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView imageSelected;
         RoundedImageView image;
         ConstraintLayout layoutImage;
         View viewBackground;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageSelected = itemView.findViewById(R.id.imageSelected);

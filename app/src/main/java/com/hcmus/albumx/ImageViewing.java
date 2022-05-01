@@ -48,6 +48,7 @@ public class ImageViewing extends Fragment {
     public static String TAG = "Image Viewing";
 
     private static final String IMAGE_PATH_ARG = "imagePath";
+    private static final String IMAGE_ARRAY_ARG = "imageArray";
     private static final String IMAGE_POSITION_ARG = "position";
     private static final String IMAGE_FROM_ALBUM_ARG = "fromAlbum";
 
@@ -66,12 +67,13 @@ public class ImageViewing extends Fragment {
     private ArrayList<AlbumInfo> albumInfoArrayList;
     private int fromAlbum;
 
-    public static ImageViewing newInstance(String imagePath, int pos, int fromAlbum) {
+    public static ImageViewing newInstance(String imagePath, ArrayList<ImageInfo> imageInfoArrayList, int pos, int fromAlbum) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
         bundle.putString(IMAGE_PATH_ARG, imagePath);
         bundle.putInt(IMAGE_POSITION_ARG, pos);
         bundle.putInt(IMAGE_FROM_ALBUM_ARG, fromAlbum);
+        bundle.putSerializable(IMAGE_ARRAY_ARG, imageInfoArrayList);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -108,12 +110,8 @@ public class ImageViewing extends Fragment {
                 pos = getArguments().getInt(IMAGE_POSITION_ARG);
 
                 fromAlbum = getArguments().getInt(IMAGE_FROM_ALBUM_ARG);
-                if(fromAlbum == 0){
-                    imageInfoArrayList = ImageDatabase.getInstance(context).getAllImages();
-                } else {
-                    imageInfoArrayList = AlbumDatabase.getInstance(context)
-                            .getImagesOf(getArguments().getInt(IMAGE_FROM_ALBUM_ARG));
-                }
+
+                imageInfoArrayList = (ArrayList<ImageInfo>) getArguments().getSerializable(IMAGE_ARRAY_ARG);
             }
         } catch (IllegalStateException ignored) {
         }

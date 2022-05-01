@@ -32,7 +32,6 @@ public class FullScreenImageAdapter extends RecyclerView.Adapter<FullScreenImage
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final int pos = position;
         Glide.with(context).load(listImage.get(position).path).into(holder.imageView);
     }
 
