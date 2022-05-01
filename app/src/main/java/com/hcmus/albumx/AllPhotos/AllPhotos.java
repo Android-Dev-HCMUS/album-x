@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -60,9 +61,13 @@ public class AllPhotos extends Fragment {
     MainActivity main;
     Context context;
     Button selectBtn, subMenuBtn;
-    ImageButton shareMultipleImages;
     ImageButton imageButton;
+
     RelativeLayout longClickBar;
+    ImageButton addToAlbum;
+    ImageButton shareMultipleImages;
+    ImageButton deleteMultipleImages;
+    ImageButton closeToolbar;
 
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
@@ -97,15 +102,10 @@ public class AllPhotos extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = (View) inflater.inflate(R.layout.all_photos_layout, null);
-        super.onViewCreated(view, savedInstanceState);
+        View contextView = (View) inflater.inflate(R.layout.all_photos_layout, null);
+        super.onViewCreated(contextView, savedInstanceState);
 
-        longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
-
-        selectBtn = (Button) view.findViewById(R.id.buttonSelect);
-
-        subMenuBtn = (Button) view.findViewById(R.id.buttonSubMenu);
-
+        subMenuBtn = (Button) contextView.findViewById(R.id.buttonSubMenu);
         subMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,7 +142,7 @@ public class AllPhotos extends Fragment {
             }
         }); //subMenu onClickListener
 
-        imageButton = (ImageButton) view.findViewById(R.id.addBtn);
+        imageButton = (ImageButton) contextView.findViewById(R.id.addBtn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,7 +154,7 @@ public class AllPhotos extends Fragment {
             }
         });
 
-        recyclerView = view.findViewById(R.id.recycleview_gallery_images);
+        recyclerView = contextView.findViewById(R.id.recycleview_gallery_images);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
@@ -180,93 +180,116 @@ public class AllPhotos extends Fragment {
 
             @Override
             public boolean onLongClick(String imagePath, int position, boolean state) {
-                // Process handling here
-                if (state) {
-                    longClickBar.animate()
-                            .alpha(1f)
-                            .setDuration(500)
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-                                    longClickBar.setVisibility(View.VISIBLE);
-                                    shareMultipleImages = (ImageButton) view.findViewById(R.id.shareMultipleImages);
-                                    shareMultipleImages.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            List<ImageInfo> selectedImages = new ArrayList<>();
-
-                                            selectedImages = getSelectedImages();
-                                            //Create Img from bitmap and share with text
-
-                                            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-
-                                            // adding text to share
-                                            intent.putExtra(Intent.EXTRA_TEXT, "Sharing Images");
-
-                                            // Add subject Here
-                                            intent.putExtra(Intent.EXTRA_SUBJECT, "Album X share multi images");
-
-                                            // setting type to image
-                                            intent.setType("image/*");
-
-                                            ArrayList<Uri> files = new ArrayList<Uri>();
-
-                                            for(ImageInfo imageShow: selectedImages){
-                                                String path = imageShow.path;
-                                                Uri uri = getImageToShare(BitmapFactory.decodeFile(path), path);
-                                                // putting uri of image to be shared
-                                                files.add(uri);
-                                            }
-                                            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-
-                                            // calling startactivity() to share
-                                            startActivity(Intent.createChooser(intent, "Share Via"));
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) { }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) { }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) { }
-                            });
-                }
-                else {
-                    longClickBar.animate()
-                            .alpha(0f)
-                            .setDuration(500)
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) { }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    longClickBar.setVisibility(View.GONE);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) { }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) { }
-                            });
-                }
-                return true;
+                return false;
             }
 
             @Override
-            public void onImageAction(Boolean isSelected) {
-
-            }
+            public void onImageAction(Boolean isSelected) { }
         });
 
         galleryAdapter.setData(listItems);
 
-        recyclerView = view.findViewById(R.id.recycleview_gallery_images);
+        // Multiple image toolbar
+        longClickBar = (RelativeLayout) contextView.findViewById(R.id.longClickBar);
+        selectBtn = (Button) contextView.findViewById(R.id.buttonSelect);
+        selectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                longClickBar.animate()
+                        .alpha(1f)
+                        .setDuration(500)
+                        .setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animator) {
+                                // Show toolbar
+                                longClickBar.setVisibility(View.VISIBLE);
+
+                                // Set state -> can click to choose
+                                galleryAdapter.setMultipleSelectState(true);
+
+                                // Set view and its listeners
+                                addToAlbum = (ImageButton) contextView.findViewById(R.id.addToAlbum);
+                                // -> set listener
+
+                                shareMultipleImages = (ImageButton) contextView.findViewById(R.id.shareMultipleImages);
+                                shareMultipleImages.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        List<ImageInfo> selectedImages = new ArrayList<>();
+
+                                        selectedImages = getSelectedImages();
+                                        //Create Img from bitmap and share with text
+
+                                        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+
+                                        // adding text to share
+                                        intent.putExtra(Intent.EXTRA_TEXT, "Sharing Images");
+
+                                        // Add subject Here
+                                        intent.putExtra(Intent.EXTRA_SUBJECT, "Album X share multi images");
+
+                                        // setting type to image
+                                        intent.setType("image/*");
+
+                                        ArrayList<Uri> files = new ArrayList<Uri>();
+
+                                        for(ImageInfo imageShow: selectedImages){
+                                            String path = imageShow.path;
+                                            Uri uri = getImageToShare(BitmapFactory.decodeFile(path), path);
+                                            // putting uri of image to be shared
+                                            files.add(uri);
+                                        }
+                                        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+
+                                        // calling startactivity() to share
+                                        startActivity(Intent.createChooser(intent, "Share Via"));
+                                    }
+                                });
+
+                                deleteMultipleImages = (ImageButton) contextView.findViewById(R.id.deleteMultipleImages);
+                                // -> set listener
+
+                                closeToolbar = (ImageButton) contextView.findViewById(R.id.closeToolbar);
+                                closeToolbar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        longClickBar.animate()
+                                                .alpha(0f)
+                                                .setDuration(500)
+                                                .setListener(new Animator.AnimatorListener() {
+                                                    @Override
+                                                    public void onAnimationStart(Animator animator) { }
+
+                                                    @Override
+                                                    public void onAnimationEnd(Animator animator) {
+                                                        longClickBar.setVisibility(View.GONE);
+                                                        // Set state -> can't click to choose
+                                                        galleryAdapter.setMultipleSelectState(false);
+                                                    }
+
+                                                    @Override
+                                                    public void onAnimationCancel(Animator animator) { }
+
+                                                    @Override
+                                                    public void onAnimationRepeat(Animator animator) { }
+                                                });
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animator) { }
+
+                            @Override
+                            public void onAnimationCancel(Animator animator) { }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animator) { }
+                        });
+            }
+        });
+
+        recyclerView = contextView.findViewById(R.id.recycleview_gallery_images);
         recyclerView.setHasFixedSize(true);
 
         GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
@@ -285,7 +308,7 @@ public class AllPhotos extends Fragment {
 
         recyclerView.setAdapter(galleryAdapter);
 
-        return view;
+        return contextView;
     }
 
     @Override

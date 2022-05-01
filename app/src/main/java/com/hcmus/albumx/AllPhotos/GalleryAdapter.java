@@ -28,6 +28,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private List<ImageInfo> imageInfoArrayList;
 
+    private boolean isMultipleSelectState = false;
+    public void setMultipleSelectState(boolean state) {
+        this.isMultipleSelectState = state;
+        notifyDataSetChanged();
+    }
+
     private List<ListItem> listItem;
     public void setData(List<ListItem> listItem){
         this.listItem = listItem;
@@ -50,7 +56,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gallery_item, parent, false);
             return new ImageViewHolder(view);
         }
-
         return null;
     }
 
@@ -73,31 +78,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .load(groupImageItem.getImageInfo().path)
                     .into(viewHolder.image);
 
-            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    ListItem item = listItem.get(pos);
-                    GroupImageItem image = (GroupImageItem) item;
-                    if(item.getType() == ListItem.TYPE_IMAGE) {
-                        viewHolder.bindImageShow(image.getImageInfo(), pos);
-                    }
-
-
-                    return false;
-                }
-            });
-
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ListItem item = listItem.get(pos);
                     GroupImageItem image = (GroupImageItem) item;
-                    List<ImageInfo> selectedImages = new ArrayList<>();
-                    selectedImages = getSelectedImages();
 
                     if(item.getType() == ListItem.TYPE_IMAGE){
-                        if(selectedImages.size() == 0){
+                        if(isMultipleSelectState == false){
                             photoListener.onPhotoClick(image.getImageInfo().path, pos);
+                            // Remove all selected item
                         }else {
                             viewHolder.bindImageShow(image.getImageInfo(), pos);
                         }
@@ -127,7 +117,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 selectedImages.add(imageShow);
             }
         }
-
         return selectedImages;
     }
 
@@ -156,7 +145,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewBackground = itemView.findViewById(R.id.viewBackground);
         }
 
-        void  bindImageShow(final ImageInfo imageShow, int pos){
+        public void  bindImageShow(final ImageInfo imageShow, int pos){
             if(imageShow.isSelected){
                 viewBackground.setBackgroundResource(R.drawable.image_selected_background);
                 imageSelected.setVisibility(View.VISIBLE);
@@ -171,8 +160,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         viewBackground.setBackgroundResource(R.drawable.image_background);
                         imageSelected.setVisibility(View.GONE);
                         imageShow.isSelected = false;
-                        if(getSelectedImages().size() == 0){
-                            photoListener.onLongClick(imageShow.path, pos, false);
+                        if(getSelectedImages().size() == 0) {
                             photoListener.onImageAction(false);
                         }
 
@@ -180,31 +168,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         viewBackground.setBackgroundResource(R.drawable.image_selected_background);
                         imageSelected.setVisibility(View.VISIBLE);
                         imageShow.isSelected =true;
-                        photoListener.onLongClick(imageShow.path, pos, true);
                         photoListener.onImageAction(true);
                     }
-                }
-            });
-            layoutImage.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if(imageShow.isSelected){
-                        viewBackground.setBackgroundResource(R.drawable.image_background);
-                        imageSelected.setVisibility(View.GONE);
-                        imageShow.isSelected = false;
-                        if(getSelectedImages().size() == 0){
-                            photoListener.onLongClick(imageShow.path, pos, false);
-                            photoListener.onImageAction(false);
-                        }
-
-                    } else {
-                        viewBackground.setBackgroundResource(R.drawable.image_selected_background);
-                        imageSelected.setVisibility(View.VISIBLE);
-                        imageShow.isSelected =true;
-                        photoListener.onLongClick(imageShow.path, pos, true);
-                        photoListener.onImageAction(true);
-                    }
-                    return true;
                 }
             });
         }
