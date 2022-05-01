@@ -1,7 +1,7 @@
 package com.hcmus.albumx.AllPhotos;
 
 public class GroupImageItem extends ListItem{
-    ImageInfo imageInfo;
+    private ImageInfo imageInfo;
 
     public GroupImageItem(ImageInfo imageInfo) {
         this.imageInfo = imageInfo;

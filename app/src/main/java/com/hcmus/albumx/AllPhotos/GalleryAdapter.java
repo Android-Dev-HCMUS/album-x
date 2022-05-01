@@ -76,8 +76,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    viewHolder.bindImageShow(imageInfoArrayList.get(pos), pos);
-//                photoListener.onLongClick(imageInfoArrayList.get(pos).path, pos);
+                    ListItem item = listItem.get(pos);
+                    GroupImageItem image = (GroupImageItem) item;
+                    if(item.getType() == ListItem.TYPE_IMAGE) {
+                        viewHolder.bindImageShow(image.getImageInfo(), pos);
+                    }
+
+
                     return false;
                 }
             });
@@ -90,11 +95,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     List<ImageInfo> selectedImages = new ArrayList<>();
                     selectedImages = getSelectedImages();
 
-                    if(selectedImages.size() == 0 && item.getType() == ListItem.TYPE_IMAGE){
-
-                        photoListener.onPhotoClick(image.getImageInfo().path, pos);
-                    }else {
-                        viewHolder.bindImageShow(image.getImageInfo(), pos);
+                    if(item.getType() == ListItem.TYPE_IMAGE){
+                        if(selectedImages.size() == 0){
+                            photoListener.onPhotoClick(image.getImageInfo().path, pos);
+                        }else {
+                            viewHolder.bindImageShow(image.getImageInfo(), pos);
+                        }
                     }
                 }
             });
