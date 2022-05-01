@@ -73,6 +73,7 @@ public class AllPhotos extends Fragment {
             myDB = ImageDatabase.getInstance(context);
 
             imageInfoArrayList = myDB.getAllImages();
+//            imageInfoArrayList.forEach((imageInfo -> Log.e("AddImageInfo", imageInfo.getPath())));
         } catch (IllegalStateException ignored) {
         }
     }
@@ -110,6 +111,10 @@ public class AllPhotos extends Fragment {
 //                                    context.setTheme(R.style.DarkTheme);
 //                                    Toast.makeText(context, "Set light", Toast.LENGTH_SHORT).show();
 //                                }
+                                return true;
+                            case R.id.secure_folder:
+                                // Secure folder
+
                                 return true;
                             default:
                                 return false;
@@ -273,7 +278,6 @@ public class AllPhotos extends Fragment {
                 }
             } else {
                 String path = getRealPathFromURI(data.getData());   //context
-
                 String imageName = path.substring(path.lastIndexOf("/") + 1);
 
                 if (ImageDatabase.getInstance(context).isImageExistsInApplication(imageName)) {
@@ -301,7 +305,7 @@ public class AllPhotos extends Fragment {
     }
 
     public String saveImageBitmap(Bitmap image_bitmap, String image_name) {
-        String root = Environment.getExternalStorageDirectory().toString();
+        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
         File myDir = new File(root, "/saved_images");
         if (!myDir.exists()) {
             myDir.mkdirs();
@@ -316,11 +320,10 @@ public class AllPhotos extends Fragment {
             image_bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-            return file.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return file.getAbsolutePath();
     }
 
     private String getRealPathFromURI(Uri contentUri) {
