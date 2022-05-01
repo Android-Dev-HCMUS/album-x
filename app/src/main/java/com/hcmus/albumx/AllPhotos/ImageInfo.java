@@ -1,5 +1,7 @@
 package com.hcmus.albumx.AllPhotos;
 
+import androidx.annotation.NonNull;
+
 public class ImageInfo {
     public int id;
     public String name;
@@ -11,5 +13,13 @@ public class ImageInfo {
         this.name = name;
         this.path = path;
         this.isSelected = isSelected;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
