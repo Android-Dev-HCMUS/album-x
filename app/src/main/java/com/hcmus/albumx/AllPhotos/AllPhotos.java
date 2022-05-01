@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,23 +25,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
+import com.hcmus.albumx.BuildConfig;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AllPhotos extends Fragment {
     public static String TAG = "ALl Photos";
@@ -49,6 +49,7 @@ public class AllPhotos extends Fragment {
     MainActivity main;
     Context context;
     Button selectBtn, subMenuBtn;
+    ImageButton shareMultipleImages;
     ImageButton imageButton;
     RelativeLayout longClickBar;
 
@@ -161,6 +162,40 @@ public class AllPhotos extends Fragment {
                                 @Override
                                 public void onAnimationStart(Animator animator) {
                                     longClickBar.setVisibility(View.VISIBLE);
+                                    shareMultipleImages = (ImageButton) view.findViewById(R.id.shareMultipleImages);
+                                    shareMultipleImages.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            List<ImageInfo> selectedImages = new ArrayList<>();
+
+                                            selectedImages = getSelectedImages();
+                                            //Create Img from bitmap and share with text
+
+                                            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+
+                                            // adding text to share
+                                            intent.putExtra(Intent.EXTRA_TEXT, "Sharing Images");
+
+                                            // Add subject Here
+                                            intent.putExtra(Intent.EXTRA_SUBJECT, "Album X share multi images");
+
+                                            // setting type to image
+                                            intent.setType("image/*");
+
+                                            ArrayList<Uri> files = new ArrayList<Uri>();
+
+                                            for(ImageInfo imageShow: selectedImages){
+                                                String path = imageShow.path;
+                                                Uri uri = getImageToShare(BitmapFactory.decodeFile(path), path);
+                                                // putting uri of image to be shared
+                                                files.add(uri);
+                                            }
+                                            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+
+                                            // calling startactivity() to share
+                                            startActivity(Intent.createChooser(intent, "Share Via"));
+                                        }
+                                    });
                                 }
 
                                 @Override
@@ -318,6 +353,39 @@ public class AllPhotos extends Fragment {
         imageInfoArrayList.addAll(newList);
         galleryAdapter.notifyDataSetChanged();
     }
+
+    public List<ImageInfo> getSelectedImages() {
+        List<ImageInfo> selectedImages = new ArrayList<>();
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(imageShow.isSelected){
+                selectedImages.add(imageShow);
+            }
+        }
+
+        return selectedImages;
+    }
+
+
+    // Retrieving the url to share
+    private Uri getImageToShare(Bitmap bitmap, String path) {
+        File imagefolder = new File(getActivity().getCacheDir() + path, "images");
+        Uri uri = null;
+        try {
+            imagefolder.mkdirs();
+            File file = new File(imagefolder, "shared_image.jpeg");
+            FileOutputStream outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            uri = FileProvider.getUriForFile(context,
+                    BuildConfig.APPLICATION_ID + ".provider", file);
+
+        } catch (Exception e) {
+            Log.d("err", e.getMessage());
+            Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        return uri;
+    }   //getImageToShare
 
 
 }
