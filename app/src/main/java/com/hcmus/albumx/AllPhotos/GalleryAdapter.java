@@ -1,13 +1,10 @@
 package com.hcmus.albumx.AllPhotos;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -58,7 +55,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                photoListener.onPhotoClick(imageInfoArrayList.get(pos).path, pos);
+                List<ImageInfo> selectedImages = new ArrayList<>();
+                selectedImages = getSelectedImages();
+
+                if(selectedImages.size() == 0){
+                    photoListener.onPhotoClick(imageInfoArrayList.get(pos).path, pos);
+
+                }else {
+                    holder.bindImageShow(imageInfoArrayList.get(pos), pos);
+                }
             }
         });
     }
@@ -102,7 +107,27 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 viewBackground.setBackgroundResource(R.drawable.image_background);
                 imageSelected.setVisibility(View.GONE);
             }
+            layoutImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(imageShow.isSelected){
+                        viewBackground.setBackgroundResource(R.drawable.image_background);
+                        imageSelected.setVisibility(View.GONE);
+                        imageShow.isSelected = false;
+                        if(getSelectedImages().size() == 0){
+                            photoListener.onLongClick(imageShow.path, pos, false);
+                            photoListener.onImageAction(false);
+                        }
 
+                    } else {
+                        viewBackground.setBackgroundResource(R.drawable.image_selected_background);
+                        imageSelected.setVisibility(View.VISIBLE);
+                        imageShow.isSelected =true;
+                        photoListener.onLongClick(imageShow.path, pos, true);
+                        photoListener.onImageAction(true);
+                    }
+                }
+            });
             layoutImage.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
