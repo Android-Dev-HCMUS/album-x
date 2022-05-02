@@ -30,11 +30,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.BuildConfig;
+import com.hcmus.albumx.CloudStorage.CloudStorage;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
@@ -203,8 +205,6 @@ public class AllPhotos extends Fragment {
                             public void onAnimationStart(Animator animator) {
                                 // Show toolbar
                                 longClickBar.setVisibility(View.VISIBLE);
-
-                                // Set state -> can click to choose
                                 galleryAdapter.setMultipleSelectState(true);
 
                                 // Set view and its listeners
@@ -262,9 +262,9 @@ public class AllPhotos extends Fragment {
 
                                                     @Override
                                                     public void onAnimationEnd(Animator animator) {
-                                                        longClickBar.setVisibility(View.GONE);
-                                                        // Set state -> can't click to choose
-                                                        galleryAdapter.setMultipleSelectState(false);
+                                                        getFragmentManager().beginTransaction()
+                                                                .replace(R.id.frameFragment, new AllPhotos(), TAG)
+                                                                .commit();
                                                     }
 
                                                     @Override
