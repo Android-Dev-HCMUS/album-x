@@ -102,6 +102,8 @@ public class ImageViewing extends Fragment {
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
                     } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
                     } else {
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
                     }
