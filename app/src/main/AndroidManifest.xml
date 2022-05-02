@@ -37,6 +37,10 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:ignore="Instantiatable" />
+        <activity
+            android:name=".SecureFolder.SecureFolderManager"
+            android:label="@string/app_name"
+            tools:ignore="Instantiatable"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

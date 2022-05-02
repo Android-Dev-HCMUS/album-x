@@ -15,18 +15,21 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="bgc">#ffffff</item>
         <item name="tC">#000000</item>
     </style>
-    <style name="DarkTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <style name="BlueTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="tC">#ffffff</item>
-        <item name="bgc">#000000</item>
+        <item name="bgc">#00BCD4</item>
+    </style>
+
+    <!-- White theme -->
+    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="bgc">#ffffff</item>
+        <item name="tC">#000000</item>
     </style>
 </resources>

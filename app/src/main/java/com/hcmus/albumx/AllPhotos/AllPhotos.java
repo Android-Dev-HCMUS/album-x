@@ -5,12 +5,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -24,6 +26,10 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -63,6 +69,7 @@ public class AllPhotos extends Fragment {
     ImageButton shareMultipleImages;
     ImageButton imageButton;
     RelativeLayout longClickBar;
+    SharedPreferences sp;
 
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
@@ -127,14 +134,34 @@ public class AllPhotos extends Fragment {
 //                                    context.setTheme(R.style.DarkTheme);
 //                                    Toast.makeText(context, "Set light", Toast.LENGTH_SHORT).show();
 //                                }
+                                sp = getContext().getSharedPreferences("MyPref", 0);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putBoolean("isNightMode", true);
+                                editor.apply();
+                                Toast.makeText(context, "Theme changed to black", Toast.LENGTH_SHORT).show();
+                                reset();
                                 return true;
                             case R.id.secure_folder:
                                 // Secure folder
 
+                            case R.id.change_theme_light:
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                                sp = getContext().getSharedPreferences("MyPref", 0);
+                                SharedPreferences.Editor editor2 = sp.edit();
+                                editor2.putBoolean("isNightMode", false);
+                                editor2.apply();
+                                Toast.makeText(context, "Theme changed to white", Toast.LENGTH_SHORT).show();
+                                reset();
                                 return true;
                             default:
                                 return false;
                         } //Switch
+                    }
+
+                    private void reset() {
+                        Intent intent = new Intent (getContext(), MainActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
                     }
                 }); //setOnMenuItemClickListener
                 popup.inflate(R.menu.menu_image_submenu);
