@@ -16,7 +16,6 @@ public class ImagesEditGallery {
         Cursor cursor;
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
         final String orderBy = MediaStore.Images.Media._ID;
-        final String selectionArgs = "%/DCIM%"; // Test was my folder name
         //Stores all the images from the gallery in Cursor
         try{
             cursor = context.getContentResolver().query(
@@ -41,7 +40,7 @@ public class ImagesEditGallery {
                                         cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID)));
 
                 arrUri.add(imageUri);
-                Log.d("uri", String.valueOf(imageUri));
+                Log.d("uri", String.valueOf(path));
             }
         }
         cursor.close();

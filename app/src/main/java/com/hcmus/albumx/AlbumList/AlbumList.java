@@ -169,4 +169,29 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         db.updateAlbum(albumList.get(position).id, albumName);
         adapter.notifyDataSetChanged();
     }
+
+    public ArrayList<AlbumInfo> infoAddAlbums(){
+
+        ArrayList<AlbumInfo> album;
+
+        album = new ArrayList<>();
+
+        Cursor cursor = db.getAlbums();
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            int type = cursor.getInt(2);
+
+            if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                Log.d("pass", "pass");
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
+                album.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
+                Log.d("pass", "pass");
+            } else {
+                album.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
+            }
+        }
+        return album;
+    }
 }

@@ -3,12 +3,12 @@ package com.hcmus.albumx.AllPhotos;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,14 +30,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.BuildConfig;
 import com.hcmus.albumx.EditedView.ImagesEditGallery;
-import com.hcmus.albumx.CloudStorage.CloudStorage;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
@@ -213,6 +211,12 @@ public class AllPhotos extends Fragment {
 
                                 // Set view and its listeners
                                 addToAlbum = (ImageButton) contextView.findViewById(R.id.addToAlbum);
+                                addToAlbum.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                });
                                 // -> set listener
 
                                 shareMultipleImages = (ImageButton) contextView.findViewById(R.id.shareMultipleImages);
@@ -251,6 +255,47 @@ public class AllPhotos extends Fragment {
                                 });
 
                                 deleteMultipleImages = (ImageButton) contextView.findViewById(R.id.deleteMultipleImages);
+                                deleteMultipleImages.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        List<ImageInfo> selectedImages = new ArrayList<>();
+
+                                        selectedImages = getSelectedImages();
+
+                                        Dialog dialog = new Dialog(context);
+                                        dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
+                                        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
+                                        Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
+                                        List<ImageInfo> finalSelectedImages = selectedImages;
+                                        removeGallery.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                for(ImageInfo imageShow: finalSelectedImages){
+                                                    String path = imageShow.path;
+                                                    String name = imageShow.name;
+                                                    ImageDatabase.getInstance(getContext())
+                                                            .moveImageToRecycleBin(name,path);
+                                                    AlbumDatabase.getInstance(getContext())
+                                                            .softDeleteImage(name,path);
+                                                }
+
+                                                dialog.dismiss();
+                                                getFragmentManager().beginTransaction()
+                                                        .replace(R.id.frameFragment, new AllPhotos(), TAG)
+                                                        .commit();
+                                            }
+                                        });
+                                        Button cancel = dialog.findViewById(R.id.cancel);
+                                        cancel.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        dialog.show();
+                                    }
+                                });
                                 // -> set listener
 
                                 closeToolbar = (ImageButton) contextView.findViewById(R.id.closeToolbar);
