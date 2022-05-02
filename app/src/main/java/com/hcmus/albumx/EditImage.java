@@ -2,22 +2,15 @@ package com.hcmus.albumx;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -62,7 +55,7 @@ public class EditImage extends Activity implements PermissionRequest.Response {
     }
 
     Activity activity;
-    EditImage(Activity ac) {
+    public EditImage(Activity ac) {
         activity = ac;
     }
 
@@ -106,8 +99,9 @@ public class EditImage extends Activity implements PermissionRequest.Response {
         }
     }
 
-    private void openSystemCameraToTakeAnImage() {
+    public void openSystemCameraToTakeAnImage() {
         PhotoEditorSettingsList settingsList = (PhotoEditorSettingsList) createPesdkSettingsList();
+        settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.DIRECTORY_DCIM);
 
         new CameraPreviewBuilder(activity)
                 .setSettingsList(settingsList)
@@ -117,12 +111,9 @@ public class EditImage extends Activity implements PermissionRequest.Response {
 
     protected void openEditor(Uri inputImage) {
         SettingsList settingsList = createPesdkSettingsList();
-
         // Set input image
         settingsList.getSettingsModel(LoadSettings.class).setSource(inputImage);
-
         settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.DIRECTORY_DCIM);
-
         new PhotoEditorBuilder(activity).setSettingsList(settingsList).startActivityForResult(activity, PESDK_RESULT);
     }   //openEditor
 
@@ -131,15 +122,16 @@ public class EditImage extends Activity implements PermissionRequest.Response {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-
+        Log.d("SOS", "0");
         if (resultCode == RESULT_OK && requestCode == GALLERY_RESULT) {
-            Log.d("save", "1");
+            Log.d("SOS", "1");
             // Open Editor with some uri in this case with an image selected from the system gallery.
             Uri selectedImage = intent.getData();
 
             openEditor(selectedImage);
 
         } else if (resultCode == RESULT_OK && requestCode == PESDK_RESULT) {
+            Log.d("save", "2");
             // Editor has saved an Image.
             EditorSDKResult data = new EditorSDKResult(intent);
 
@@ -177,4 +169,5 @@ public class EditImage extends Activity implements PermissionRequest.Response {
             // TODO: Do something with the source...
         }
     }
+
 }

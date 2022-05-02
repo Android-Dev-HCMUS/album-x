@@ -26,7 +26,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         public static final int DEFAULT_TYPE = 0;
         public static final int USER_TYPE = 1;
 
-        public static final String ALBUM_RECENT = "Recent";
+        public static final String  ALBUM_RECENT = "Recent";
         public static final String ALBUM_FAVORITE = "Favorite";
         public static final String ALBUM_EDITOR = "Editor";
     }

@@ -78,6 +78,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .load(groupImageItem.getImageInfo().path)
                     .into(viewHolder.image);
 
+
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    ListItem item = listItem.get(pos);
+                    GroupImageItem image = (GroupImageItem) item;
+                    if(item.getType() == ListItem.TYPE_IMAGE) {
+                        viewHolder.bindImageShow(image.getImageInfo(), pos);
+                    }
+                    return false;
+                }
+            });
+
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

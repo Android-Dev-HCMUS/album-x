@@ -180,9 +180,6 @@ public class ImageViewing extends Fragment {
             @Override
             public void onClick(View view) {
                 String path = imageInfoArrayList.get(pos).path;
-                Log.d("pathne", path);
-//                Uri uri = getImageContentUri(context, path);
-
                 Uri selectedUri = Uri.fromFile(new File(path));
                 EditImage editImage = new EditImage(getActivity());
                 editImage.openEditor(selectedUri);

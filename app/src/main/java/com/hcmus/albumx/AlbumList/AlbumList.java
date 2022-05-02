@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 
@@ -109,6 +110,9 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View album = inflater.inflate(R.layout.album_list_layout, null);
+
+
+        AllPhotos.newInstance().onCreateView(inflater, container, savedInstanceState);
         adapter = new AlbumListAdapter(context, R.layout.album_row, albumList);
 
         listView = album.findViewById(R.id.listView);
@@ -117,6 +121,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+                AllPhotos.newInstance().onCreateView(inflater, container, savedInstanceState);
                 main.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frameFragment,
                                 AlbumPhotos.newInstance(albumList.get(position).id, albumList.get(position).name),
