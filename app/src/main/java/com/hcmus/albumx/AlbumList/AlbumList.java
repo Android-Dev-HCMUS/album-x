@@ -3,6 +3,7 @@ package com.hcmus.albumx.AlbumList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,8 @@ import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 import com.hcmus.albumx.SecureFolder.SecureFolder;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbumDialogListener, SetNameAlbumDialog.NewAlbumDialogListener{
@@ -71,7 +74,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                     } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
                     } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
+                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_lock));
                     } else {
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
                     }
@@ -87,7 +90,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         int position = info.position;
 
-        if(v.getId() == R.id.listView && position != 0 && position != 1 && position != 2){
+        if(v.getId() == R.id.listView && position != 0 && position != 1 && position != 2 && position != 3){
             MenuInflater inflater = main.getMenuInflater();
             inflater.inflate(R.menu.menu_list_album, menu);
         }
@@ -155,8 +158,12 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                                 // There are no request codes
                                 Intent data = result.getData();
                                 String returnString = data.getStringExtra(Intent.EXTRA_TEXT);
+                                //Lấy mã password đã lưu
+                                SharedPreferences sp = getContext().getSharedPreferences("MyPref", 0);
+                                SharedPreferences.Editor ed;
+                                String storedPassword = sp.getString("password", null);
                                 //Xử lý mã PIN
-                                if(returnString.equals("000000")) {
+                                if(md5(returnString).equals(storedPassword)) {
                                     main.getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.frameFragment,
                                                     AlbumPhotos.newInstance(3, "Secure Folder"),
@@ -164,8 +171,27 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                                             .addToBackStack("AlbumPhotosUI")
                                             .commit();
                                 }
-                                else {Toast.makeText(context, "Incorrect Password", Toast.LENGTH_SHORT).show();}
+                                else { Toast.makeText(context, "Incorrect Password", Toast.LENGTH_SHORT).show(); }
                             }
+                        }
+
+                        private String md5(String s) {
+                            try {
+                                // Create MD5 Hash
+                                MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+                                digest.update(s.getBytes());
+                                byte messageDigest[] = digest.digest();
+
+                                // Create Hex String
+                                StringBuffer hexString = new StringBuffer();
+                                for (int i=0; i<messageDigest.length; i++)
+                                    hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+                                return hexString.toString();
+
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
+                            }
+                            return "";
                         }
                     });
         });
