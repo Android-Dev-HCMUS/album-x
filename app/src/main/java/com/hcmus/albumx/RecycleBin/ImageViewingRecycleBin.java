@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -103,6 +105,12 @@ public class ImageViewingRecycleBin extends Fragment {
             }
         });
         viewPager.setPageTransformer(transformer);
+
+        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+            viewPager.setBackgroundColor(Color.rgb(0,188,212));
+        }else{
+            viewPager.setBackgroundColor(Color.WHITE);
+        }
 
         Button delete = view.findViewById(R.id.buttonDelete);
         delete.setOnClickListener(new View.OnClickListener() {
