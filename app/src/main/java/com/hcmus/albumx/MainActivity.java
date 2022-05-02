@@ -29,6 +29,13 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences sp = this.getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor ed;
+        if(!sp.contains("isNightMode")){
+            ed = sp.edit();
+            //Set default as light theme
+            ed.putBoolean("isNightMode", false);
+            ed.commit();
+        }
         boolean isNightMode = sp.getBoolean("isNightMode", true);
         if(isNightMode){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
