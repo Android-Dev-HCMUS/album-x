@@ -5,10 +5,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,14 +30,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.BuildConfig;
 import com.hcmus.albumx.EditedView.ImagesEditGallery;
-import com.hcmus.albumx.CloudStorage.CloudStorage;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
@@ -183,14 +181,6 @@ public class AllPhotos extends Fragment {
 
                 ((MainActivity)getActivity()).setBottomNavigationVisibility(View.INVISIBLE);
             }
-
-            @Override
-            public boolean onLongClick(String imagePath, int position, boolean state) {
-                return false;
-            }
-
-            @Override
-            public void onImageAction(Boolean isSelected) { }
         });
 
         galleryAdapter.setData(listItems);
@@ -298,13 +288,14 @@ public class AllPhotos extends Fragment {
         recyclerView = contextView.findViewById(R.id.recycleview_gallery_images);
         recyclerView.setHasFixedSize(true);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
+        int spanCount = getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT?  3 : 6;
+        GridLayoutManager layoutManager = new GridLayoutManager(context, spanCount);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 switch (galleryAdapter.getItemViewType(position)){
                     case ListItem.TYPE_DATE:
-                        return 3;
+                        return spanCount;
                     default:
                         return 1;
                 }

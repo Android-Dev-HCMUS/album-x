@@ -207,6 +207,7 @@ public class ImageViewing extends Fragment {
                     dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
                     dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
 
+
                     Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
                     removeGallery.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -78,16 +78,6 @@ public class RecycleBinPhotos extends Fragment {
                         .commit();
                 ((MainActivity)getActivity()).setBottomNavigationVisibility(View.INVISIBLE);
             }
-
-            @Override
-            public boolean onLongClick(String imagePath, int position, boolean state) {
-                return false;
-            }
-
-            @Override
-            public void onImageAction(Boolean isSelected) {
-
-            }
         });
         galleryAdapter.setData(listItems);
 
