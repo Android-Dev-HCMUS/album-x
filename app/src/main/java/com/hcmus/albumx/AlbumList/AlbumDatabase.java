@@ -29,6 +29,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         public static final String  ALBUM_RECENT = "Recent";
         public static final String ALBUM_FAVORITE = "Favorite";
         public static final String ALBUM_EDITOR = "Editor";
+        public static final String ALBUM_SECURE = "Secure Folder";
     }
 
     public class imageSet{
@@ -60,6 +61,8 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
             "("+albumSet.FIELD_NAME+", "+albumSet.FIELD_TYPE+") VALUES ('" + albumSet.ALBUM_FAVORITE + "', 0);";
     public static final String GENERATE_INITIAL_DATA_3 = "INSERT INTO " + albumSet.TABLE_NAME +
             "("+albumSet.FIELD_NAME+", "+albumSet.FIELD_TYPE+") VALUES ('" + albumSet.ALBUM_EDITOR + "', 0);";
+    public static final String GENERATE_INITIAL_DATA_4 = "INSERT INTO " + albumSet.TABLE_NAME +
+            "("+albumSet.FIELD_NAME+", "+albumSet.FIELD_TYPE+") VALUES ('" + albumSet.ALBUM_SECURE + "', 0);";
 
     private static AlbumDatabase instance;
 

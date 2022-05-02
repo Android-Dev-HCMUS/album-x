@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_change_theme" android:title="Change theme"/>
+    <item android:id="@+id/menu_change_theme" android:title="Change theme">
+        <menu>
+            <item android:id="@+id/change_theme_blue" android:title="Blue Theme"/>
+            <item android:id="@+id/change_theme_light" android:title="Light Theme"/>
+        </menu>
+    </item>
     <item android:id="@+id/secure_folder" android:title="Secure folder"/>
 </menu>

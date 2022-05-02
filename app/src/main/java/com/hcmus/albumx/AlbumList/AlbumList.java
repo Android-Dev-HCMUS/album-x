@@ -1,6 +1,8 @@
 package com.hcmus.albumx.AlbumList;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,13 +15,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
+import com.hcmus.albumx.SecureFolder.SecureFolder;
 
 import java.util.ArrayList;
 
@@ -62,6 +70,8 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
                     } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
+                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
                     } else {
                         albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
                     }
@@ -118,13 +128,47 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                main.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameFragment,
-                                AlbumPhotos.newInstance(albumList.get(position).id, albumList.get(position).name),
-                                AlbumPhotos.TAG)
-                        .addToBackStack("AlbumPhotosUI")
-                        .commit();
+                if(position == 3) {
+                    openSecureFolder();
+                } else {
+                    AllPhotos.newInstance().onCreateView(inflater, container, savedInstanceState);
+                    main.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameFragment,
+                                    AlbumPhotos.newInstance(albumList.get(position).id, albumList.get(position).name),
+                                    AlbumPhotos.TAG)
+                            .addToBackStack("AlbumPhotosUI")
+                            .commit();
+                }
+
             }
+
+            private void openSecureFolder() {
+                Intent intent = new Intent(getContext(), SecureFolder.class);
+                activityResultLauncher.launch(intent);
+            }
+            // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
+            ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            if (result.getResultCode() == Activity.RESULT_OK) {
+                                // There are no request codes
+                                Intent data = result.getData();
+                                String returnString = data.getStringExtra(Intent.EXTRA_TEXT);
+                                //Xử lý mã PIN
+                                if(returnString.equals("000000")) {
+                                    main.getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.frameFragment,
+                                                    AlbumPhotos.newInstance(3, "Secure Folder"),
+                                                    AlbumPhotos.TAG)
+                                            .addToBackStack("AlbumPhotosUI")
+                                            .commit();
+                                }
+                                else {Toast.makeText(context, "Incorrect Password", Toast.LENGTH_SHORT).show();}
+                            }
+                        }
+                    });
         });
 
         Button addBtn = album.findViewById(R.id.add_album_button);
@@ -164,5 +208,30 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         albumList.get(position).name = albumName;
         db.updateAlbum(albumList.get(position).id, albumName);
         adapter.notifyDataSetChanged();
+    }
+
+    public ArrayList<AlbumInfo> infoAddAlbums(){
+
+        ArrayList<AlbumInfo> album;
+
+        album = new ArrayList<>();
+
+        Cursor cursor = db.getAlbums();
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            int type = cursor.getInt(2);
+
+            if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                Log.d("pass", "pass");
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
+                album.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
+                Log.d("pass", "pass");
+            } else {
+                album.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
+            }
+        }
+        return album;
     }
 }

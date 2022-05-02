@@ -8,7 +8,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.pdf.PdfDocument;
+import android.media.MediaScannerConnection;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
@@ -22,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
@@ -100,6 +105,8 @@ public class ImageViewing extends Fragment {
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
                     } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
+                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
+                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
                     } else {
                         albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
                     }
@@ -147,6 +154,12 @@ public class ImageViewing extends Fragment {
         });
         viewPager.setPageTransformer(transformer);
 
+        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+            viewPager.setBackgroundColor(Color.rgb(0,188,212));
+        }else{
+            viewPager.setBackgroundColor(Color.WHITE);
+        }
+
         Button back = (Button) view.findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +186,7 @@ public class ImageViewing extends Fragment {
                     Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        }); //like onClickListener
 
         Button edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -191,12 +204,9 @@ public class ImageViewing extends Fragment {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Create Img from bitmap and share with text
-//                Bitmap bitmap =  MediaStore.Images.Media.getBitmap( , Uri.parse(imageInfoArrayList.get(pos).path));
-//                shareImageandText( MediaStore.Images.Media.getBitmap(c.getContentResolver() , Uri.parse(paths)););
                 shareImageandText(BitmapFactory.decodeFile(imageInfoArrayList.get(pos).path));
             }
-        });
+        }); //share onClickListener
 
         Button delete = (Button) view.findViewById(R.id.buttonDelete);
         delete.setOnClickListener(new View.OnClickListener() {
@@ -280,9 +290,19 @@ public class ImageViewing extends Fragment {
                                 }
                                 return true;
                             case R.id.menu_image_info:
-
                                 showExif(imageInfoArrayList.get(pos).path);
-                                //                                  chua lam
+                                return true;
+                            case R.id.menu_export_toPDF:
+                                boolean converted = imageToPDF(imageInfoArrayList.get(pos).path, imageInfoArrayList.get(pos).name);
+
+                                if (!converted) {
+                                    Toast.makeText(context, "fail",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(context, "Export to PDF success",
+                                            Toast.LENGTH_SHORT).show();
+                                }
                                 return true;
                             default:
                                 return false;
@@ -461,5 +481,51 @@ public class ImageViewing extends Fragment {
                     Toast.LENGTH_LONG).show();
         }
     };
+
+    //Export to pdf
+
+    private boolean imageToPDF(String path, String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            PdfDocument pdfDocument = new PdfDocument();
+            String width = "1970";
+            String height = "4160";
+
+            try {
+                ExifInterface exifInterface = new ExifInterface(path);
+                width = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+                height = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(main.getApplicationContext(),
+                        "Something wrong:\n" + e.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(
+                    Integer.parseInt(width), Integer.parseInt(height),
+                    0).create();
+            PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+            page.getCanvas().drawBitmap(bitmap, 0, 0, null);
+            pdfDocument.finishPage(page);
+            String changeName = "PDF" + getWithoutExtension(name);
+            String newPath =   "/storage/emulated/0/DCIM" + "/" + changeName + ".pdf";
+            File file = new File(newPath);
+            try {
+                pdfDocument.writeTo(new FileOutputStream(file));
+                MediaScannerConnection.scanFile(context,
+                        new String[]{file.toString()}, null, null);
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+            pdfDocument.close();
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private String getWithoutExtension(String name) {
+        return name.substring(0, name.lastIndexOf("."));
+    }
 
 }

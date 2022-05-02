@@ -3,15 +3,21 @@ package com.hcmus.albumx.AllPhotos;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+
 import android.content.res.Configuration;
+
+import android.content.SharedPreferences;
+
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -25,6 +31,10 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -39,6 +49,8 @@ import com.hcmus.albumx.EditedView.ImagesEditGallery;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
+import com.hcmus.albumx.SecureFolder.SecureFolder;
+import com.hcmus.albumx.SecureFolder.SecureFolderManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -69,6 +81,7 @@ public class AllPhotos extends Fragment {
     ImageButton shareMultipleImages;
     ImageButton deleteMultipleImages;
     ImageButton closeToolbar;
+    SharedPreferences sp;
 
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
@@ -118,27 +131,36 @@ public class AllPhotos extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-
-                            case R.id.menu_change_theme:
-                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                                Toast.makeText(context, "Change theme", Toast.LENGTH_SHORT).show();
-//                                if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
-//                                    context.setTheme(R.style.DarkTheme);
-//                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//                                    Toast.makeText(context, "Set dark", Toast.LENGTH_SHORT).show();
-//                                }else{
-//                                    AppCompatDelegate.setDefault'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''NightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//                                    context.setTheme(R.style.DarkTheme);
-//                                    Toast.makeText(context, "Set light", Toast.LENGTH_SHORT).show();
-//                                }
-                                return true;
                             case R.id.secure_folder:
-                                // Secure folder
-
+                                openSecureFolder();
+                                return true;
+                            case R.id.change_theme_blue:
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                                sp = getContext().getSharedPreferences("MyPref", 0);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putBoolean("isNightMode", true);
+                                editor.apply();
+                                Toast.makeText(context, "Theme changed to black", Toast.LENGTH_SHORT).show();
+                                reset();
+                                return true;
+                            case R.id.change_theme_light:
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                                sp = getContext().getSharedPreferences("MyPref", 0);
+                                SharedPreferences.Editor editor2 = sp.edit();
+                                editor2.putBoolean("isNightMode", false);
+                                editor2.apply();
+                                Toast.makeText(context, "Theme changed to white", Toast.LENGTH_SHORT).show();
+                                reset();
                                 return true;
                             default:
                                 return false;
                         } //Switch
+                    }
+
+                    private void reset() {
+                        Intent intent = new Intent (getContext(), MainActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
                     }
                 }); //setOnMenuItemClickListener
                 popup.inflate(R.menu.menu_image_submenu);
@@ -203,6 +225,12 @@ public class AllPhotos extends Fragment {
 
                                 // Set view and its listeners
                                 addToAlbum = (ImageButton) contextView.findViewById(R.id.addToAlbum);
+                                addToAlbum.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                });
                                 // -> set listener
 
                                 shareMultipleImages = (ImageButton) contextView.findViewById(R.id.shareMultipleImages);
@@ -241,6 +269,47 @@ public class AllPhotos extends Fragment {
                                 });
 
                                 deleteMultipleImages = (ImageButton) contextView.findViewById(R.id.deleteMultipleImages);
+                                deleteMultipleImages.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        List<ImageInfo> selectedImages = new ArrayList<>();
+
+                                        selectedImages = getSelectedImages();
+
+                                        Dialog dialog = new Dialog(context);
+                                        dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
+                                        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
+                                        Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
+                                        List<ImageInfo> finalSelectedImages = selectedImages;
+                                        removeGallery.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                for(ImageInfo imageShow: finalSelectedImages){
+                                                    String path = imageShow.path;
+                                                    String name = imageShow.name;
+                                                    ImageDatabase.getInstance(getContext())
+                                                            .moveImageToRecycleBin(name,path);
+                                                    AlbumDatabase.getInstance(getContext())
+                                                            .softDeleteImage(name,path);
+                                                }
+
+                                                dialog.dismiss();
+                                                getFragmentManager().beginTransaction()
+                                                        .replace(R.id.frameFragment, new AllPhotos(), TAG)
+                                                        .commit();
+                                            }
+                                        });
+                                        Button cancel = dialog.findViewById(R.id.cancel);
+                                        cancel.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        dialog.show();
+                                    }
+                                });
                                 // -> set listener
 
                                 closeToolbar = (ImageButton) contextView.findViewById(R.id.closeToolbar);
@@ -306,6 +375,11 @@ public class AllPhotos extends Fragment {
         recyclerView.setAdapter(galleryAdapter);
 
         return contextView;
+    }
+
+    public void openSecureFolder() {
+        Intent intent = new Intent(getContext(), SecureFolderManager.class);
+        getContext().startActivity(intent);
     }
 
     @Override

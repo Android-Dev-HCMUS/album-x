@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
         android:id="@+id/headerBar"
         android:layout_width="match_parent"
@@ -20,22 +21,25 @@
             android:drawableLeft="@drawable/ic_arrow_back"
             android:text="  Tất cả ảnh" />
 
-        <FrameLayout android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp">
+
             <Button
                 android:id="@+id/buttonEdit"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="35dp"
-                android:layout_height="35dp"/>
+                android:layout_height="35dp" />
+
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:layout_gravity="center"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_edit"
-                android:layout_gravity="center"/>
+                android:src="@drawable/ic_edit" />
         </FrameLayout>
     </RelativeLayout>
 
@@ -43,7 +47,6 @@
         android:id="@+id/imageViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:layout_below="@+id/headerBar"
         android:layout_above="@+id/optionBar"/>
 
