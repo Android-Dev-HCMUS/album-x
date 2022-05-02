@@ -125,7 +125,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
-
             dateHeader = itemView.findViewById(R.id.dateTextView);
         }
     }
@@ -138,7 +137,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
-
             imageSelected = itemView.findViewById(R.id.imageSelected);
             image = itemView.findViewById(R.id.image);
             layoutImage = itemView.findViewById(R.id.layoutImage);
@@ -163,7 +161,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         if(getSelectedImages().size() == 0) {
                             photoListener.onImageAction(false);
                         }
-
                     } else {
                         viewBackground.setBackgroundResource(R.drawable.image_selected_background);
                         imageSelected.setVisibility(View.VISIBLE);
@@ -176,7 +173,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
     public interface PhotoListener {
-
         void onPhotoClick(String imagePath, int position);
         boolean onLongClick(String imagePath, int position, boolean state);
         void onImageAction(Boolean isSelected);
