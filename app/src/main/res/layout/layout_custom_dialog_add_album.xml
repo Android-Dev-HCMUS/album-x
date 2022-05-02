@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        style="@style/Divider.Horizontal"
+        android:layout_height="2dp"/>
+    <Button
+        android:id="@+id/remove_out_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:stateListAnimator="@null"
+        android:text="Xóa khỏi Ứng dụng"
+        android:textAllCaps="false"
+        android:textColor="@color/red"
+        android:background="@color/imgly_transparent_color"
+        />
+    <View
+        style="@style/Divider.Horizontal"
+        android:layout_height="2dp"/>
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:state_pressed="true"
+        android:text="Hủy"
+        android:textAllCaps="false"
+        android:background="@color/imgly_transparent_color"
+        />
+</LinearLayout>
