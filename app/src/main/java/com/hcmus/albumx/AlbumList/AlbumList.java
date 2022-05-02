@@ -209,7 +209,9 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         adapter.notifyDataSetChanged();
     }
 
-    public ArrayList<AlbumInfo> infoAddAlbums(){
+    public ArrayList<AlbumInfo> infoAddAlbums(Context context){
+//        context = getActivity();
+        db = AlbumDatabase.getInstance(context);
 
         ArrayList<AlbumInfo> album;
 
