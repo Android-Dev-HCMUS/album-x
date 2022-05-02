@@ -131,7 +131,6 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                 if(position == 3) {
                     openSecureFolder();
                 } else {
-                    AllPhotos.newInstance().onCreateView(inflater, container, savedInstanceState);
                     main.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameFragment,
                                     AlbumPhotos.newInstance(albumList.get(position).id, albumList.get(position).name),
