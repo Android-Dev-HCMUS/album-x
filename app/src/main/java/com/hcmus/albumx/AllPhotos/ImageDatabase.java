@@ -166,6 +166,7 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(AlbumDatabase.GENERATE_INITIAL_DATA_1);
         sqLiteDatabase.execSQL(AlbumDatabase.GENERATE_INITIAL_DATA_2);
         sqLiteDatabase.execSQL(AlbumDatabase.GENERATE_INITIAL_DATA_3);
+        sqLiteDatabase.execSQL(AlbumDatabase.GENERATE_INITIAL_DATA_4);
         sqLiteDatabase.execSQL(AlbumDatabase.CREATE_IMAGE_TABLE);
     }
 

@@ -7,6 +7,7 @@ buildscript {
         google()
         gradlePluginPortal()
         maven { url 'https://artifactory.img.ly/artifactory/imgly' }
+        maven { url "https://www.jitpack.io" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.2'
@@ -26,6 +27,7 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://artifactory.img.ly/artifactory/imgly' }
+        maven { url "https://www.jitpack.io" }
     }
 }
 
