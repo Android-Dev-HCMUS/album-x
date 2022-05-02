@@ -3,21 +3,19 @@ package com.hcmus.albumx.AllPhotos;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-
-import android.content.res.Configuration;
-
 import android.content.SharedPreferences;
-
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -25,16 +23,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -44,12 +39,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
+import com.hcmus.albumx.AlbumList.AlbumInfo;
+import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.BuildConfig;
 import com.hcmus.albumx.EditedView.ImagesEditGallery;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
-import com.hcmus.albumx.SecureFolder.SecureFolder;
 import com.hcmus.albumx.SecureFolder.SecureFolderManager;
 
 import java.io.File;
@@ -94,6 +90,7 @@ public class AllPhotos extends Fragment {
 
     List<Uri> listEditImages;
 
+
     public static AllPhotos newInstance() {
         return new AllPhotos();
     }
@@ -105,6 +102,7 @@ public class AllPhotos extends Fragment {
             context = getActivity();
             main = (MainActivity) getActivity();
             myDB = ImageDatabase.getInstance(context);
+
             handleEditImages();
             imageInfoArrayList = myDB.getAllImages();
 //            imageInfoArrayList.forEach((imageInfo -> Log.e("AddImageInfo", imageInfo.getPath())));
@@ -228,8 +226,40 @@ public class AllPhotos extends Fragment {
                                 addToAlbum.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        ArrayList<AlbumInfo> album;
+                                        album = AlbumList.newInstance().infoAddAlbums(context);
+                                        Log.d("album", String.valueOf(album));
+                                        AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+                                        builderSingle.setIcon(R.drawable.ic_album);
+                                        builderSingle.setTitle("Select One Album:");
 
+                                        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+
+                                        for(AlbumInfo itemAlbum: album){
+                                            String name = itemAlbum.name;
+                                            arrayAdapter.add(name);
+                                        }
+
+
+                                        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+
+                                        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                String strName = arrayAdapter.getItem(which);
+                                                handleAddImagesToAlbum(strName, album, which);
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        builderSingle.show();
+                                        resetFragment();
                                     }
+
                                 });
                                 // -> set listener
 
@@ -265,7 +295,9 @@ public class AllPhotos extends Fragment {
 
                                         // calling startactivity() to share
                                         startActivity(Intent.createChooser(intent, "Share Via"));
+                                        resetFragment();
                                     }
+
                                 });
 
                                 deleteMultipleImages = (ImageButton) contextView.findViewById(R.id.deleteMultipleImages);
@@ -295,9 +327,7 @@ public class AllPhotos extends Fragment {
                                                 }
 
                                                 dialog.dismiss();
-                                                getFragmentManager().beginTransaction()
-                                                        .replace(R.id.frameFragment, new AllPhotos(), TAG)
-                                                        .commit();
+                                                resetFragment();
                                             }
                                         });
                                         Button cancel = dialog.findViewById(R.id.cancel);
@@ -382,6 +412,11 @@ public class AllPhotos extends Fragment {
         getContext().startActivity(intent);
     }
 
+    private  void resetFragment(){
+        getFragmentManager().beginTransaction()
+                .replace(R.id.frameFragment, new AllPhotos(), TAG)
+                .commit();
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -402,6 +437,31 @@ public class AllPhotos extends Fragment {
         galleryAdapter.notifyDataSetChanged();
     }
 
+    public  void handleAddImagesToAlbum(String albumName,  ArrayList<AlbumInfo> album, int pos){
+        List<ImageInfo> selectedImages = new ArrayList<>();
+
+        selectedImages = getSelectedImages();
+        for(ImageInfo imageShow: selectedImages){
+            String path = imageShow.path;
+            String name = imageShow.name;
+            if(AlbumDatabase.getInstance(context)
+                    .isImageExistsInAlbum(name,
+                            path,
+                            album.get(pos).id)){
+                Toast.makeText(context, "Image exists in " + albumName, Toast.LENGTH_SHORT).show();
+            } else{
+                AlbumDatabase.getInstance(context)
+                        .insertImageToAlbum(name, path, album.get(pos).id);
+
+                Toast.makeText(context, "Added to " + albumName, Toast.LENGTH_SHORT).show();
+            }
+        }
+//        if (albumName.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)) {
+//
+//        } else if(albumName.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
+//
+//        }
+    }
     public void handleEditImages(){
         listEditImages = ImagesEditGallery.listOfEditImages(context);
         if (listEditImages == null){
