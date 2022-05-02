@@ -266,9 +266,8 @@ public class AllPhotos extends Fragment {
 
                                                     @Override
                                                     public void onAnimationEnd(Animator animator) {
-                                                        getFragmentManager().beginTransaction()
-                                                                .replace(R.id.frameFragment, new AllPhotos(), TAG)
-                                                                .commit();
+                                                        longClickBar.setVisibility(View.GONE);
+                                                        galleryAdapter.setMultipleSelectState(false);
                                                     }
 
                                                     @Override
@@ -277,6 +276,9 @@ public class AllPhotos extends Fragment {
                                                     @Override
                                                     public void onAnimationRepeat(Animator animator) { }
                                                 });
+                                        getFragmentManager().beginTransaction()
+                                                .replace(R.id.frameFragment, new AllPhotos(), TAG)
+                                                .commit();
                                     }
                                 });
                             }
