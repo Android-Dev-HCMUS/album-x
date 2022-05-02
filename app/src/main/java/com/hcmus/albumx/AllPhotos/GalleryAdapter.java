@@ -81,8 +81,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     if(item.getType() == ListItem.TYPE_IMAGE) {
                         viewHolder.bindImageShow(image.getImageInfo(), pos);
                     }
-
-
                     return false;
                 }
             });

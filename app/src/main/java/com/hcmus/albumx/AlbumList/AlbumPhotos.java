@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.hcmus.albumx.AllPhotos.GroupImageItem;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 import com.hcmus.albumx.AllPhotos.ListItem;
+import com.hcmus.albumx.EditImage;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
@@ -49,6 +51,7 @@ public class AlbumPhotos extends Fragment {
     private ImageDatabase myDB;
 
     private int albumID;
+    ImageButton cameraBtn;
 
     public static AlbumPhotos newInstance(int albumID, String albumName) {
         AlbumPhotos fragment = new AlbumPhotos();
@@ -86,8 +89,21 @@ public class AlbumPhotos extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView albumName = view.findViewById(R.id.album_name);
+
         if(getArguments() != null){
             albumName.setText(getArguments().getString(ALBUM_NAME_ARG));
+        }
+        if(getArguments().getString(ALBUM_NAME_ARG).trim().equals(AlbumDatabase.albumSet.ALBUM_EDITOR.trim()) ){
+            cameraBtn = (ImageButton) view.findViewById(R.id.cameraBtn);
+            cameraBtn.setVisibility(View.VISIBLE);
+            cameraBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditImage editImage = new EditImage(getActivity());
+
+                    editImage.openSystemCameraToTakeAnImage();
+                }
+            });
         }
 
         Button back = (Button) view.findViewById(R.id.backButton);

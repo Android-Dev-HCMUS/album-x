@@ -1,7 +1,6 @@
 package com.hcmus.albumx;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -16,7 +15,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.CloudStorage.Authentication;
-import com.hcmus.albumx.CloudStorage.CloudStorage;
 import com.hcmus.albumx.InfoMembers.InfoMembers;
 import com.hcmus.albumx.RecycleBin.RecycleBinPhotos;
 
@@ -28,7 +26,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadFragment(AllPhotos.newInstance(), "AllPhotos", "AllPhotosUI");
-
         //Check permission
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_READ_PERMISSION_CODE);
@@ -36,10 +33,12 @@ public class MainActivity extends FragmentActivity {
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
 
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.menu_album:
                     loadFragment(AlbumList.newInstance(), AlbumList.TAG, "AlbumListUI");
+
                     break;
                 case R.id.menu_recycleBin:
                     loadFragment(RecycleBinPhotos.newInstance(), RecycleBinPhotos.TAG, "RecycleBinUI");
@@ -47,6 +46,7 @@ public class MainActivity extends FragmentActivity {
                 case R.id.menu_photo:
                 default:
                     loadFragment(AllPhotos.newInstance(), AllPhotos.TAG, "AllPhotosUI");
+
                     break;
                 case R.id.cloudStorage:
                     loadFragment(Authentication.newInstance(), Authentication.TAG, "AuthenticationUI");
@@ -70,6 +70,7 @@ public class MainActivity extends FragmentActivity {
     public void setBottomNavigationVisibility(int visibility) {
         bottomNavigationView.setVisibility(visibility);
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

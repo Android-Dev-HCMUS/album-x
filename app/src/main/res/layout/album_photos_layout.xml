@@ -68,5 +68,19 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp"
         android:gravity="center" />
+    <ImageButton
+        android:id="@+id/cameraBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/round_corner"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_camera"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.BuildConfig;
+import com.hcmus.albumx.EditedView.ImagesEditGallery;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
@@ -73,6 +74,8 @@ public class AllPhotos extends Fragment {
     LinkedHashMap<String, List<ImageInfo>> listImageGroupByDate;
     ImageDatabase myDB;
 
+    List<Uri> listEditImages;
+
     public static AllPhotos newInstance() {
         return new AllPhotos();
     }
@@ -84,11 +87,12 @@ public class AllPhotos extends Fragment {
             context = getActivity();
             main = (MainActivity) getActivity();
             myDB = ImageDatabase.getInstance(context);
-
+            handleEditImages();
             imageInfoArrayList = myDB.getAllImages();
 //            imageInfoArrayList.forEach((imageInfo -> Log.e("AddImageInfo", imageInfo.getPath())));
             listItems = new ArrayList<>();
             listImageGroupByDate = new LinkedHashMap<>();
+
             prepareData();
         } catch (IllegalStateException ignored) {
         }
@@ -306,6 +310,39 @@ public class AllPhotos extends Fragment {
         }
 
         galleryAdapter.notifyDataSetChanged();
+    }
+
+    public void handleEditImages(){
+        listEditImages = ImagesEditGallery.listOfEditImages(context);
+        if (listEditImages == null){
+            return;
+        }else{
+            for (int i = 0; i < listEditImages.size(); i++) {
+                handleEditImagePick(listEditImages.get(i));
+            }
+
+        }
+    }
+
+    private void handleEditImagePick(Uri contentUri){
+        ImageInfo image = getInfoFromURI(contentUri);
+
+        if (ImageDatabase.getInstance(context).isImageExistsInApplication(image.name)) {
+            Log.d("pass", "1");
+        }
+        else {
+            image.path = saveImageBitmap(contentUri, image.name);
+            myDB.insertImage(image.name, image.path, image.createdDate);
+
+            Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
+            while (cursor.moveToNext()) {
+                if (cursor.getString(1).equals(AlbumDatabase.albumSet.ALBUM_EDITOR)) {
+                    AlbumDatabase.getInstance(context)
+                            .insertImageToAlbum(image.name, image.path, cursor.getInt(0));
+                    break;
+                }
+            }
+        }
     }
 
     private void handleNewImagePick(Uri contentUri){
