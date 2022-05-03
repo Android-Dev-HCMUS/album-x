@@ -1,15 +1,20 @@
 package com.hcmus.albumx;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.pdf.PdfDocument;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
@@ -17,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -33,6 +39,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.AlbumList.AlbumInfo;
+import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AlbumList.AlbumPhotos;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
@@ -183,7 +190,7 @@ public class ImageViewing extends Fragment {
                     Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        }); //like onClickListener
 
         Button edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -201,12 +208,9 @@ public class ImageViewing extends Fragment {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Create Img from bitmap and share with text
-//                Bitmap bitmap =  MediaStore.Images.Media.getBitmap( , Uri.parse(imageInfoArrayList.get(pos).path));
-//                shareImageandText( MediaStore.Images.Media.getBitmap(c.getContentResolver() , Uri.parse(paths)););
                 shareImageandText(BitmapFactory.decodeFile(imageInfoArrayList.get(pos).path));
             }
-        });
+        }); //share onClickListener
 
         Button delete = (Button) view.findViewById(R.id.buttonDelete);
         delete.setOnClickListener(new View.OnClickListener() {
@@ -216,6 +220,7 @@ public class ImageViewing extends Fragment {
                     Dialog dialog = new Dialog(context);
                     dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
                     dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
 
                     Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
                     removeGallery.setOnClickListener(new View.OnClickListener() {
@@ -275,7 +280,50 @@ public class ImageViewing extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
+                            case R.id.add_to_album:
+                                ArrayList<AlbumInfo> album;
+                                album = AlbumList.newInstance().infoAddAlbums(context);
 
+                                AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+                                builderSingle.setIcon(R.drawable.ic_album);
+                                builderSingle.setTitle("Select One Album:");
+
+                                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+
+                                for(AlbumInfo itemAlbum: album){
+                                    String name = itemAlbum.name;
+                                    arrayAdapter.add(name);
+                                }
+
+                                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String strName = arrayAdapter.getItem(which);
+                                        if(AlbumDatabase.getInstance(context)
+                                                .isImageExistsInAlbum(imageInfoArrayList.get(pos).name,
+                                                        imageInfoArrayList.get(pos).path,
+                                                        album.get(which).id)){
+                                            Toast.makeText(context, "Image exists in " + album.get(which).name, Toast.LENGTH_SHORT).show();
+                                        } else{
+                                            AlbumDatabase.getInstance(context)
+                                                    .insertImageToAlbum(imageInfoArrayList.get(pos).name,
+                                                            imageInfoArrayList.get(pos).path,
+                                                            album.get(which).id);
+
+                                            Toast.makeText(context, "Added to " + album.get(which).name, Toast.LENGTH_SHORT).show();
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                                builderSingle.show();
+                                return true;
                             case R.id.menu_wallpaper:
                                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(v.getContext());
                                 try {
@@ -289,9 +337,19 @@ public class ImageViewing extends Fragment {
                                 }
                                 return true;
                             case R.id.menu_image_info:
-
                                 showExif(imageInfoArrayList.get(pos).path);
-                                //                                  chua lam
+                                return true;
+                            case R.id.menu_export_toPDF:
+                                boolean converted = imageToPDF(imageInfoArrayList.get(pos).path, imageInfoArrayList.get(pos).name);
+
+                                if (!converted) {
+                                    Toast.makeText(context, "fail",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(context, "Export to PDF success",
+                                            Toast.LENGTH_SHORT).show();
+                                }
                                 return true;
                             case R.id.add_secure_folder:
                                 // Di chuyển ảnh vào album secure folder
@@ -473,5 +531,51 @@ public class ImageViewing extends Fragment {
                     Toast.LENGTH_LONG).show();
         }
     };
+
+    //Export to pdf
+
+    private boolean imageToPDF(String path, String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            PdfDocument pdfDocument = new PdfDocument();
+            String width = "1970";
+            String height = "4160";
+
+            try {
+                ExifInterface exifInterface = new ExifInterface(path);
+                width = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+                height = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(main.getApplicationContext(),
+                        "Something wrong:\n" + e.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(
+                    Integer.parseInt(width), Integer.parseInt(height),
+                    0).create();
+            PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+            page.getCanvas().drawBitmap(bitmap, 0, 0, null);
+            pdfDocument.finishPage(page);
+            String changeName = "PDF" + getWithoutExtension(name);
+            String newPath =   "/storage/emulated/0/DCIM" + "/" + changeName + ".pdf";
+            File file = new File(newPath);
+            try {
+                pdfDocument.writeTo(new FileOutputStream(file));
+                MediaScannerConnection.scanFile(context,
+                        new String[]{file.toString()}, null, null);
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+            pdfDocument.close();
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private String getWithoutExtension(String name) {
+        return name.substring(0, name.lastIndexOf("."));
+    }
 
 }

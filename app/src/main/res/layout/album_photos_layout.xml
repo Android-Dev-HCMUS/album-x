@@ -83,4 +83,48 @@
         android:src="@drawable/ic_camera"
         android:visibility="invisible"/>
 
+    <RelativeLayout
+        android:id="@+id/longClickBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp"
+        android:background="@drawable/tool_bar_border"
+        android:padding="10dp"
+        android:visibility="gone">
+        <ImageButton
+            android:id="@+id/addToAlbum"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/ic_add_circle"
+            android:tooltipText="Add images to album"/>
+        <ImageButton
+            android:id="@+id/shareMultipleImages"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_toRightOf="@+id/addToAlbum"
+            android:background="@drawable/ic_share"
+            android:tooltipText="Share images"/>
+        <ImageButton
+            android:id="@+id/deleteMultipleImages"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_toRightOf="@+id/shareMultipleImages"
+            android:background="@drawable/ic_delete"
+            android:tooltipText="Move images to recycle bin"/>
+        <ImageButton
+            android:id="@+id/closeToolbar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_toRightOf="@+id/deleteMultipleImages"
+            android:background="@drawable/ic_close"
+            android:tooltipText="Close toolbar"/>
+    </RelativeLayout>
+
 </RelativeLayout>

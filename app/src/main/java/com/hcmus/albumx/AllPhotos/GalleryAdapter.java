@@ -8,14 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.hcmus.albumx.R;
 import com.makeramen.roundedimageview.RoundedImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -77,6 +75,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Glide.with(context)
                     .load(groupImageItem.getImageInfo().path)
                     .into(viewHolder.image);
+            if(groupImageItem.getImageInfo().isSelected){
+                viewHolder.imageSelected.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.imageSelected.setVisibility(View.GONE);
+            }
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,11 +88,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     GroupImageItem image = (GroupImageItem) item;
 
                     if(item.getType() == ListItem.TYPE_IMAGE){
-                        if(isMultipleSelectState == false){
+                        if(!isMultipleSelectState){
                             photoListener.onPhotoClick(image.getImageInfo().path, pos);
                             // Remove all selected item
                         }else {
-                            viewHolder.bindImageShow(image.getImageInfo(), pos);
+                            viewHolder.bindImageShow(listItem.get(pos));
                         }
                     }
                 }
@@ -110,16 +113,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return listItem.get(position).getType();
     }
 
-    public List<ImageInfo> getSelectedImages() {
-        List<ImageInfo> selectedImages = new ArrayList<>();
-        for(ImageInfo imageShow: imageInfoArrayList){
-            if(imageShow.isSelected){
-                selectedImages.add(imageShow);
-            }
-        }
-        return selectedImages;
-    }
-
     public class HeaderViewHolder extends RecyclerView.ViewHolder{
         private TextView dateHeader;
 
@@ -132,49 +125,31 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView imageSelected;
         RoundedImageView image;
-        ConstraintLayout layoutImage;
         View viewBackground;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             imageSelected = itemView.findViewById(R.id.imageSelected);
             image = itemView.findViewById(R.id.image);
-            layoutImage = itemView.findViewById(R.id.layoutImage);
             viewBackground = itemView.findViewById(R.id.viewBackground);
         }
 
-        public void  bindImageShow(final ImageInfo imageShow, int pos){
-            if(imageShow.isSelected){
+        public void bindImageShow(ListItem item){
+            GroupImageItem image = (GroupImageItem) item;
+
+            if(image.getImageInfo().isSelected){
                 viewBackground.setBackgroundResource(R.drawable.image_selected_background);
-                imageSelected.setVisibility(View.VISIBLE);
+                imageSelected.setVisibility(View.GONE);
+                image.getImageInfo().isSelected = false;
             } else {
                 viewBackground.setBackgroundResource(R.drawable.image_background);
-                imageSelected.setVisibility(View.GONE);
+                imageSelected.setVisibility(View.VISIBLE);
+                image.getImageInfo().isSelected = true;
             }
-            layoutImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(imageShow.isSelected){
-                        viewBackground.setBackgroundResource(R.drawable.image_background);
-                        imageSelected.setVisibility(View.GONE);
-                        imageShow.isSelected = false;
-                        if(getSelectedImages().size() == 0) {
-                            photoListener.onImageAction(false);
-                        }
-                    } else {
-                        viewBackground.setBackgroundResource(R.drawable.image_selected_background);
-                        imageSelected.setVisibility(View.VISIBLE);
-                        imageShow.isSelected =true;
-                        photoListener.onImageAction(true);
-                    }
-                }
-            });
         }
 
     }
     public interface PhotoListener {
         void onPhotoClick(String imagePath, int position);
-        boolean onLongClick(String imagePath, int position, boolean state);
-        void onImageAction(Boolean isSelected);
     }
 }

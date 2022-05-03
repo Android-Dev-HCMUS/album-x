@@ -39,6 +39,7 @@ import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 import com.hcmus.albumx.SecureFolder.SecureFolder;
 import com.hcmus.albumx.SecureFolder.SecureFolderManager;
+import com.hcmus.albumx.SelectMultiple;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -194,18 +195,11 @@ public class AlbumPhotos extends Fragment {
                         .commit();
                 ((MainActivity)getActivity()).setBottomNavigationVisibility(View.INVISIBLE);
             }
-
-            @Override
-            public boolean onLongClick(String imagePath, int position, boolean state) {
-                return false;
-            }
-
-            @Override
-            public void onImageAction(Boolean isSelected) {
-
-            }
         });
         galleryAdapter.setData(listItems);
+
+        SelectMultiple temp = new SelectMultiple();
+        temp.selectMultiImages(view, context, galleryAdapter, imageInfoArrayList, 0);
 
         recyclerView = view.findViewById(R.id.recyclerview_image);
         recyclerView.setHasFixedSize(true);

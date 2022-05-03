@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 import com.hcmus.albumx.SecureFolder.SecureFolder;
@@ -124,8 +123,6 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View album = inflater.inflate(R.layout.album_list_layout, null);
 
-
-        AllPhotos.newInstance().onCreateView(inflater, container, savedInstanceState);
         adapter = new AlbumListAdapter(context, R.layout.album_row, albumList);
 
         listView = album.findViewById(R.id.listView);
@@ -137,7 +134,6 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                 if(position == 3) {
                     openSecureFolder();
                 } else {
-                    AllPhotos.newInstance().onCreateView(inflater, container, savedInstanceState);
                     main.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameFragment,
                                     AlbumPhotos.newInstance(albumList.get(position).id, albumList.get(position).name),
@@ -145,6 +141,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                             .addToBackStack("AlbumPhotosUI")
                             .commit();
                 }
+
             }
 
             private void openSecureFolder() {
@@ -235,5 +232,32 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         albumList.get(position).name = albumName;
         db.updateAlbum(albumList.get(position).id, albumName);
         adapter.notifyDataSetChanged();
+    }
+
+    public ArrayList<AlbumInfo> infoAddAlbums(Context context){
+//        context = getActivity();
+        db = AlbumDatabase.getInstance(context);
+
+        ArrayList<AlbumInfo> album;
+
+        album = new ArrayList<>();
+
+        Cursor cursor = db.getAlbums();
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            int type = cursor.getInt(2);
+
+            if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                Log.d("pass", "pass");
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
+                album.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
+                Log.d("pass", "pass");
+            } else {
+                album.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
+            }
+        }
+        return album;
     }
 }
