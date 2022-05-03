@@ -33,12 +33,12 @@ public class SecureFolder extends AppCompatActivity {
 
         sp = this.getSharedPreferences("MyPref", 0);
         SharedPreferences.Editor ed;
-        if(!sp.contains("password")){
-            if(!sp.contains("isSettingPassword")) {
+        if(!sp.contains("PIN")){
+            if(!sp.contains("isSettingPIN")) {
                 Toast.makeText(this, "Setup PIN", Toast.LENGTH_SHORT).show();
-                newPassword();
+                newPIN();
             } else {
-                if(sp.getBoolean("isSettingPassword", false)) {
+                if(sp.getBoolean("isSettingPIN", false)) {
                     new SignInUI.Builder(this)
                             .setSignInType(SignInUI.PIN_FORM)
                             .setPinLength(6)
@@ -47,7 +47,7 @@ public class SecureFolder extends AppCompatActivity {
                 }
             }
         } else {
-            Toast.makeText(this, "Enter PIN to unlock", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Enter your current PIN", Toast.LENGTH_SHORT).show();
             new SignInUI.Builder(this)
                     .setSignInType(SignInUI.PIN_FORM)
                     .setPinLength(6)
@@ -56,10 +56,10 @@ public class SecureFolder extends AppCompatActivity {
         }
     }
 
-    private void newPassword() {
+    private void newPIN() {
         SharedPreferences.Editor ed;
         ed = sp.edit();
-        ed.putBoolean("isSettingPassword", true);
+        ed.putBoolean("isSettingPIN", true);
         ed.apply();
         Intent intent = new Intent(this, SecureFolder.class);
         activityResultLauncher.launch(intent);
@@ -77,18 +77,21 @@ public class SecureFolder extends AppCompatActivity {
                         //Xử lý mã PIN
                         sp = getApplicationContext().getSharedPreferences("MyPref", 0);
                         SharedPreferences.Editor ed;
-                        if(!sp.contains("password")){
+                        if(!sp.contains("PIN")){
                             ed = sp.edit();
                             //Put hash password into shared preferences
-                            ed.putString("password", md5(returnString));
-                            ed.commit();
+                            ed.putString("PIN", md5(returnString));
+                            //Change state of changing password
+                            ed.remove("isSettingPIN");
+                            ed.apply();
+                            Toast.makeText(getApplicationContext(), "Setup PIN successfully", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     } else {
                         SharedPreferences.Editor ed;
                         ed = sp.edit();
-                        ed.putBoolean("isSettingPassword", false);
-                        ed.apply();
+                        ed.remove("isSettingPIN");
+                        ed.commit();
                         finish();
                     }
                 }
@@ -126,7 +129,7 @@ public class SecureFolder extends AppCompatActivity {
                 // pin value - data?.getStringExtra(SignInUI.PARAM_PIN)
 
                 // TODO the user provided correct values. Send request to validate credentials
-                //Gửi mã pin và result ok về main activity
+                //Gửi mã pin và result ok về activity đã gọi intent tới activity này
                 String stringToPassBack = intent.getStringExtra(SignInUI.PARAM_PIN);
                 Intent intent2 = new Intent();
                 intent2.putExtra(Intent.EXTRA_TEXT, stringToPassBack);

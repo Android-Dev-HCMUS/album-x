@@ -1,14 +1,27 @@
 package com.hcmus.albumx.AlbumList;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -24,7 +37,12 @@ import com.hcmus.albumx.EditImage;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
+import com.hcmus.albumx.SecureFolder.SecureFolder;
+import com.hcmus.albumx.SecureFolder.SecureFolderManager;
 
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +70,7 @@ public class AlbumPhotos extends Fragment {
 
     private int albumID;
     ImageButton cameraBtn;
+    SharedPreferences sp;
 
     public static AlbumPhotos newInstance(int albumID, String albumName) {
         AlbumPhotos fragment = new AlbumPhotos();
@@ -115,6 +134,33 @@ public class AlbumPhotos extends Fragment {
             }
         });
 
+        Button subMenu = (Button) view.findViewById(R.id.buttonSubMenu);
+        subMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getArguments().getString(ALBUM_NAME_ARG).equals("Secure Folder") && getArguments().getInt(ALBUM_ID_ARG) == 3) {
+                    PopupMenu popup = new PopupMenu(getActivity().getApplicationContext(), v);
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+                                case R.id.delete_secure_folder:
+                                    return true;
+                                case R.id.change_PIN:
+                                    // Đổi mã PIN cho thư mục secure folder
+                                    changePIN();
+                                    return true;
+                                default:
+                                    return false;
+                            } //Switch
+                        }
+                    }); //setOnMenuItemClickListener
+                    popup.inflate(R.menu.menu_secure_folder);
+                    popup.show();
+                }
+            }
+        });
+
         galleryAdapter = new GalleryAdapter(context, imageInfoArrayList, new GalleryAdapter.PhotoListener() {
             @Override
             public void onPhotoClick(String imagePath, int position) {
@@ -160,6 +206,82 @@ public class AlbumPhotos extends Fragment {
         recyclerView.setAdapter(galleryAdapter);
 
         return view;
+    }
+
+    private void changePIN() {
+        Intent intent = new Intent(getContext(), SecureFolder.class);
+        activityResultLauncher2.launch(intent);
+    }
+    // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
+    ActivityResultLauncher<Intent> activityResultLauncher2 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        String returnString = data.getStringExtra(Intent.EXTRA_TEXT);
+                        //Lấy mã PIN đã lưu
+                        sp = getContext().getSharedPreferences("MyPref", 0);
+                        String storedPIN = sp.getString("PIN", null);
+                        //Xử lý mã PIN
+                        SharedPreferences.Editor ed;
+                        if(md5(returnString).equals(storedPIN)) {
+                            //changePIN
+                            newPIN();
+                        } else { Toast.makeText(context, "Incorrect PIN", Toast.LENGTH_SHORT).show(); }
+                    }
+                }
+            });
+
+    private void newPIN() {
+        Intent intent = new Intent(getContext(), SecureFolderManager.class);
+        activityResultLauncher3.launch(intent);
+    }
+    // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
+    ActivityResultLauncher<Intent> activityResultLauncher3 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        String returnString = data.getStringExtra(Intent.EXTRA_TEXT);
+                        //Lấy mã PIN đã lưu
+                        sp = getContext().getSharedPreferences("MyPref", 0);
+                        String storedPIN = sp.getString("PIN", null);
+                        //Xử lý mã PIN
+                        SharedPreferences.Editor ed;
+                        // changePIN
+                        ed = sp.edit();
+                        //Put hash password into shared preferences
+                        ed.putString("PIN", md5(returnString));
+                        ed.apply();
+                        Toast.makeText(getContext(), "Change PIN successfully", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+    private String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i=0; i<messageDigest.length; i++)
+                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private void prepareData(){

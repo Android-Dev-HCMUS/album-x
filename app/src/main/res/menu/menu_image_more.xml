@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_wallpaper" android:title="Set as Wallpaper"/>
+    <item android:id="@+id/add_secure_folder" android:title="Add to secure folder"/>
     <item android:id="@+id/menu_image_info" android:title="Info"/>
 </menu>

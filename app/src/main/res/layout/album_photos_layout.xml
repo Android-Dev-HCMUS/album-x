@@ -59,15 +59,15 @@
         android:textColor="@color/black" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerview_image"
         android:layout_below="@+id/album_name"
+        android:gravity="center"
         android:horizontalSpacing="5dp"
         android:numColumns="3"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
-        android:gravity="center" />
+        android:verticalSpacing="5dp" />
     <ImageButton
         android:id="@+id/cameraBtn"
         android:layout_width="50dp"

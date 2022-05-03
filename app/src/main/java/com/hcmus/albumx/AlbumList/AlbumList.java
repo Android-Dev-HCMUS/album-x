@@ -161,12 +161,11 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                                 // There are no request codes
                                 Intent data = result.getData();
                                 String returnString = data.getStringExtra(Intent.EXTRA_TEXT);
-                                //Lấy mã password đã lưu
+                                //Lấy mã PIN đã lưu
                                 SharedPreferences sp = getContext().getSharedPreferences("MyPref", 0);
-                                SharedPreferences.Editor ed;
-                                String storedPassword = sp.getString("password", null);
+                                String storedPIN = sp.getString("PIN", null);
                                 //Xử lý mã PIN
-                                if(md5(returnString).equals(storedPassword)) {
+                                if(md5(returnString).equals(storedPIN)) {
                                     main.getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.frameFragment,
                                                     AlbumPhotos.newInstance(3, "Secure Folder"),
@@ -174,7 +173,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                                             .addToBackStack("AlbumPhotosUI")
                                             .commit();
                                 }
-                                else { Toast.makeText(context, "Incorrect Password", Toast.LENGTH_SHORT).show(); }
+                                else { Toast.makeText(context, "Incorrect PIN", Toast.LENGTH_SHORT).show(); }
                             }
                         }
 

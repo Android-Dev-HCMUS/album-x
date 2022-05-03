@@ -293,6 +293,9 @@ public class ImageViewing extends Fragment {
                                 showExif(imageInfoArrayList.get(pos).path);
                                 //                                  chua lam
                                 return true;
+                            case R.id.add_secure_folder:
+                                // Di chuyển ảnh vào album secure folder
+                                return true;
                             default:
                                 return false;
                         } //Switch
