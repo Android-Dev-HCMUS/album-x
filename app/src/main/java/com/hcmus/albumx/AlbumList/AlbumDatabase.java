@@ -115,8 +115,14 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
             String name = cursor.getString(1);
             int type = cursor.getInt(2);
 
-            if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)) {
+            if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                ;
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
                 albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
+                ;
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
             } else {
                 albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
             }
