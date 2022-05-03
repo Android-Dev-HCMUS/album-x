@@ -20,10 +20,10 @@
         <item name="bgc">#ffffff</item>
         <item name="tC">#000000</item>
     </style>
-    <style name="BlueTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="BlueGrayTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="tC">#ffffff</item>
-        <item name="bgc">#00BCD4</item>
+        <item name="bgc">#8F9E9F</item>
     </style>
 
     <!-- White theme -->

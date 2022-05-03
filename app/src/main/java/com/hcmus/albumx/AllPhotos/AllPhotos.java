@@ -125,7 +125,7 @@ public class AllPhotos extends Fragment {
                                 SharedPreferences.Editor editor = sp.edit();
                                 editor.putBoolean("isNightMode", true);
                                 editor.apply();
-                                Toast.makeText(context, "Theme changed to black", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Theme changed to blue gray", Toast.LENGTH_SHORT).show();
                                 reset();
                                 return true;
                             case R.id.change_theme_light:

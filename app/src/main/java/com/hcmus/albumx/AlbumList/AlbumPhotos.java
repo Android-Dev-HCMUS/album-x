@@ -2,15 +2,11 @@ package com.hcmus.albumx.AlbumList;
 
 
 import android.animation.Animator;
-
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.WallpaperManager;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,10 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-
-import android.widget.RelativeLayout;
-
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,12 +39,9 @@ import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.MultiSelectionHelper;
 import com.hcmus.albumx.R;
-
 import com.hcmus.albumx.SecureFolder.SecureFolder;
 import com.hcmus.albumx.SecureFolder.SecureFolderManager;
-import com.hcmus.albumx.SelectMultiple;
 
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;

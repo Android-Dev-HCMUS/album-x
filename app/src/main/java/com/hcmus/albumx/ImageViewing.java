@@ -141,7 +141,7 @@ public class ImageViewing extends Fragment {
         viewPager.setPageTransformer(transformer);
 
         if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
-            viewPager.setBackgroundColor(Color.rgb(0,188,212));
+            viewPager.setBackgroundColor(Color.rgb(143,156,158));
         }else{
             viewPager.setBackgroundColor(Color.WHITE);
         }
