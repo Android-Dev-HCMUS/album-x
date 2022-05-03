@@ -1,10 +1,15 @@
 package com.hcmus.albumx.RecycleBin;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +23,7 @@ import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 import com.hcmus.albumx.AllPhotos.ListItem;
 import com.hcmus.albumx.MainActivity;
+import com.hcmus.albumx.MultiSelectionHelper;
 import com.hcmus.albumx.R;
 
 import java.text.DateFormat;
@@ -34,6 +40,8 @@ public class RecycleBinPhotos extends Fragment {
 
     MainActivity main;
     Context context;
+
+    RelativeLayout longClickBar;
 
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
@@ -100,6 +108,61 @@ public class RecycleBinPhotos extends Fragment {
 
         recyclerView.setAdapter(galleryAdapter);
 
+        MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
+        longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
+        Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
+        selectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                longClickBar.animate()
+                        .alpha(1f)
+                        .setDuration(500)
+                        .setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animator) {
+                                longClickBar.setVisibility(View.VISIBLE);
+                                galleryAdapter.setMultipleSelectState(true);
+
+                                ImageButton restoreFromTrash = (ImageButton) view.findViewById(R.id.restoreFromTrash);
+                                restoreFromTrash.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        multiSelectionHelper.handleRestoreImages(imageInfoArrayList, -1);
+                                        turnOffMultiSelectionMode();
+                                    }
+                                });
+
+                                ImageButton deleteForever = (ImageButton) view.findViewById(R.id.deleteForever);
+                                deleteForever.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        multiSelectionHelper.handleDeleteImagesForever(imageInfoArrayList, -1);
+                                        turnOffMultiSelectionMode();
+                                    }
+                                });
+
+                                ImageButton closeToolbar = (ImageButton) view.findViewById(R.id.closeToolbar);
+                                closeToolbar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        turnOffMultiSelectionMode();
+                                        longClickBar.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animator) { }
+
+                            @Override
+                            public void onAnimationCancel(Animator animator) { }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animator) { }
+                        });
+            }
+        });
+
         return view;
     }
 
@@ -126,10 +189,22 @@ public class RecycleBinPhotos extends Fragment {
         }
     }
 
-    public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
+    public void notifyChangedListImage(ArrayList<ImageInfo> newList){
+        Log.e(TAG, "notifyChangedListImage " + newList.size() );
+        Log.e(TAG, "notifyChangedListImage " + imageInfoArrayList.size() );
         imageInfoArrayList = newList;
         listItems = new ArrayList<>();
         prepareData();
         galleryAdapter.setData(listItems);
+    }
+
+    public void turnOffMultiSelectionMode(){
+        longClickBar.setVisibility(View.GONE);
+        galleryAdapter.setMultipleSelectState(false);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(imageShow.isSelected){
+                imageShow.isSelected = false;
+            }
+        }
     }
 }

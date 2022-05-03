@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -59,26 +58,7 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
             db = AlbumDatabase.getInstance(context);
 
             if(albumList == null){
-                albumList = new ArrayList<>();
-
-                Cursor cursor = db.getAlbums();
-                while (cursor.moveToNext()){
-                    int id = cursor.getInt(0);
-                    String name = cursor.getString(1);
-                    int type = cursor.getInt(2);
-
-                    if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
-                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
-                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
-                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_lock));
-                    } else {
-                        albumList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
-                    }
-                }
+                albumList = db.getAlbums();
             }
         } catch (IllegalStateException ignored) {
         }
@@ -235,30 +215,5 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
         adapter.notifyDataSetChanged();
     }
 
-    public ArrayList<AlbumInfo> infoAddAlbums(Context context){
-//        context = getActivity();
-        db = AlbumDatabase.getInstance(context);
 
-        ArrayList<AlbumInfo> album;
-
-        album = new ArrayList<>();
-
-        Cursor cursor = db.getAlbums();
-        while (cursor.moveToNext()){
-            int id = cursor.getInt(0);
-            String name = cursor.getString(1);
-            int type = cursor.getInt(2);
-
-            if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
-                Log.d("pass", "pass");
-            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
-                album.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
-            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
-                Log.d("pass", "pass");
-            } else {
-                album.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
-            }
-        }
-        return album;
-    }
 }

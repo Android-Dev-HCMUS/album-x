@@ -7,7 +7,6 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -39,7 +38,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.AlbumList.AlbumInfo;
-import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AlbumList.AlbumPhotos;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
@@ -76,6 +74,8 @@ public class ImageViewing extends Fragment {
     private ArrayList<AlbumInfo> albumInfoArrayList;
     private int fromAlbum;
 
+    private AlbumDatabase myDB;
+
     public static ImageViewing newInstance(String imagePath, ArrayList<ImageInfo> imageInfoArrayList, int pos, int fromAlbum) {
         ImageViewing fragment = new ImageViewing();
         Bundle bundle = new Bundle();
@@ -95,26 +95,8 @@ public class ImageViewing extends Fragment {
             main = (MainActivity) getActivity();
 
             if(albumInfoArrayList == null){
-                albumInfoArrayList = new ArrayList<>();
-
-                Cursor cursor = AlbumDatabase.getInstance(context).getAlbums();
-                while (cursor.moveToNext()){
-                    int id = cursor.getInt(0);
-                    String name = cursor.getString(1);
-                    int type = cursor.getInt(2);
-
-                    if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
-                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
-                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
-                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
-                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
-                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
-                    } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
-                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
-                    } else {
-                        albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
-                    }
-                }
+                myDB = AlbumDatabase.getInstance(context);
+                albumInfoArrayList = myDB.getAlbums();
             }
 
             if (getArguments() != null) {
@@ -281,8 +263,7 @@ public class ImageViewing extends Fragment {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.add_to_album:
-                                ArrayList<AlbumInfo> album;
-                                album = AlbumList.newInstance().infoAddAlbums(context);
+                                ArrayList<AlbumInfo> album = myDB.getInfoAddAlbums();
 
                                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
                                 builderSingle.setIcon(R.drawable.ic_album);
@@ -295,7 +276,7 @@ public class ImageViewing extends Fragment {
                                     arrayAdapter.add(name);
                                 }
 
-                                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -305,7 +286,6 @@ public class ImageViewing extends Fragment {
                                 builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        String strName = arrayAdapter.getItem(which);
                                         if(AlbumDatabase.getInstance(context)
                                                 .isImageExistsInAlbum(imageInfoArrayList.get(pos).name,
                                                         imageInfoArrayList.get(pos).path,
@@ -452,13 +432,7 @@ public class ImageViewing extends Fragment {
 
     void showExif(String path){
         if(path != null){
-
             ParcelFileDescriptor parcelFileDescriptor = null;
-
-            /*
-            How to convert the Uri to FileDescriptor, refer to the example in the document:
-            https://developer.android.com/guide/topics/providers/document-provider.html
-             */
             try {
 //                parcelFileDescriptor = main.getContentResolver().openFileDescriptor(photoUri, "r");
 //                FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
@@ -571,6 +545,7 @@ public class ImageViewing extends Fragment {
             return false;
         }
     }
+
     private String getWithoutExtension(String name) {
         return name.substring(0, name.lastIndexOf("."));
     }

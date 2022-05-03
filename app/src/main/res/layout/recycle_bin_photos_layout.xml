@@ -69,4 +69,44 @@
         android:verticalSpacing="5dp"
         android:gravity="center" />
 
+    <RelativeLayout
+        android:id="@+id/longClickBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp"
+        android:background="@drawable/tool_bar_border"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/restoreFromTrash"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/restore_from_trash"
+            android:tooltipText="Add images to album"/>
+
+
+        <ImageButton
+            android:id="@+id/closeToolbar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_toRightOf="@+id/restoreFromTrash"
+            android:background="@drawable/ic_baseline_close_24"
+            android:tooltipText="Close toolbar"/>
+
+        <ImageButton
+            android:id="@+id/deleteForever"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_toRightOf="@+id/closeToolbar"
+            android:background="@drawable/delete_forever"
+            android:tooltipText="Move images to recycle bin" />
+    </RelativeLayout>
+
 </RelativeLayout>

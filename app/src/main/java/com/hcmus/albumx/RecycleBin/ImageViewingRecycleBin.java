@@ -1,9 +1,7 @@
 package com.hcmus.albumx.RecycleBin;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,8 +13,6 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
@@ -180,31 +176,16 @@ public class ImageViewingRecycleBin extends Fragment {
         return view;
     }
 
-    public boolean isStoragePermissionGranted() {
-        boolean checkWritePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-
-        if (checkWritePermission) {
-            return  true;
-        } else{
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            return false;
-        }
-    }
-
-    public String deleteImageInStorage(String image_name) {
+    public void deleteImageInStorage(String image_name) {
         String root = Environment.getExternalStorageDirectory().toString();
-        if (isStoragePermissionGranted()) { // check or ask permission
-            File myDir = new File(root, "/saved_images");
-            if (!myDir.exists()) {
-                myDir.mkdirs();
-            }
-            File file = new File(myDir, image_name);
-            if (file.exists()) {
-                file.delete();
-            }
+        File myDir = new File(root, "/saved_images");
+        if (!myDir.exists()) {
+            myDir.mkdirs();
         }
-        return null;
+        File file = new File(myDir, image_name);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     @Override
@@ -216,7 +197,7 @@ public class ImageViewingRecycleBin extends Fragment {
                 .findFragmentByTag(RecycleBinPhotos.TAG);
 
         if (fragment != null) {
-            fragment.notifyChangedListImageOnDelete(imageInfoArrayList);
+            fragment.notifyChangedListImage(imageInfoArrayList);
         }
     }
 

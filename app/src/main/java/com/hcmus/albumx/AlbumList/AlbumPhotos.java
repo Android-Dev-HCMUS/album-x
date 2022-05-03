@@ -1,5 +1,6 @@
 package com.hcmus.albumx.AlbumList;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,8 +25,8 @@ import com.hcmus.albumx.AllPhotos.ListItem;
 import com.hcmus.albumx.EditImage;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
+import com.hcmus.albumx.MultiSelectionHelper;
 import com.hcmus.albumx.R;
-import com.hcmus.albumx.SelectMultiple;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -47,12 +49,14 @@ public class AlbumPhotos extends Fragment {
     private RecyclerView recyclerView;
     private GalleryAdapter galleryAdapter;
 
+    private RelativeLayout longClickBar;
+
     private ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
-    List<ListItem> listItems;
+    private List<ListItem> listItems;
     private ImageDatabase myDB;
 
     private int albumID;
-    ImageButton cameraBtn;
+    private ImageButton cameraBtn;
 
     public static AlbumPhotos newInstance(int albumID, String albumName) {
         AlbumPhotos fragment = new AlbumPhotos();
@@ -131,8 +135,70 @@ public class AlbumPhotos extends Fragment {
         });
         galleryAdapter.setData(listItems);
 
-        SelectMultiple temp = new SelectMultiple();
-        temp.selectMultiImages(view, context, galleryAdapter, imageInfoArrayList, 0);
+        MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
+        longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
+        Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
+        selectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                longClickBar.animate()
+                        .alpha(1f)
+                        .setDuration(500)
+                        .setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animator) {
+                                longClickBar.setVisibility(View.VISIBLE);
+                                galleryAdapter.setMultipleSelectState(true);
+
+                                ImageButton addToAlbum = (ImageButton) view.findViewById(R.id.addToAlbum);
+                                addToAlbum.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        multiSelectionHelper.handleAddImagesToAlbum(imageInfoArrayList);
+                                        turnOffMultiSelectionMode();
+                                    }
+                                });
+
+                                ImageButton shareMultipleImages = (ImageButton) view.findViewById(R.id.shareMultipleImages);
+                                shareMultipleImages.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        multiSelectionHelper.handleShareImages(imageInfoArrayList);
+                                        turnOffMultiSelectionMode();
+                                    }
+                                });
+
+                                ImageButton deleteMultipleImages = (ImageButton) view.findViewById(R.id.deleteMultipleImages);
+                                deleteMultipleImages.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        multiSelectionHelper.handleDeleteImages(imageInfoArrayList, albumID);
+                                        notifyChangedListImageOnDelete(imageInfoArrayList);
+                                        turnOffMultiSelectionMode();
+                                    }
+                                });
+
+                                ImageButton closeToolbar = (ImageButton) view.findViewById(R.id.closeToolbar);
+                                closeToolbar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        turnOffMultiSelectionMode();
+                                        longClickBar.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animator) { }
+
+                            @Override
+                            public void onAnimationCancel(Animator animator) { }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animator) { }
+                        });
+            }
+        });
 
         recyclerView = view.findViewById(R.id.recyclerview_image);
         recyclerView.setHasFixedSize(true);
@@ -184,5 +250,15 @@ public class AlbumPhotos extends Fragment {
         listItems = new ArrayList<>();
         prepareData();
         galleryAdapter.setData(listItems);
+    }
+
+    public void turnOffMultiSelectionMode(){
+        longClickBar.setVisibility(View.GONE);
+        galleryAdapter.setMultipleSelectState(false);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(imageShow.isSelected){
+                imageShow.isSelected = false;
+            }
+        }
     }
 }

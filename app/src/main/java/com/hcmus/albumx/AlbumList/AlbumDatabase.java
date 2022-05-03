@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.hcmus.albumx.AllPhotos.ImageInfo;
+import com.hcmus.albumx.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         public static final int DEFAULT_TYPE = 0;
         public static final int USER_TYPE = 1;
 
-        public static final String  ALBUM_RECENT = "Recent";
+        public static final String ALBUM_RECENT = "Recent";
         public static final String ALBUM_FAVORITE = "Favorite";
         public static final String ALBUM_EDITOR = "Editor";
         public static final String ALBUM_SECURE = "Secure Folder";
@@ -77,9 +78,50 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
         return instance;
     }
 
-    public Cursor getAlbums(){
+    public ArrayList<AlbumInfo> getAlbums(){
+        ArrayList<AlbumInfo> albumInfoArrayList = new ArrayList<>();
         SQLiteDatabase database = this.getReadableDatabase();
-        return database.rawQuery("SELECT * FROM " + AlbumDatabase.albumSet.TABLE_NAME, null);
+
+        Cursor cursor = database.rawQuery("SELECT * FROM " + AlbumDatabase.albumSet.TABLE_NAME, null);
+
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            int type = cursor.getInt(2);
+
+            if(name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)){
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_recent));
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)){
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
+            } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
+            } else {
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
+            }
+        }
+
+        return albumInfoArrayList;
+    }
+
+    public ArrayList<AlbumInfo> getInfoAddAlbums() {
+        ArrayList<AlbumInfo> albumInfoArrayList = new ArrayList<>();
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        Cursor cursor = database.rawQuery("SELECT * FROM " + AlbumDatabase.albumSet.TABLE_NAME, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            int type = cursor.getInt(2);
+
+            if (name.equals(AlbumDatabase.albumSet.ALBUM_FAVORITE)) {
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_favorite));
+            } else {
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
+            }
+        }
+        return albumInfoArrayList;
     }
 
     public int insertAlbum(String name, int type){

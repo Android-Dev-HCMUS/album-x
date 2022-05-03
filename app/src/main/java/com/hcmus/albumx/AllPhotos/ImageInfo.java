@@ -10,7 +10,7 @@ public class ImageInfo implements Serializable {
     public String modifiedDate;
     public String mimeType;
     public String size;
-    Boolean isSelected = false;
+    public Boolean isSelected = false;
 
     public ImageInfo(int id, String name, String path, Boolean isSelected) {
         this.id = id;
