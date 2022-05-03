@@ -145,6 +145,27 @@ public class AlbumPhotos extends Fragment {
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             switch (menuItem.getItemId()) {
                                 case R.id.delete_secure_folder:
+                                    Dialog dialog = new Dialog(context);
+                                    dialog.setContentView(R.layout.layout_custom_dialog_delete_secure_folder);
+                                    dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
+                                    Button removeGallery = dialog.findViewById(R.id.delete_secure_folder_accept);
+                                    removeGallery.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            // Xóa mã PIN và toàn bộ hình ảnh của secure folder
+                                            deletePIN();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    Button cancel = dialog.findViewById(R.id.delete_secure_folder_cancel);
+                                    cancel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog.show();
                                     return true;
                                 case R.id.change_PIN:
                                     // Đổi mã PIN cho thư mục secure folder
@@ -207,6 +228,38 @@ public class AlbumPhotos extends Fragment {
 
         return view;
     }
+
+    private void deletePIN() {
+        Intent intent = new Intent(getContext(), SecureFolder.class);
+        activityResultLauncher.launch(intent);
+    }
+    // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        String returnString = data.getStringExtra(Intent.EXTRA_TEXT);
+                        //Lấy mã PIN đã lưu
+                        sp = getContext().getSharedPreferences("MyPref", 0);
+                        String storedPIN = sp.getString("PIN", null);
+                        //Xử lý mã PIN
+                        SharedPreferences.Editor ed;
+                        if(md5(returnString).equals(storedPIN)) {
+                            ed = sp.edit();
+                            //Remove PIN
+                            ed.remove("PIN");
+                            ed.commit();
+                            Toast.makeText(context, "Secure Folder deleted!", Toast.LENGTH_SHORT).show();
+                            main.getSupportFragmentManager().popBackStack();
+                            onDetach();
+                        } else { Toast.makeText(context, "Incorrect PIN", Toast.LENGTH_SHORT).show(); }
+                    }
+                }
+            });
 
     private void changePIN() {
         Intent intent = new Intent(getContext(), SecureFolder.class);
