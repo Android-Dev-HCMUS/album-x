@@ -117,7 +117,7 @@ public class AllPhotos extends Fragment {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.secure_folder:
-                                openSecureFolder();
+                                openSecureFolderManager();
                                 return true;
                             case R.id.change_theme_blue:
                                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -280,7 +280,7 @@ public class AllPhotos extends Fragment {
         return contextView;
     }
 
-    public void openSecureFolder() {
+    public void openSecureFolderManager() {
         Intent intent = new Intent(getContext(), SecureFolderManager.class);
         getContext().startActivity(intent);
     }

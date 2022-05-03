@@ -331,6 +331,9 @@ public class ImageViewing extends Fragment {
                                             Toast.LENGTH_SHORT).show();
                                 }
                                 return true;
+                            case R.id.add_secure_folder:
+                                // Di chuyển ảnh vào album secure folder
+                                return true;
                             default:
                                 return false;
                         } //Switch

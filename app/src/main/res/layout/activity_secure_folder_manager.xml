@@ -11,8 +11,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Set Password"
-            android:id="@+id/setPassword"/>
+            android:text="Change PIN"
+            android:id="@+id/changePIN"/>
 
     </LinearLayout>
 
