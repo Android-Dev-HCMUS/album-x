@@ -226,40 +226,42 @@ public class AllPhotos extends Fragment {
                                 addToAlbum.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        ArrayList<AlbumInfo> album;
-                                        album = AlbumList.newInstance().infoAddAlbums(context);
-                                        Log.d("album", String.valueOf(album));
-                                        AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
-                                        builderSingle.setIcon(R.drawable.ic_album);
-                                        builderSingle.setTitle("Select One Album:");
+                                        if(!getSelectedImages().isEmpty()){
+                                            ArrayList<AlbumInfo> album;
+                                            album = AlbumList.newInstance().infoAddAlbums(context);
 
-                                        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+                                            AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+                                            builderSingle.setIcon(R.drawable.ic_album);
+                                            builderSingle.setTitle("Select One Album:");
 
-                                        for(AlbumInfo itemAlbum: album){
-                                            String name = itemAlbum.name;
-                                            arrayAdapter.add(name);
+                                            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+
+                                            for(AlbumInfo itemAlbum: album){
+                                                String name = itemAlbum.name;
+                                                arrayAdapter.add(name);
+                                            }
+
+                                            builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+
+                                            builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    String strName = arrayAdapter.getItem(which);
+                                                    handleAddImagesToAlbum(strName, album, which);
+                                                    dialog.dismiss();
+                                                    turnOffMultiSelectionMode();
+                                                }
+                                            });
+                                            builderSingle.show();
+                                        } else {
+                                            notificationWhenNothingIsSelect();
                                         }
-
-
-                                        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-
-                                        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                String strName = arrayAdapter.getItem(which);
-                                                handleAddImagesToAlbum(strName, album, which);
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        builderSingle.show();
-                                        resetFragment();
                                     }
-
                                 });
                                 // -> set listener
 
@@ -267,77 +269,82 @@ public class AllPhotos extends Fragment {
                                 shareMultipleImages.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        List<ImageInfo> selectedImages = new ArrayList<>();
+                                        List<ImageInfo> selectedImages = getSelectedImages();
+                                        if(!selectedImages.isEmpty()){
+                                            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
 
-                                        selectedImages = getSelectedImages();
-                                        //Create Img from bitmap and share with text
+                                            // adding text to share
+                                            intent.putExtra(Intent.EXTRA_TEXT, "Sharing Images");
 
-                                        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                                            // Add subject Here
+                                            intent.putExtra(Intent.EXTRA_SUBJECT, "Album X share multi images");
 
-                                        // adding text to share
-                                        intent.putExtra(Intent.EXTRA_TEXT, "Sharing Images");
+                                            // setting type to image
+                                            intent.setType("image/*");
 
-                                        // Add subject Here
-                                        intent.putExtra(Intent.EXTRA_SUBJECT, "Album X share multi images");
+                                            ArrayList<Uri> files = new ArrayList<Uri>();
 
-                                        // setting type to image
-                                        intent.setType("image/*");
+                                            for(ImageInfo imageShow: selectedImages){
+                                                String path = imageShow.path;
+                                                Uri uri = getImageToShare(BitmapFactory.decodeFile(path), path);
+                                                // putting uri of image to be shared
+                                                files.add(uri);
+                                            }
+                                            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
 
-                                        ArrayList<Uri> files = new ArrayList<Uri>();
-
-                                        for(ImageInfo imageShow: selectedImages){
-                                            String path = imageShow.path;
-                                            Uri uri = getImageToShare(BitmapFactory.decodeFile(path), path);
-                                            // putting uri of image to be shared
-                                            files.add(uri);
+                                            // calling startactivity() to share
+                                            startActivity(Intent.createChooser(intent, "Share Via"));
+                                            turnOffMultiSelectionMode();
+                                        } else {
+                                            notificationWhenNothingIsSelect();
                                         }
-                                        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-
-                                        // calling startactivity() to share
-                                        startActivity(Intent.createChooser(intent, "Share Via"));
-                                        resetFragment();
                                     }
-
                                 });
 
                                 deleteMultipleImages = (ImageButton) contextView.findViewById(R.id.deleteMultipleImages);
                                 deleteMultipleImages.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        List<ImageInfo> selectedImages = new ArrayList<>();
+                                        List<ImageInfo> selectedImages = getSelectedImages();
 
-                                        selectedImages = getSelectedImages();
+                                        if(!selectedImages.isEmpty()){
+                                            Dialog dialog = new Dialog(context);
+                                            dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
+                                            dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
 
-                                        Dialog dialog = new Dialog(context);
-                                        dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
-                                        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+                                            Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
 
-                                        Button removeGallery = dialog.findViewById(R.id.remove_out_gallery);
-                                        List<ImageInfo> finalSelectedImages = selectedImages;
-                                        removeGallery.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                for(ImageInfo imageShow: finalSelectedImages){
-                                                    String path = imageShow.path;
-                                                    String name = imageShow.name;
-                                                    ImageDatabase.getInstance(getContext())
-                                                            .moveImageToRecycleBin(name,path);
-                                                    AlbumDatabase.getInstance(getContext())
-                                                            .softDeleteImage(name,path);
+                                            removeGallery.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    for(ImageInfo imageShow: selectedImages){
+                                                        String path = imageShow.path;
+                                                        String name = imageShow.name;
+                                                        ImageDatabase.getInstance(getContext())
+                                                                .moveImageToRecycleBin(name,path);
+                                                        AlbumDatabase.getInstance(getContext())
+                                                                .softDeleteImage(name,path);
+
+                                                        imageInfoArrayList.removeIf(
+                                                                image -> image.path.equals(imageShow.path) && image.name.equals(imageShow.name));
+                                                    }
+                                                    notifyChangedListImageOnDelete(imageInfoArrayList);
+
+                                                    dialog.dismiss();
+                                                    turnOffMultiSelectionMode();
                                                 }
-
-                                                dialog.dismiss();
-                                                resetFragment();
-                                            }
-                                        });
-                                        Button cancel = dialog.findViewById(R.id.cancel);
-                                        cancel.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        dialog.show();
+                                            });
+                                            Button cancel = dialog.findViewById(R.id.cancel);
+                                            cancel.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            dialog.show();
+                                        } else {
+                                            notificationWhenNothingIsSelect();
+                                        }
                                     }
                                 });
                                 // -> set listener
@@ -355,8 +362,7 @@ public class AllPhotos extends Fragment {
 
                                                     @Override
                                                     public void onAnimationEnd(Animator animator) {
-                                                        longClickBar.setVisibility(View.GONE);
-                                                        galleryAdapter.setMultipleSelectState(false);
+                                                        turnOffMultiSelectionMode();
                                                     }
 
                                                     @Override
@@ -365,9 +371,6 @@ public class AllPhotos extends Fragment {
                                                     @Override
                                                     public void onAnimationRepeat(Animator animator) { }
                                                 });
-                                        getFragmentManager().beginTransaction()
-                                                .replace(R.id.frameFragment, new AllPhotos(), TAG)
-                                                .commit();
                                     }
                                 });
                             }
@@ -437,10 +440,9 @@ public class AllPhotos extends Fragment {
         galleryAdapter.notifyDataSetChanged();
     }
 
-    public  void handleAddImagesToAlbum(String albumName,  ArrayList<AlbumInfo> album, int pos){
-        List<ImageInfo> selectedImages = new ArrayList<>();
+    public void handleAddImagesToAlbum(String albumName,  ArrayList<AlbumInfo> album, int pos){
+        List<ImageInfo> selectedImages = getSelectedImages();
 
-        selectedImages = getSelectedImages();
         for(ImageInfo imageShow: selectedImages){
             String path = imageShow.path;
             String name = imageShow.name;
@@ -477,10 +479,7 @@ public class AllPhotos extends Fragment {
     private void handleEditImagePick(Uri contentUri){
         ImageInfo image = getInfoFromURI(contentUri);
 
-        if (ImageDatabase.getInstance(context).isImageExistsInApplication(image.name)) {
-            Log.d("pass", "1");
-        }
-        else {
+        if (!ImageDatabase.getInstance(context).isImageExistsInApplication(image.name)) {
             image.path = saveImageBitmap(contentUri, image.name);
             myDB.insertImage(image.name, image.path, image.createdDate);
 
@@ -489,7 +488,10 @@ public class AllPhotos extends Fragment {
                 if (cursor.getString(1).equals(AlbumDatabase.albumSet.ALBUM_EDITOR)) {
                     AlbumDatabase.getInstance(context)
                             .insertImageToAlbum(image.name, image.path, cursor.getInt(0));
-                    break;
+                }
+                if (cursor.getString(1).equals(AlbumDatabase.albumSet.ALBUM_RECENT)) {
+                    AlbumDatabase.getInstance(context)
+                            .insertImageToAlbum(image.name, image.path, cursor.getInt(0));
                 }
             }
         }
@@ -586,7 +588,7 @@ public class AllPhotos extends Fragment {
             if (byte_size > -1) {
                 size = getFileSize((long) byte_size);
             }
-
+            Log.e(TAG, size );
             info = new ImageInfo(displayName, lastModified, mimeType, size);
             cursor.close();
         }
@@ -674,6 +676,31 @@ public class AllPhotos extends Fragment {
         }
 
         return selectedImages;
+    }
+
+    public void turnOffMultiSelectionMode(){
+        longClickBar.setVisibility(View.GONE);
+        galleryAdapter.setMultipleSelectState(false);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(imageShow.isSelected){
+                imageShow.isSelected = false;
+            }
+        }
+    }
+
+    public void notificationWhenNothingIsSelect(){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+        builderSingle.setTitle("Please select one image !");
+
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.show();
     }
 
 

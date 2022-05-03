@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.pdf.PdfDocument;
 import android.media.MediaScannerConnection;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -276,7 +276,9 @@ public class ImageViewing extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
+                            case R.id.add_to_album:
 
+                                return true;
                             case R.id.menu_wallpaper:
                                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(v.getContext());
                                 try {
