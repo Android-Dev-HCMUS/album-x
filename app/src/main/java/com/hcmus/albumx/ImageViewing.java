@@ -1,9 +1,11 @@
 package com.hcmus.albumx;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -20,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -36,6 +39,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.AlbumList.AlbumInfo;
+import com.hcmus.albumx.AlbumList.AlbumList;
 import com.hcmus.albumx.AlbumList.AlbumPhotos;
 import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
@@ -277,7 +281,48 @@ public class ImageViewing extends Fragment {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.add_to_album:
+                                ArrayList<AlbumInfo> album;
+                                album = AlbumList.newInstance().infoAddAlbums(context);
 
+                                AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+                                builderSingle.setIcon(R.drawable.ic_album);
+                                builderSingle.setTitle("Select One Album:");
+
+                                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+
+                                for(AlbumInfo itemAlbum: album){
+                                    String name = itemAlbum.name;
+                                    arrayAdapter.add(name);
+                                }
+
+                                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String strName = arrayAdapter.getItem(which);
+                                        if(AlbumDatabase.getInstance(context)
+                                                .isImageExistsInAlbum(imageInfoArrayList.get(pos).name,
+                                                        imageInfoArrayList.get(pos).path,
+                                                        album.get(which).id)){
+                                            Toast.makeText(context, "Image exists in " + album.get(which).name, Toast.LENGTH_SHORT).show();
+                                        } else{
+                                            AlbumDatabase.getInstance(context)
+                                                    .insertImageToAlbum(imageInfoArrayList.get(pos).name,
+                                                            imageInfoArrayList.get(pos).path,
+                                                            album.get(which).id);
+
+                                            Toast.makeText(context, "Added to " + album.get(which).name, Toast.LENGTH_SHORT).show();
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                                builderSingle.show();
                                 return true;
                             case R.id.menu_wallpaper:
                                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(v.getContext());
