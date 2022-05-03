@@ -34,4 +34,12 @@ public class ImageInfo implements Serializable {
         this.mimeType = mimeType;
         this.size = size;
     }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
+    }
 }
