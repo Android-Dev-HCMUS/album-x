@@ -24,6 +24,7 @@ import com.hcmus.albumx.EditImage;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
+import com.hcmus.albumx.SelectMultiple;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -129,6 +130,9 @@ public class AlbumPhotos extends Fragment {
             }
         });
         galleryAdapter.setData(listItems);
+
+        SelectMultiple temp = new SelectMultiple();
+        temp.selectMultiImages(view, context, galleryAdapter, imageInfoArrayList, 0);
 
         recyclerView = view.findViewById(R.id.recyclerview_image);
         recyclerView.setHasFixedSize(true);
