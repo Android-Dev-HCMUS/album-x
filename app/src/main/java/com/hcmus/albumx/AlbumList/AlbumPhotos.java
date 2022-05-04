@@ -7,11 +7,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -42,6 +47,10 @@ import com.hcmus.albumx.R;
 import com.hcmus.albumx.SecureFolder.SecureFolder;
 import com.hcmus.albumx.SecureFolder.SecureFolderManager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -106,6 +115,13 @@ public class AlbumPhotos extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        handleEditImages();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -124,7 +140,6 @@ public class AlbumPhotos extends Fragment {
                 @Override
                 public void onClick(View view) {
                     EditImage editImage = new EditImage(getActivity());
-
                     editImage.openSystemCameraToTakeAnImage();
 
                 }
@@ -478,5 +493,102 @@ public class AlbumPhotos extends Fragment {
         }
 
         return !state;
+    }
+
+    public void handleEditImages(){
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + "/temp";
+        File myDir = new File(path);
+        if (myDir.exists()) {
+            File directory = new File(path);
+            File[] files = directory.listFiles();
+            if(files != null && files.length > 0){
+                for (File value : files) {
+                    File file = new File(myDir, value.getName());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                    String extension = MimeTypeMap.getFileExtensionFromUrl(file.getPath());
+                    String type = "";
+                    if (extension != null) {
+                        type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                    }
+                    //TODO: Insert into app
+                    ImageInfo image = new ImageInfo();
+                    image.name = value.getName();
+                    image.createdDate = simpleDateFormat.format(new Date(file.lastModified()));
+                    image.size = getFileSize(file.length());
+                    image.mimeType = type;
+
+                    if (!ImageDatabase.getInstance(context).isImageExistsInApplication(image.name)) {
+                        image.path = saveImageBitmap(Uri.fromFile(file), image.name);
+                        myDB.insertImage(image.name, image.path, image.createdDate);
+
+                        List<AlbumInfo> listAlbum = AlbumDatabase.getInstance(context).getAlbums();
+                        for (AlbumInfo albumInfo : listAlbum) {
+                            if (albumInfo.name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)) {
+                                AlbumDatabase.getInstance(context)
+                                        .insertImageToAlbum(image.name, image.path, albumInfo.id);
+                            }
+                            if (albumInfo.name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)) {
+                                AlbumDatabase.getInstance(context)
+                                        .insertImageToAlbum(image.name, image.path, albumInfo.id);
+                            }
+                        }
+                    }
+                    //TODO: And delete added image
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                }
+
+                notifyChangedListImageOnDelete(AlbumDatabase.getInstance(context).getImagesOf(albumID));
+            }
+        }
+
+    }
+
+    public String saveImageBitmap(Uri uri, String image_name) {
+        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        File myDir = new File(root, "/saved_images");
+        if (!myDir.exists()) {
+            myDir.mkdirs();
+        }
+        File file = new File(myDir, image_name);
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            file.createNewFile(); // if file already exists will do nothing
+            FileOutputStream out = new FileOutputStream(file);
+            createBitMapFromUri(uri).compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file.getAbsolutePath();
+    }
+
+    public String getFileSize(long bytes) {
+        String[] units = {"B", "KB", "MB", "GB"};
+        int unit = 0;
+        for (int x = 0; x < 4; x++) {
+            if (bytes > Math.pow(2, 10*x)) {
+                unit = x;
+            }
+        }
+        double result = bytes/Math.pow(2, 10*unit);
+        return String.format(Locale.US, "%.2f", result) + units[unit];
+    }
+
+    private Bitmap createBitMapFromUri(Uri uri){
+        Bitmap b = null;
+        try{
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+
+            b = BitmapFactory.decodeStream(inputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return b;
     }
 }
