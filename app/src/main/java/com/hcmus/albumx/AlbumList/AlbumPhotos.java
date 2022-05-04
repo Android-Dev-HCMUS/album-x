@@ -73,7 +73,7 @@ public class AlbumPhotos extends Fragment {
 
     private int albumID;
 
-    ImageButton cameraBtn;
+    ImageButton cameraBtn, selectAllBtn;
     SharedPreferences sp;
 
 
@@ -202,6 +202,9 @@ public class AlbumPhotos extends Fragment {
         });
         galleryAdapter.setData(listItems);
 
+
+        selectAllBtn = (ImageButton) view.findViewById(R.id.buttonSelectAll);
+        selectAllBtn.setEnabled(false);
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
         longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
@@ -216,6 +219,14 @@ public class AlbumPhotos extends Fragment {
                             public void onAnimationStart(Animator animator) {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
+
+                                selectAllBtn.setEnabled(true);
+                                selectAllBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        selectAllImages();
+                                    }
+                                });
 
                                 ImageButton addToAlbum = (ImageButton) view.findViewById(R.id.addToAlbum);
                                 addToAlbum.setOnClickListener(new View.OnClickListener() {
@@ -433,6 +444,15 @@ public class AlbumPhotos extends Fragment {
         for(ImageInfo imageShow: imageInfoArrayList){
             if(imageShow.isSelected){
                 imageShow.isSelected = false;
+            }
+        }
+    }
+
+    public void selectAllImages(){
+        galleryAdapter.setMultipleSelectState(true);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(!imageShow.isSelected){
+                imageShow.isSelected = true;
             }
         }
     }

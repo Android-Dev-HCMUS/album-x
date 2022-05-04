@@ -49,6 +49,7 @@ public class RecycleBinPhotos extends Fragment {
     private ArrayList<ImageInfo> imageInfoArrayList;
     List<ListItem> listItems;
     ImageDatabase myDB;
+    ImageButton selectAllBtn;
 
     public static RecycleBinPhotos newInstance(){
         return new RecycleBinPhotos();
@@ -108,6 +109,9 @@ public class RecycleBinPhotos extends Fragment {
 
         recyclerView.setAdapter(galleryAdapter);
 
+        selectAllBtn = (ImageButton) view.findViewById(R.id.buttonSelectAll);
+        selectAllBtn.setEnabled(false);
+
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
         longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
@@ -122,6 +126,14 @@ public class RecycleBinPhotos extends Fragment {
                             public void onAnimationStart(Animator animator) {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
+
+                                selectAllBtn.setEnabled(true);
+                                selectAllBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        selectAllImages();
+                                    }
+                                });
 
                                 ImageButton restoreFromTrash = (ImageButton) view.findViewById(R.id.restoreFromTrash);
                                 restoreFromTrash.setOnClickListener(new View.OnClickListener() {
@@ -204,6 +216,15 @@ public class RecycleBinPhotos extends Fragment {
         for(ImageInfo imageShow: imageInfoArrayList){
             if(imageShow.isSelected){
                 imageShow.isSelected = false;
+            }
+        }
+    }
+
+    public void selectAllImages(){
+        galleryAdapter.setMultipleSelectState(true);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(!imageShow.isSelected){
+                imageShow.isSelected = true;
             }
         }
     }
