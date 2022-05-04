@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ảnh này sẽ được phục hồi lại ứng dụng, bạn có muốn thực hiện ?"
+        android:text="Do you want to restore?"
         android:textSize="16sp"
         android:textAlignment="center"
         android:layout_margin="25dp" />
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:stateListAnimator="@null"
-        android:text="Phục hồi lại Ứng dụng"
+        android:text="Restore"
         android:textAllCaps="false"
         android:textColor="@color/blue"
         android:background="@color/imgly_transparent_color"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:state_pressed="true"
-        android:text="Hủy"
+        android:text="Cancel"
         android:textAllCaps="false"
         android:background="@color/imgly_transparent_color"
         />

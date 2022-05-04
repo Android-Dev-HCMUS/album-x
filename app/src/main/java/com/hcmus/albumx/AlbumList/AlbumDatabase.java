@@ -122,7 +122,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
             } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                 ;
             } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
-                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_lock));
+                ;
             } else {
                 albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
             }

@@ -19,7 +19,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:drawableLeft="@drawable/ic_arrow_back"
-            android:text="  Tất cả ảnh" />
+            android:text="  All Photos" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:drawableTop="@drawable/ic_share"
-            android:text="Chia sẻ"
+            android:text="Share"
             android:textColor="@color/black"
             android:textSize="10sp" />
         <Button
@@ -75,7 +75,7 @@
             android:layout_width="81dp"
             android:layout_height="match_parent"
             android:drawableTop="@drawable/ic_favorite"
-            android:text="Yêu thích"
+            android:text="Favorite"
             android:textColor="@color/black"
             android:textSize="10sp" />
 
@@ -85,7 +85,7 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:drawableTop="@drawable/ic_more"
-            android:text="Thêm"
+            android:text="More"
             android:textColor="@color/black"
             android:textSize="10sp" />
 
@@ -95,7 +95,7 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:drawableTop="@drawable/ic_delete"
-            android:text="Xoá"
+            android:text="Delete"
             android:textColor="@color/black"
             android:textSize="10sp" />
 

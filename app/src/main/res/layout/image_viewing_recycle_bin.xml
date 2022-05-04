@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:background="#F3F1F1"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/backButton"
             style="?android:attr/borderlessButtonStyle"
@@ -17,7 +18,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:drawableLeft="@drawable/ic_arrow_back"
-            android:text="  Thùng rác" />
+            android:text="  Trash" />
     </RelativeLayout>
 
     <androidx.viewpager2.widget.ViewPager2

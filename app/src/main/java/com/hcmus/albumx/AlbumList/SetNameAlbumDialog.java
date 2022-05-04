@@ -46,10 +46,10 @@ public class SetNameAlbumDialog extends AppCompatDialogFragment {
         albumName = view.findViewById(R.id.album_name);
         TextView header = view.findViewById(R.id.t1);
         if(type == SET_NAME_NEW_ALBUM){
-            header.setText("Album mới");
+            header.setText("New Album");
         }
         if(type == RENAME_ALBUM){
-            header.setText("Đổi tên Album");
+            header.setText("Rename Album");
         }
 
         builder.setView(view)

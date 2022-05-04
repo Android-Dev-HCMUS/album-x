@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:stateListAnimator="@null"
-        android:text="Xóa khỏi Ứng dụng"
+        android:text="Delete out of app"
         android:textAllCaps="false"
         android:textColor="@color/red"
         android:background="@color/imgly_transparent_color"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:state_pressed="true"
-        android:text="Hủy"
+        android:text="Cancel"
         android:textAllCaps="false"
         android:background="@color/imgly_transparent_color"
         />

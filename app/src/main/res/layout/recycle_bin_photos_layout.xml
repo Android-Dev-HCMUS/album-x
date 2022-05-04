@@ -16,23 +16,26 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Thùng rác"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_margin="15dp"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="Trash"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/buttonSelect"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="60dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/buttonSubMenu"
-            android:text="Chọn"
-            android:textAllCaps="false"
             android:layout_marginTop="13dp"
+            android:layout_toLeftOf="@+id/buttonSubMenu"
+            android:text="Select"
+            android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="14sp" />
         <ImageButton
@@ -46,7 +49,7 @@
             android:layout_toStartOf="@+id/buttonSelect"
             android:layout_toLeftOf="@+id/buttonSubMenu"
             android:src="@drawable/ic_select_all"
-            android:text="Chọn tất cả"
+            android:text="Select All"
             android:textAllCaps="false"
             android:enabled="false"
             android:visibility="gone"/>
@@ -59,18 +62,19 @@
             android:layout_marginTop="13dp"
             android:drawableLeft="@drawable/ic_more" />
     </RelativeLayout>
+
     <TextView
         android:id="@+id/album_name"
-        android:layout_below="@+id/headerBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/headerBar"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:text="Đã xóa gần đây"
+        android:text="Recent"
+        android:textColor="@color/black"
         android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/black" />
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_image"

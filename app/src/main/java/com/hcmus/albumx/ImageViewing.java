@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -320,7 +319,7 @@ public class ImageViewing extends Fragment {
                                 }
                                 return true;
                             case R.id.menu_image_info:
-                                showExif(imageInfoArrayList.get(pos).path);
+                                showExif(imageInfoArrayList.get(pos).path, imageInfoArrayList.get(pos).name);
                                 return true;
                             case R.id.menu_export_toPDF:
                                 boolean converted = imageToPDF(imageInfoArrayList.get(pos).path, imageInfoArrayList.get(pos).name);
@@ -486,7 +485,7 @@ public class ImageViewing extends Fragment {
         }
     }
 
-    void showExif(String path){
+    void showExif(String path, String name){
         if(path != null){
             ParcelFileDescriptor parcelFileDescriptor = null;
             try {
@@ -498,39 +497,40 @@ public class ImageViewing extends Fragment {
                  */
                 ExifInterface exifInterface = new ExifInterface(path);
                 String exif="";
+                exif += "\nIMAGE_NAME: " + name;
                 exif += "\nIMAGE_LENGTH: " +
                         exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
                 exif += "\nIMAGE_WIDTH: " +
                         exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
-                exif += "\n DATETIME: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-                exif += "\n TAG_MAKE: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_MAKE);
-                exif += "\n TAG_MODEL: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_MODEL);
-                exif += "\n TAG_ORIENTATION: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);
-                exif += "\n TAG_WHITE_BALANCE: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE);
-                exif += "\n TAG_FOCAL_LENGTH: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
-                exif += "\n TAG_FLASH: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_FLASH);
-                exif += "\nGPS related:";
-                exif += "\n TAG_GPS_DATESTAMP: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_GPS_DATESTAMP);
-                exif += "\n TAG_GPS_TIMESTAMP: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
-                exif += "\n TAG_GPS_LATITUDE: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-                exif += "\n TAG_GPS_LATITUDE_REF: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
-                exif += "\n TAG_GPS_LONGITUDE: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-                exif += "\n TAG_GPS_LONGITUDE_REF: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
-                exif += "\n TAG_GPS_PROCESSING_METHOD: " +
-                        exifInterface.getAttribute(ExifInterface.TAG_GPS_PROCESSING_METHOD);
+//                exif += "\n DATETIME: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+//                exif += "\n TAG_MAKE: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_MAKE);
+//                exif += "\n TAG_MODEL: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_MODEL);
+//                exif += "\n TAG_ORIENTATION: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);
+//                exif += "\n TAG_WHITE_BALANCE: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE);
+//                exif += "\n TAG_FOCAL_LENGTH: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
+//                exif += "\n TAG_FLASH: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_FLASH);
+//                exif += "\nGPS related:";
+//                exif += "\n TAG_GPS_DATESTAMP: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_GPS_DATESTAMP);
+//                exif += "\n TAG_GPS_TIMESTAMP: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
+//                exif += "\n TAG_GPS_LATITUDE: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+//                exif += "\n TAG_GPS_LATITUDE_REF: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
+//                exif += "\n TAG_GPS_LONGITUDE: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+//                exif += "\n TAG_GPS_LONGITUDE_REF: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
+//                exif += "\n TAG_GPS_PROCESSING_METHOD: " +
+//                        exifInterface.getAttribute(ExifInterface.TAG_GPS_PROCESSING_METHOD);
 
 //                parcelFileDescriptor.close();
 

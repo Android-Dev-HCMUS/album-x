@@ -101,7 +101,7 @@ public class EditImage extends Activity implements PermissionRequest.Response {
 
     public void openSystemCameraToTakeAnImage() {
         PhotoEditorSettingsList settingsList = (PhotoEditorSettingsList) createPesdkSettingsList();
-        settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.DIRECTORY_DCIM);
+        settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.DIRECTORY_DCIM + "/temp");
 
         new CameraPreviewBuilder(activity)
                 .setSettingsList(settingsList)
@@ -113,7 +113,7 @@ public class EditImage extends Activity implements PermissionRequest.Response {
         SettingsList settingsList = createPesdkSettingsList();
         // Set input image
         settingsList.getSettingsModel(LoadSettings.class).setSource(inputImage);
-        settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.MEDIA_UNKNOWN + "/temp");
+        settingsList.getSettingsModel(PhotoEditorSaveSettings.class).setOutputToGallery(Environment.DIRECTORY_DCIM + "/temp");
         new PhotoEditorBuilder(activity).setSettingsList(settingsList).startActivityForResult(activity, PESDK_RESULT);
     }   //openEditor
 

@@ -14,21 +14,22 @@
         android:layout_marginTop="20dp"
         android:textSize="30sp"
         android:textStyle="bold" />
+
     <TextView
         android:id="@+id/t2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nhập tên cho album này"
-        android:textColor="@color/black"
-        android:textSize="25sp"
+        android:layout_below="@+id/t1"
+        android:text="Input name for this album"
         android:textAlignment="center"
-        android:layout_below="@+id/t1"/>
+        android:textColor="@color/black"
+        android:textSize="25sp" />
 
     <EditText
         android:id="@+id/album_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tiêu đề"
+        android:hint="Album name"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:layout_margin="20dp"

@@ -17,7 +17,7 @@
             android:layout_alignParentLeft="true"
             android:gravity="center_vertical"
             android:paddingHorizontal="15dp"
-            android:text="Cloud ảnh"
+            android:text="Image Cloud"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="Đăng xuất"/>
+                android:text="Sign out"/>
 
         </RelativeLayout>
 
@@ -60,14 +60,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/userInfo"
-            android:text="Chọn ảnh"/>
+            android:text="Select image" />
 
         <EditText
             android:id="@+id/enter_file_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userInfo"
-            android:layout_toEndOf="@+id/choose_image_btn"/>
+            android:layout_toEndOf="@+id/choose_image_btn"
+            android:hint="Name image"/>
 
 
         <ImageView
@@ -92,9 +93,9 @@
             android:id="@+id/upload_image_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tải ảnh lên"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:text="Upload Image" />
 
         <TextView
             android:id="@+id/show_image_btn"
@@ -105,7 +106,7 @@
             android:layout_marginStart="25dp"
             android:layout_toEndOf="@+id/upload_image_btn"
             android:gravity="center"
-            android:text="Xem ảnh"
+            android:text="See images"
             android:textSize="16sp" />
 
     </RelativeLayout>

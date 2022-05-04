@@ -6,8 +6,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bạn có muốn xóa thư mục Secure Folder không? Tất cả mọi ảnh trong Secure Folder sẽ bị xóa bỏ cùng với mã PIN"
-        android:textSize="16sp"
+        android:text="Do you want to delete Secure Folder? All images in this folder will be deleted with PIN code"        android:textSize="16sp"
         android:textAlignment="center"
         android:layout_margin="25dp" />
     <View
@@ -19,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:stateListAnimator="@null"
-        android:text="Xóa mọi dữ liệu của Secure Folder"
+        android:text="Erase Secure Folder"
         android:textAllCaps="false"
         android:textColor="@color/red"
         android:background="@color/imgly_transparent_color"
@@ -33,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:state_pressed="true"
-        android:text="Hủy"
+        android:text="Cancel"
         android:textAllCaps="false"
         android:background="@color/imgly_transparent_color"
         />
