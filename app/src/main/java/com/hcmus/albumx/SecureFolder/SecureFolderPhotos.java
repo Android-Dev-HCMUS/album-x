@@ -59,6 +59,7 @@ public class SecureFolderPhotos extends Fragment {
     Context context;
 
     RelativeLayout longClickBar;
+    ImageButton selectAllBtn;
 
     RecyclerView recyclerView;
     GalleryAdapter galleryAdapter;
@@ -185,6 +186,7 @@ public class SecureFolderPhotos extends Fragment {
         recyclerView.setAdapter(galleryAdapter);
 
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
+        selectAllBtn = (ImageButton) view.findViewById(R.id.buttonSelectAll);
         longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         selectBtn.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +200,16 @@ public class SecureFolderPhotos extends Fragment {
                             public void onAnimationStart(Animator animator) {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
+
+                                selectAllBtn.setVisibility(View.VISIBLE);
+                                selectAllBtn.setOnClickListener(new View.OnClickListener() {
+                                    boolean state = true;
+
+                                    @Override
+                                    public void onClick(View view) {
+                                        state = selectAllImages(state);
+                                    }
+                                });
 
                                 ImageButton restoreFromTrash = (ImageButton) view.findViewById(R.id.restoreFromTrash);
                                 restoreFromTrash.setOnClickListener(new View.OnClickListener() {
@@ -221,7 +233,7 @@ public class SecureFolderPhotos extends Fragment {
                                 deleteMultipleImages.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        multiSelectionHelper.handleDeleteImages(imageInfoArrayList, 0);
+                                        multiSelectionHelper.handleDeleteImages(imageInfoArrayList, 3);
                                         turnOffMultiSelectionMode();
                                     }
                                 });
@@ -275,6 +287,14 @@ public class SecureFolderPhotos extends Fragment {
                             //Remove PIN
                             ed.remove("PIN");
                             ed.commit();
+
+                            // Xóa ảnh
+                            for(ImageInfo i : imageInfoArrayList){
+                                i.isSelected = true;
+                            }
+                            new MultiSelectionHelper(main, context)
+                                    .handleDeleteImagesSecureFolder(imageInfoArrayList);
+
                             Toast.makeText(context, "Secure Folder deleted!", Toast.LENGTH_SHORT).show();
                             main.getSupportFragmentManager().popBackStack();
                             onDetach();
@@ -390,6 +410,7 @@ public class SecureFolderPhotos extends Fragment {
     }
 
     public void turnOffMultiSelectionMode(){
+        selectAllBtn.setVisibility(View.GONE);
         longClickBar.setVisibility(View.GONE);
         galleryAdapter.setMultipleSelectState(false);
         for(ImageInfo imageShow: imageInfoArrayList){
@@ -397,5 +418,18 @@ public class SecureFolderPhotos extends Fragment {
                 imageShow.isSelected = false;
             }
         }
+    }
+
+    public boolean selectAllImages(boolean state) {
+        galleryAdapter.setMultipleSelectState(true);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(state && !imageShow.isSelected){
+                imageShow.isSelected = true;
+            } else if(!state && imageShow.isSelected) {
+                imageShow.isSelected = false;
+            }
+        }
+
+        return !state;
     }
 }

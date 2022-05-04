@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,7 +58,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class AllPhotos extends Fragment {
-    public static String TAG = "ALl Photos";
+    public static String TAG = "All Photos";
     public static int ALBUM_ID = 0;
 
     MainActivity main;
@@ -233,8 +234,14 @@ public class AllPhotos extends Fragment {
                                 addToSecureFolder.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        multiSelectionHelper.handleMoveToSecureFolderImages(imageInfoArrayList, 0);
-                                        turnOffMultiSelectionMode();
+                                        sp = getContext().getSharedPreferences("MyPref", 0);
+                                        if(!sp.contains("PIN")){
+                                            Toast.makeText(getContext(), "Bạn chưa thiết lập thư mục an toàn", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            multiSelectionHelper.handleMoveToSecureFolderImages(imageInfoArrayList, 0);
+                                            turnOffMultiSelectionMode();
+                                            Toast.makeText(context, "Moved to Secure Folder", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 });
 
@@ -530,6 +537,7 @@ public class AllPhotos extends Fragment {
     }
 
     public void notifyChangedListImage(ArrayList<ImageInfo> newList){
+        Log.e(TAG, "notifyChangedListImage: ");
         imageInfoArrayList = newList;
         listItems = new ArrayList<>();
         listImageGroupByDate = new LinkedHashMap<>();
@@ -538,6 +546,7 @@ public class AllPhotos extends Fragment {
     }
 
     public void turnOffMultiSelectionMode(){
+        Log.e(TAG, "turnOffMultiSelectionMode: ");
         selectAllBtn.setVisibility(View.GONE);
         longClickBar.setVisibility(View.GONE);
         galleryAdapter.setMultipleSelectState(false);

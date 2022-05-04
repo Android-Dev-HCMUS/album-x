@@ -463,8 +463,10 @@ public class ImageViewing extends Fragment {
         if(fromAlbum == 0){
             AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
                     .findFragmentByTag(AllPhotos.TAG);
+            Log.e(TAG, "onDetach: Allphoto" );
 
             if (fragment != null) {
+                Log.e(TAG, "onDetach: All photo != null" );
                 fragment.notifyChangedListImage(imageInfoArrayList);
             }
         } if(fromAlbum == 3) {

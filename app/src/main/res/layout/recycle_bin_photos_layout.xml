@@ -100,7 +100,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/restore_from_trash"
+            android:background="@drawable/ic_restore_from_trash"
             android:tooltipText="Add images to album"/>
 
 
@@ -110,7 +110,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="30dp"
             android:layout_toRightOf="@+id/restoreFromTrash"
-            android:background="@drawable/ic_baseline_close_24"
+            android:background="@drawable/ic_close"
             android:tooltipText="Close toolbar"/>
 
         <ImageButton
@@ -119,7 +119,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="30dp"
             android:layout_toRightOf="@+id/closeToolbar"
-            android:background="@drawable/delete_forever"
+            android:background="@drawable/ic_delete_forever"
             android:tooltipText="Move images to recycle bin" />
     </RelativeLayout>
 

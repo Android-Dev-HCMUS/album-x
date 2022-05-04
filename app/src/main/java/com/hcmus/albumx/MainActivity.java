@@ -43,7 +43,9 @@ public class MainActivity extends FragmentActivity {
             setTheme(R.style.LightTheme);
         }
         setContentView(R.layout.activity_main);
-        loadFragment(AllPhotos.newInstance(), "AllPhotos", "AllPhotosUI");
+
+        loadFragment(AllPhotos.newInstance(), AllPhotos.TAG, "AllPhotosUI");
+
         //Check permission
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_READ_PERMISSION_CODE);
@@ -64,7 +66,6 @@ public class MainActivity extends FragmentActivity {
                 case R.id.menu_photo:
                 default:
                     loadFragment(AllPhotos.newInstance(), AllPhotos.TAG, "AllPhotosUI");
-
                     break;
                 case R.id.cloudStorage:
                     loadFragment(Authentication.newInstance(), Authentication.TAG, "AuthenticationUI");

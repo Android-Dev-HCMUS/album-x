@@ -102,7 +102,7 @@ public class MultiSelectionHelper {
         List<ImageInfo> selectedImages = getSelectedImages(imageInfoArrayList);
 
         if (!selectedImages.isEmpty()) {
-            if(fromAlbum == 0){
+            if(fromAlbum == 0 || fromAlbum == 3){
                 Dialog dialog = new Dialog(context);
                 dialog.setContentView(R.layout.layout_custom_dialog_remove_image_gallery);
                 dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
@@ -210,6 +210,19 @@ public class MultiSelectionHelper {
             notificationWhenNothingIsSelect(context);
         }
     }
+    public void handleDeleteImagesSecureFolder(ArrayList<ImageInfo> imageInfoArrayList) {
+        List<ImageInfo> selectedImages = getSelectedImages(imageInfoArrayList);
+
+        if (!selectedImages.isEmpty()) {
+            for (ImageInfo image : selectedImages) {
+                ImageDatabase.getInstance(context).deleteImage(image.name, image.path);
+                deleteImageInStorage(image.name);
+                imageInfoArrayList.remove(image);
+            }
+
+            notifyDataSetChange(3, imageInfoArrayList);
+        }
+    }
     
     public void handleDeleteImagesForever(ArrayList<ImageInfo> imageInfoArrayList) {
         List<ImageInfo> selectedImages = getSelectedImages(imageInfoArrayList);
@@ -259,7 +272,7 @@ public class MultiSelectionHelper {
         }
     }
 
-    public void handleRestoreImages(ArrayList<ImageInfo> imageInfoArrayList) {
+    public void handleRestoreImages(ArrayList<ImageInfo> imageInfoArrayList, int fromAlbum) {
         List<ImageInfo> selectedImages = getSelectedImages(imageInfoArrayList);
 
         if (!selectedImages.isEmpty()) {
@@ -280,7 +293,7 @@ public class MultiSelectionHelper {
                         imageInfoArrayList.remove(image);
                     }
 
-                    notifyDataSetChange(-1, imageInfoArrayList);
+                    notifyDataSetChange(fromAlbum, imageInfoArrayList);
 
                     dialog.dismiss();
                 }

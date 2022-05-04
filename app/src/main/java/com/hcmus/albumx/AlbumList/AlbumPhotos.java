@@ -241,8 +241,14 @@ public class AlbumPhotos extends Fragment {
                                 addToSecureFolder.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        multiSelectionHelper.handleMoveToSecureFolderImages(imageInfoArrayList, albumID);
-                                        turnOffMultiSelectionMode();
+                                        sp = getContext().getSharedPreferences("MyPref", 0);
+                                        if(!sp.contains("PIN")){
+                                            Toast.makeText(getContext(), "Bạn chưa thiết lập thư mục an toàn", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            multiSelectionHelper.handleMoveToSecureFolderImages(imageInfoArrayList, 0);
+                                            turnOffMultiSelectionMode();
+                                            Toast.makeText(context, "Moved to Secure Folder", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 });
 
