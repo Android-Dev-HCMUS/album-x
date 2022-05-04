@@ -126,6 +126,7 @@ public class AlbumPhotos extends Fragment {
                     EditImage editImage = new EditImage(getActivity());
 
                     editImage.openSystemCameraToTakeAnImage();
+
                 }
             });
         }
@@ -246,9 +247,11 @@ public class AlbumPhotos extends Fragment {
                                             Toast.makeText(getContext(), "Bạn chưa thiết lập thư mục an toàn", Toast.LENGTH_SHORT).show();
                                         } else {
                                             multiSelectionHelper.handleMoveToSecureFolderImages(imageInfoArrayList, 0);
+                                            notifyChangedListImageOnDelete(imageInfoArrayList);
                                             turnOffMultiSelectionMode();
                                             Toast.makeText(context, "Moved to Secure Folder", Toast.LENGTH_SHORT).show();
                                         }
+
                                     }
                                 });
 
@@ -315,7 +318,6 @@ public class AlbumPhotos extends Fragment {
 
         return view;
     }
-
     private void deletePIN() {
         Intent intent = new Intent(getContext(), SecureFolder.class);
         activityResultLauncher.launch(intent);

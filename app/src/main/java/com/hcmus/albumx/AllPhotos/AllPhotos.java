@@ -40,7 +40,6 @@ import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.MultiSelectionHelper;
 import com.hcmus.albumx.R;
-import com.hcmus.albumx.SecureFolder.SecureFolderManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -330,7 +329,7 @@ public class AllPhotos extends Fragment {
     }
 
     public void handleEditImages(){
-        String path = Environment.getExternalStoragePublicDirectory(Environment.MEDIA_UNKNOWN).toString() + "/temp";
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + "/temp";
         File myDir = new File(path);
         if (myDir.exists()) {
             File directory = new File(path);
