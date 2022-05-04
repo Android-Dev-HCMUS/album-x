@@ -47,10 +47,11 @@
             android:layout_marginRight="72dp"
             android:layout_toStartOf="@+id/buttonSelect"
             android:layout_toLeftOf="@+id/buttonSubMenu"
+            android:enabled="false"
             android:src="@drawable/ic_select_all"
             android:text="Chọn tất cả"
             android:textAllCaps="false"
-            android:enabled="false"/>
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/buttonSubMenu"

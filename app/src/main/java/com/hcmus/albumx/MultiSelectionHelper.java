@@ -184,7 +184,7 @@ public class MultiSelectionHelper {
         }
     }
 
-    public void handleDeleteImagesForever(ArrayList<ImageInfo> imageInfoArrayList, int fromAlbum) {
+    public void handleDeleteImagesForever(ArrayList<ImageInfo> imageInfoArrayList) {
         List<ImageInfo> selectedImages = getSelectedImages(imageInfoArrayList);
 
         if (!selectedImages.isEmpty()) {
@@ -202,7 +202,7 @@ public class MultiSelectionHelper {
                         imageInfoArrayList.remove(image);
                     }
 
-                    notifyDataSetChange(fromAlbum, imageInfoArrayList);
+                    notifyDataSetChange(-1, imageInfoArrayList);
 
                     dialog.dismiss();
                 }
@@ -232,7 +232,7 @@ public class MultiSelectionHelper {
         }
     }
 
-    public void handleRestoreImages(ArrayList<ImageInfo> imageInfoArrayList, int fromAlbum) {
+    public void handleRestoreImages(ArrayList<ImageInfo> imageInfoArrayList) {
         List<ImageInfo> selectedImages = getSelectedImages(imageInfoArrayList);
 
         if (!selectedImages.isEmpty()) {
@@ -253,7 +253,7 @@ public class MultiSelectionHelper {
                         imageInfoArrayList.remove(image);
                     }
 
-                    notifyDataSetChange(fromAlbum, imageInfoArrayList);
+                    notifyDataSetChange(-1, imageInfoArrayList);
 
                     dialog.dismiss();
                 }
@@ -340,7 +340,7 @@ public class MultiSelectionHelper {
                     .findFragmentByTag(AllPhotos.TAG);
 
             if (fragment != null) {
-                fragment.notifyChangedListImageOnDelete(imageInfoArrayList);
+                fragment.notifyChangedListImage(imageInfoArrayList);
             }
         }
         else {

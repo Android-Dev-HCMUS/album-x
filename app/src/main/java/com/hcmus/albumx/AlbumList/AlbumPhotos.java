@@ -202,10 +202,8 @@ public class AlbumPhotos extends Fragment {
         });
         galleryAdapter.setData(listItems);
 
-
-        selectAllBtn = (ImageButton) view.findViewById(R.id.buttonSelectAll);
-        selectAllBtn.setEnabled(false);
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
+        selectAllBtn = (ImageButton) view.findViewById(R.id.buttonSelectAll);
         longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         selectBtn.setOnClickListener(new View.OnClickListener() {
@@ -220,11 +218,13 @@ public class AlbumPhotos extends Fragment {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
 
-                                selectAllBtn.setEnabled(true);
+                                selectAllBtn.setVisibility(View.VISIBLE);
                                 selectAllBtn.setOnClickListener(new View.OnClickListener() {
+                                    boolean state = true;
+
                                     @Override
                                     public void onClick(View view) {
-                                        selectAllImages();
+                                        state = selectAllImages(state);
                                     }
                                 });
 
@@ -261,6 +261,7 @@ public class AlbumPhotos extends Fragment {
                                     @Override
                                     public void onClick(View view) {
                                         turnOffMultiSelectionMode();
+                                        selectAllBtn.setVisibility(View.GONE);
                                         longClickBar.setVisibility(View.GONE);
                                     }
                                 });
@@ -439,6 +440,7 @@ public class AlbumPhotos extends Fragment {
     }
 
     public void turnOffMultiSelectionMode(){
+        selectAllBtn.setVisibility(View.GONE);
         longClickBar.setVisibility(View.GONE);
         galleryAdapter.setMultipleSelectState(false);
         for(ImageInfo imageShow: imageInfoArrayList){
@@ -448,12 +450,16 @@ public class AlbumPhotos extends Fragment {
         }
     }
 
-    public void selectAllImages(){
+    public boolean selectAllImages(boolean state) {
         galleryAdapter.setMultipleSelectState(true);
         for(ImageInfo imageShow: imageInfoArrayList){
-            if(!imageShow.isSelected){
+            if(state && !imageShow.isSelected){
                 imageShow.isSelected = true;
+            } else if(!state && imageShow.isSelected) {
+                imageShow.isSelected = false;
             }
         }
+
+        return !state;
     }
 }
