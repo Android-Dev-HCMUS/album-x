@@ -3,7 +3,6 @@ package com.hcmus.albumx.RecycleBin;
 import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +48,7 @@ public class RecycleBinPhotos extends Fragment {
     private ArrayList<ImageInfo> imageInfoArrayList;
     List<ListItem> listItems;
     ImageDatabase myDB;
+    ImageButton selectAllBtn;
 
     public static RecycleBinPhotos newInstance(){
         return new RecycleBinPhotos();
@@ -109,6 +109,7 @@ public class RecycleBinPhotos extends Fragment {
         recyclerView.setAdapter(galleryAdapter);
 
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
+        selectAllBtn = (ImageButton) view.findViewById(R.id.buttonSelectAll);
         longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         selectBtn.setOnClickListener(new View.OnClickListener() {
@@ -123,11 +124,21 @@ public class RecycleBinPhotos extends Fragment {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
 
+                                selectAllBtn.setVisibility(View.VISIBLE);
+                                selectAllBtn.setOnClickListener(new View.OnClickListener() {
+                                    boolean state = true;
+
+                                    @Override
+                                    public void onClick(View view) {
+                                        state = selectAllImages(state);
+                                    }
+                                });
+
                                 ImageButton restoreFromTrash = (ImageButton) view.findViewById(R.id.restoreFromTrash);
                                 restoreFromTrash.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        multiSelectionHelper.handleRestoreImages(imageInfoArrayList, -1);
+                                        multiSelectionHelper.handleRestoreImages(imageInfoArrayList);
                                         turnOffMultiSelectionMode();
                                     }
                                 });
@@ -136,7 +147,7 @@ public class RecycleBinPhotos extends Fragment {
                                 deleteForever.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        multiSelectionHelper.handleDeleteImagesForever(imageInfoArrayList, -1);
+                                        multiSelectionHelper.handleDeleteImagesForever(imageInfoArrayList);
                                         turnOffMultiSelectionMode();
                                     }
                                 });
@@ -146,6 +157,7 @@ public class RecycleBinPhotos extends Fragment {
                                     @Override
                                     public void onClick(View view) {
                                         turnOffMultiSelectionMode();
+                                        selectAllBtn.setVisibility(View.GONE);
                                         longClickBar.setVisibility(View.GONE);
                                     }
                                 });
@@ -190,8 +202,6 @@ public class RecycleBinPhotos extends Fragment {
     }
 
     public void notifyChangedListImage(ArrayList<ImageInfo> newList){
-        Log.e(TAG, "notifyChangedListImage " + newList.size() );
-        Log.e(TAG, "notifyChangedListImage " + imageInfoArrayList.size() );
         imageInfoArrayList = newList;
         listItems = new ArrayList<>();
         prepareData();
@@ -199,12 +209,27 @@ public class RecycleBinPhotos extends Fragment {
     }
 
     public void turnOffMultiSelectionMode(){
+        selectAllBtn.setVisibility(View.GONE);
         longClickBar.setVisibility(View.GONE);
+
         galleryAdapter.setMultipleSelectState(false);
         for(ImageInfo imageShow: imageInfoArrayList){
             if(imageShow.isSelected){
                 imageShow.isSelected = false;
             }
         }
+    }
+
+    public boolean selectAllImages(boolean state) {
+        galleryAdapter.setMultipleSelectState(true);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(state && !imageShow.isSelected){
+                imageShow.isSelected = true;
+            } else if(!state && imageShow.isSelected) {
+                imageShow.isSelected = false;
+            }
+        }
+
+        return !state;
     }
 }

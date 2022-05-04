@@ -148,19 +148,38 @@ public class ImageViewingRecycleBin extends Fragment {
         recover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageDatabase.getInstance(getContext())
-                        .recoverImageFromRecycleBin(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path);
-                AlbumDatabase.getInstance(getContext())
-                        .recoverImage(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path);
+                Dialog dialog = new Dialog(context);
+                dialog.getWindow().setContentView(R.layout.layout_custom_dialog_restore_image_recycle_bin);
+                dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
 
-                imageInfoArrayList.remove(pos);
+                Button removeGallery = dialog.findViewById(R.id.restore_gallery);
+                removeGallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ImageDatabase.getInstance(getContext())
+                                .recoverImageFromRecycleBin(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path);
+                        AlbumDatabase.getInstance(getContext())
+                                .recoverImage(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path);
+                        imageInfoArrayList.remove(pos);
 
-                if (imageInfoArrayList.size() > 0) {
-                    adapter.notifyDataSetChanged();
-                    viewPager.setCurrentItem(pos, false);
-                } else {
-                    main.getSupportFragmentManager().popBackStack();
-                }
+                        if (imageInfoArrayList.size() > 0) {
+                            adapter.notifyDataSetChanged();
+                            viewPager.setCurrentItem(pos, false);
+                        } else {
+                            main.getSupportFragmentManager().popBackStack();
+                        };
+
+                        dialog.dismiss();
+                    }
+                });
+                Button cancel = dialog.findViewById(R.id.cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
         });
 

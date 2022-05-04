@@ -185,7 +185,7 @@ public class ImageViewing extends Fragment {
                 Uri selectedUri = Uri.fromFile(new File(path));
                 EditImage editImage = new EditImage(getActivity());
                 editImage.openEditor(selectedUri);
-                getFragmentManager().popBackStackImmediate();
+                main.getSupportFragmentManager().popBackStack();
             }
         }); //edit onClickListener
 
@@ -465,7 +465,7 @@ public class ImageViewing extends Fragment {
                     .findFragmentByTag(AllPhotos.TAG);
 
             if (fragment != null) {
-                fragment.notifyChangedListImageOnDelete(imageInfoArrayList);
+                fragment.notifyChangedListImage(imageInfoArrayList);
             }
         } if(fromAlbum == 3) {
             SecureFolderPhotos fragment2 = (SecureFolderPhotos) main.getSupportFragmentManager()

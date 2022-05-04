@@ -34,6 +34,21 @@
             android:text="Chọn"
             android:textColor="@color/black"
             android:textSize="12sp" />
+        <ImageButton
+            android:id="@+id/buttonSelectAll"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="72dp"
+            android:layout_toStartOf="@+id/buttonSelect"
+            android:layout_toLeftOf="@+id/buttonSubMenu"
+            android:src="@drawable/ic_select_all"
+            android:text="Chọn tất cả"
+            android:textAllCaps="false"
+            android:enabled="false"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/buttonSubMenu"

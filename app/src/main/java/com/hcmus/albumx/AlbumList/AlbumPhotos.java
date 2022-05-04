@@ -73,7 +73,7 @@ public class AlbumPhotos extends Fragment {
 
     private int albumID;
 
-    ImageButton cameraBtn;
+    ImageButton cameraBtn, selectAllBtn;
     SharedPreferences sp;
 
 
@@ -203,6 +203,7 @@ public class AlbumPhotos extends Fragment {
         galleryAdapter.setData(listItems);
 
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
+        selectAllBtn = (ImageButton) view.findViewById(R.id.buttonSelectAll);
         longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         selectBtn.setOnClickListener(new View.OnClickListener() {
@@ -216,6 +217,16 @@ public class AlbumPhotos extends Fragment {
                             public void onAnimationStart(Animator animator) {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
+
+                                selectAllBtn.setVisibility(View.VISIBLE);
+                                selectAllBtn.setOnClickListener(new View.OnClickListener() {
+                                    boolean state = true;
+
+                                    @Override
+                                    public void onClick(View view) {
+                                        state = selectAllImages(state);
+                                    }
+                                });
 
                                 ImageButton addToAlbum = (ImageButton) view.findViewById(R.id.addToAlbum);
                                 addToAlbum.setOnClickListener(new View.OnClickListener() {
@@ -259,6 +270,7 @@ public class AlbumPhotos extends Fragment {
                                     @Override
                                     public void onClick(View view) {
                                         turnOffMultiSelectionMode();
+                                        selectAllBtn.setVisibility(View.GONE);
                                         longClickBar.setVisibility(View.GONE);
                                     }
                                 });
@@ -437,6 +449,7 @@ public class AlbumPhotos extends Fragment {
     }
 
     public void turnOffMultiSelectionMode(){
+        selectAllBtn.setVisibility(View.GONE);
         longClickBar.setVisibility(View.GONE);
         galleryAdapter.setMultipleSelectState(false);
         for(ImageInfo imageShow: imageInfoArrayList){
@@ -444,5 +457,18 @@ public class AlbumPhotos extends Fragment {
                 imageShow.isSelected = false;
             }
         }
+    }
+
+    public boolean selectAllImages(boolean state) {
+        galleryAdapter.setMultipleSelectState(true);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(state && !imageShow.isSelected){
+                imageShow.isSelected = true;
+            } else if(!state && imageShow.isSelected) {
+                imageShow.isSelected = false;
+            }
+        }
+
+        return !state;
     }
 }

@@ -15,11 +15,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hcmus.albumx.AlbumList.AlbumDatabase;
 import com.hcmus.albumx.AlbumList.AlbumInfo;
-import com.hcmus.albumx.EditedView.ImagesEditGallery;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.MultiSelectionHelper;
@@ -64,6 +63,7 @@ public class AllPhotos extends Fragment {
     MainActivity main;
     Context context;
 
+    ImageButton selectAllBtn;
     RelativeLayout longClickBar;
     SharedPreferences sp;
 
@@ -75,9 +75,6 @@ public class AllPhotos extends Fragment {
     List<ListItem> listItems;
     LinkedHashMap<String, List<ImageInfo>> listImageGroupByDate;
     ImageDatabase myDB;
-
-    List<Uri> listEditImages;
-
 
     public static AllPhotos newInstance() {
         return new AllPhotos();
@@ -91,7 +88,6 @@ public class AllPhotos extends Fragment {
             main = (MainActivity) getActivity();
             myDB = ImageDatabase.getInstance(context);
 
-            handleEditImages();
             imageInfoArrayList = myDB.getAllImages();
             listItems = new ArrayList<>();
             listImageGroupByDate = new LinkedHashMap<>();
@@ -99,6 +95,14 @@ public class AllPhotos extends Fragment {
             prepareData();
         } catch (IllegalStateException ignored) {
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        handleEditImages();
     }
 
     @Override
@@ -191,6 +195,8 @@ public class AllPhotos extends Fragment {
 
         // Multiple image toolbar
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
+
+        selectAllBtn = (ImageButton) contextView.findViewById(R.id.buttonSelectAll);
         longClickBar = (RelativeLayout) contextView.findViewById(R.id.longClickBar);
         Button selectBtn = (Button) contextView.findViewById(R.id.buttonSelect);
         selectBtn.setOnClickListener(new View.OnClickListener() {
@@ -205,6 +211,15 @@ public class AllPhotos extends Fragment {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
 
+                                selectAllBtn.setVisibility(View.VISIBLE);
+                                selectAllBtn.setOnClickListener(new View.OnClickListener() {
+                                    boolean state = true;
+
+                                    @Override
+                                    public void onClick(View view) {
+                                        state = selectAllImages(state);
+                                    }
+                                });
                                 ImageButton addToAlbum = (ImageButton) contextView.findViewById(R.id.addToAlbum);
                                 addToAlbum.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -246,6 +261,7 @@ public class AllPhotos extends Fragment {
                                     @Override
                                     public void onClick(View view) {
                                         turnOffMultiSelectionMode();
+                                        selectAllBtn.setVisibility(View.GONE);
                                         longClickBar.setVisibility(View.GONE);
                                     }
                                 });
@@ -307,41 +323,56 @@ public class AllPhotos extends Fragment {
     }
 
     public void handleEditImages(){
-        listEditImages = ImagesEditGallery.listOfEditImages(context);
-        if (listEditImages == null){
-            return;
-        }else{
-            for (int i = 0; i < listEditImages.size(); i++) {
-                handleEditImagePick(listEditImages.get(i));
-            }
+        String path = Environment.getExternalStoragePublicDirectory(Environment.MEDIA_UNKNOWN).toString() + "/temp";
+        File myDir = new File(path);
+        if (myDir.exists()) {
+            File directory = new File(path);
+            File[] files = directory.listFiles();
+            if(files != null && files.length > 0){
+                for (File value : files) {
+                    File file = new File(myDir, value.getName());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                    String extension = MimeTypeMap.getFileExtensionFromUrl(file.getPath());
+                    String type = "";
+                    if (extension != null) {
+                        type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                    }
+                    //TODO: Insert into app
+                    ImageInfo image = new ImageInfo();
+                    image.name = value.getName();
+                    image.createdDate = simpleDateFormat.format(new Date(file.lastModified()));
+                    image.size = getFileSize(file.length());
+                    image.mimeType = type;
 
-        }
-    }
+                    if (!ImageDatabase.getInstance(context).isImageExistsInApplication(image.name)) {
+                        image.path = saveImageBitmap(Uri.fromFile(file), image.name);
+                        myDB.insertImage(image.name, image.path, image.createdDate);
 
-    private void handleEditImagePick(Uri contentUri){
-        ImageInfo image = getInfoFromURI(contentUri);
-
-        if (!ImageDatabase.getInstance(context).isImageExistsInApplication(image.name)) {
-            image.path = saveImageBitmap(contentUri, image.name);
-            myDB.insertImage(image.name, image.path, image.createdDate);
-
-            List<AlbumInfo> listAlbum = AlbumDatabase.getInstance(context).getAlbums();
-            for (AlbumInfo albumInfo : listAlbum) {
-                if (albumInfo.name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)) {
-                    AlbumDatabase.getInstance(context)
-                            .insertImageToAlbum(image.name, image.path, albumInfo.id);
+                        List<AlbumInfo> listAlbum = AlbumDatabase.getInstance(context).getAlbums();
+                        for (AlbumInfo albumInfo : listAlbum) {
+                            if (albumInfo.name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)) {
+                                AlbumDatabase.getInstance(context)
+                                        .insertImageToAlbum(image.name, image.path, albumInfo.id);
+                            }
+                            if (albumInfo.name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)) {
+                                AlbumDatabase.getInstance(context)
+                                        .insertImageToAlbum(image.name, image.path, albumInfo.id);
+                            }
+                        }
+                    }
+                    //TODO: And delete added image
+                    if (file.exists()) {
+                        file.delete();
+                    }
                 }
-                if (albumInfo.name.equals(AlbumDatabase.albumSet.ALBUM_RECENT)) {
-                    AlbumDatabase.getInstance(context)
-                            .insertImageToAlbum(image.name, image.path, albumInfo.id);
-                }
+
+                notifyChangedListImage(myDB.getAllImages());
             }
         }
     }
 
     private void handleNewImagePick(Uri contentUri){
         ImageInfo image = getInfoFromURI(contentUri);
-
         if (ImageDatabase.getInstance(context).isImageExistsInApplication(image.name)) {
             Toast.makeText(context, "Image " + image.name + " is exists in gallery ! :)",
                     Toast.LENGTH_SHORT).show();
@@ -360,7 +391,6 @@ public class AllPhotos extends Fragment {
 
             imageInfoArrayList.add(image);
         }
-
         prepareData();
     }
 
@@ -429,7 +459,6 @@ public class AllPhotos extends Fragment {
             if (byte_size > -1) {
                 size = getFileSize((long) byte_size);
             }
-            Log.e(TAG, size );
             info = new ImageInfo(displayName, lastModified, mimeType, size);
             cursor.close();
         }
@@ -500,7 +529,7 @@ public class AllPhotos extends Fragment {
         }
     }
 
-    public void notifyChangedListImageOnDelete(ArrayList<ImageInfo> newList){
+    public void notifyChangedListImage(ArrayList<ImageInfo> newList){
         imageInfoArrayList = newList;
         listItems = new ArrayList<>();
         listImageGroupByDate = new LinkedHashMap<>();
@@ -509,6 +538,7 @@ public class AllPhotos extends Fragment {
     }
 
     public void turnOffMultiSelectionMode(){
+        selectAllBtn.setVisibility(View.GONE);
         longClickBar.setVisibility(View.GONE);
         galleryAdapter.setMultipleSelectState(false);
         for(ImageInfo imageShow: imageInfoArrayList){
@@ -516,5 +546,18 @@ public class AllPhotos extends Fragment {
                 imageShow.isSelected = false;
             }
         }
+    }
+
+    public boolean selectAllImages(boolean state) {
+        galleryAdapter.setMultipleSelectState(true);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(state && !imageShow.isSelected){
+                imageShow.isSelected = true;
+            } else if(!state && imageShow.isSelected) {
+                imageShow.isSelected = false;
+            }
+        }
+
+        return !state;
     }
 }

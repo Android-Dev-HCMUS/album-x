@@ -12,6 +12,10 @@ public class ImageInfo implements Serializable {
     public String size;
     public Boolean isSelected = false;
 
+    public ImageInfo() {
+
+    }
+
     public ImageInfo(int id, String name, String path, Boolean isSelected) {
         this.id = id;
         this.name = name;

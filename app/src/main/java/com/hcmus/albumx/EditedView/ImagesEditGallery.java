@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -40,7 +39,6 @@ public class ImagesEditGallery {
                                         cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID)));
 
                 arrUri.add(imageUri);
-                Log.d("uri", String.valueOf(path));
             }
         }
         cursor.close();
