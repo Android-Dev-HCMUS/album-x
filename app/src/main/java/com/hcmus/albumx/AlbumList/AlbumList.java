@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.R;
 import com.hcmus.albumx.SecureFolder.SecureFolder;
+import com.hcmus.albumx.SecureFolder.SecureFolderPhotos;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -145,8 +146,8 @@ public class AlbumList extends Fragment implements  RemoveAlbumDialog.RemoveAlbu
                                 if(md5(returnString).equals(storedPIN)) {
                                     main.getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.frameFragment,
-                                                    AlbumPhotos.newInstance(3, "Secure Folder"),
-                                                    AlbumPhotos.TAG)
+                                                    SecureFolderPhotos.newInstance(),
+                                                    SecureFolderPhotos.TAG)
                                             .addToBackStack("AlbumPhotosUI")
                                             .commit();
                                 }

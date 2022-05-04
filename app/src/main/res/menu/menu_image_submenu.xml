@@ -6,5 +6,4 @@
             <item android:id="@+id/change_theme_light" android:title="Light Theme"/>
         </menu>
     </item>
-    <item android:id="@+id/secure_folder" android:title="Secure folder"/>
 </menu>

@@ -96,7 +96,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
             } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                 albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_edit));
             } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
-                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_lock));
             } else {
                 albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
             }
@@ -122,7 +122,7 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
             } else if (name.equals(AlbumDatabase.albumSet.ALBUM_EDITOR)){
                 ;
             } else if (name.equals(AlbumDatabase.albumSet.ALBUM_SECURE)){
-                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_filter));
+                albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_lock));
             } else {
                 albumInfoArrayList.add(new AlbumInfo(id, name, type, R.drawable.ic_photo));
             }
@@ -223,13 +223,23 @@ public final class AlbumDatabase extends SQLiteOpenHelper {
                 imageSet.FIELD_NAME + " = ? and " + imageSet.FIELD_PATH + " = ? ", arg);
     }
 
+    public void moveImageToSecureFolder(String name, String path){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(imageSet.FIELD_REMOVE_PROPERTY, 2);
+
+        String[] arg = {name, path};
+
+        database.update(imageSet.TABLE_NAME, contentValues,
+                imageSet.FIELD_NAME + " = ? and " + imageSet.FIELD_PATH + " = ? ", arg);
+    }
+
     public void hardDeleteImage(String name, String path){
         SQLiteDatabase database = this.getWritableDatabase();
         String[] arg = {name, path};
 
         database.delete(imageSet.TABLE_NAME,
-                imageSet.FIELD_NAME + " = ? and " + imageSet.FIELD_PATH + " = ? ",
-                arg);
+                imageSet.FIELD_NAME + " = ? and " + imageSet.FIELD_PATH + " = ? ", arg);
     }
 
     private String getDateTime() {

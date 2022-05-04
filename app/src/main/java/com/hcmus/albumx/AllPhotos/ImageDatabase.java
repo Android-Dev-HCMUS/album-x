@@ -94,6 +94,22 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         return imageInfoArrayList;
     }
 
+    public ArrayList<ImageInfo> getImagesInSecureFolder(){
+        SQLiteDatabase database = this.getReadableDatabase();
+        ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
+
+        String[] columns = {ImageDatabase.FIELD_ID, ImageDatabase.FIELD_NAME, ImageDatabase.FIELD_PATH,
+                ImageDatabase.FIELD_CREATED_DATE, ImageDatabase.FIELD_MODIFIED_DATE};
+        Cursor cursor = database.query(ImageDatabase.TABLE_NAME, columns,
+                ImageDatabase.FIELD_REMOVE_PROPERTY +" = 2", null,
+                null, null, null);
+        while(cursor.moveToNext()){
+            imageInfoArrayList.add(new ImageInfo(cursor.getInt(0),cursor.getString(1),
+                    cursor.getString(2),  cursor.getString(3), cursor.getString(4)));
+        }
+        return imageInfoArrayList;
+    }
+
     public int insertImage(String name, String path, String date){
         SQLiteDatabase database = this.getWritableDatabase();
 
@@ -128,6 +144,18 @@ public final class ImageDatabase extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(FIELD_REMOVE_PROPERTY, 1);
+        contentValues.put(FIELD_MODIFIED_DATE, getDateTime());
+
+        String[] arg = {name, path};
+
+        database.update(TABLE_NAME, contentValues,
+                FIELD_NAME + " = ? and " + FIELD_PATH + " = ? ", arg);
+    }
+
+    public void moveImageToSecureFolder(String name, String path){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FIELD_REMOVE_PROPERTY, 2);
         contentValues.put(FIELD_MODIFIED_DATE, getDateTime());
 
         String[] arg = {name, path};

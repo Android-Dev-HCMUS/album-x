@@ -1,5 +1,4 @@
-package com.hcmus.albumx.AlbumList;
-
+package com.hcmus.albumx.SecureFolder;
 
 import android.animation.Animator;
 import android.app.Activity;
@@ -8,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,13 +34,12 @@ import com.hcmus.albumx.AllPhotos.GroupImageItem;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 import com.hcmus.albumx.AllPhotos.ListItem;
-import com.hcmus.albumx.EditImage;
 import com.hcmus.albumx.ImageViewing;
 import com.hcmus.albumx.MainActivity;
 import com.hcmus.albumx.MultiSelectionHelper;
 import com.hcmus.albumx.R;
-import com.hcmus.albumx.SecureFolder.SecureFolder;
-import com.hcmus.albumx.SecureFolder.SecureFolderManager;
+import com.hcmus.albumx.RecycleBin.ImageViewingRecycleBin;
+import com.hcmus.albumx.RecycleBin.RecycleBinPhotos;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -53,82 +52,48 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class AlbumPhotos extends Fragment {
-    public static final String TAG = "Album Photos";
+public class SecureFolderPhotos extends Fragment {
+    public static final String TAG = "SecureFolderPhotos";
 
-    private static final String ALBUM_ID_ARG = "albumID";
-    private static final String ALBUM_NAME_ARG = "albumName";
+    MainActivity main;
+    Context context;
 
-    private MainActivity main;
-    private Context context;
+    RelativeLayout longClickBar;
 
-    private RecyclerView recyclerView;
-    private GalleryAdapter galleryAdapter;
+    RecyclerView recyclerView;
+    GalleryAdapter galleryAdapter;
 
-    private RelativeLayout longClickBar;
-
-    private ArrayList<ImageInfo> imageInfoArrayList = new ArrayList<>();
-    private List<ListItem> listItems;
-    private ImageDatabase myDB;
-
-    private int albumID;
-
-    ImageButton cameraBtn;
+    private ArrayList<ImageInfo> imageInfoArrayList;
+    List<ListItem> listItems;
+    ImageDatabase myDB;
     SharedPreferences sp;
 
-
-    public static AlbumPhotos newInstance(int albumID, String albumName) {
-        AlbumPhotos fragment = new AlbumPhotos();
-        Bundle bundle = new Bundle();
-        bundle.putInt(ALBUM_ID_ARG, albumID);
-        bundle.putString(ALBUM_NAME_ARG, albumName);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static SecureFolderPhotos newInstance(){
+        return new SecureFolderPhotos();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            context = getActivity();
+        try{
             main = (MainActivity) getActivity();
+            context = getContext();
             myDB = ImageDatabase.getInstance(context);
-
-            if(getArguments() != null){
-                albumID = getArguments().getInt(ALBUM_ID_ARG);
-            }
-
-            imageInfoArrayList = AlbumDatabase.getInstance(context).getImagesOf(albumID);
-
+            imageInfoArrayList = myDB.getImagesInSecureFolder();
             listItems = new ArrayList<>();
             prepareData();
-        } catch (IllegalStateException ignored) {
+        }catch (IllegalStateException ignored){
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = (View) inflater.inflate(R.layout.album_photos_layout, null);
+        View view = (View) inflater.inflate(R.layout.album_secure_folder_layout, null);
         super.onViewCreated(view, savedInstanceState);
 
         TextView albumName = view.findViewById(R.id.album_name);
-
-        if(getArguments() != null){
-            albumName.setText(getArguments().getString(ALBUM_NAME_ARG));
-        }
-        if(getArguments().getString(ALBUM_NAME_ARG).trim().equals(AlbumDatabase.albumSet.ALBUM_EDITOR.trim()) ){
-            cameraBtn = (ImageButton) view.findViewById(R.id.cameraBtn);
-            cameraBtn.setVisibility(View.VISIBLE);
-            cameraBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EditImage editImage = new EditImage(getActivity());
-
-                    editImage.openSystemCameraToTakeAnImage();
-                }
-            });
-        }
+        albumName.setText("Secure Folder");
 
         Button back = (Button) view.findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +108,6 @@ public class AlbumPhotos extends Fragment {
         subMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getArguments().getString(ALBUM_NAME_ARG).equals("Secure Folder") && getArguments().getInt(ALBUM_ID_ARG) == 3) {
                     PopupMenu popup = new PopupMenu(getActivity().getApplicationContext(), v);
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
@@ -181,9 +145,8 @@ public class AlbumPhotos extends Fragment {
                             } //Switch
                         }
                     }); //setOnMenuItemClickListener
-                    popup.inflate(R.menu.menu_secure_folder);
-                    popup.show();
-                }
+                popup.inflate(R.menu.menu_secure_folder);
+                popup.show();
             }
         });
 
@@ -193,7 +156,7 @@ public class AlbumPhotos extends Fragment {
                 main.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_layout,
-                                ImageViewing.newInstance(imagePath, imageInfoArrayList, position, albumID),
+                                ImageViewing.newInstance(imagePath, imageInfoArrayList, position, 3),
                                 ImageViewing.TAG)
                         .addToBackStack("ImageViewingUI")
                         .commit();
@@ -201,6 +164,25 @@ public class AlbumPhotos extends Fragment {
             }
         });
         galleryAdapter.setData(listItems);
+
+        recyclerView = view.findViewById(R.id.recyclerview_image);
+        recyclerView.setHasFixedSize(true);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (galleryAdapter.getItemViewType(position)){
+                    case ListItem.TYPE_DATE:
+                        return 3;
+                    default:
+                        return 1;
+                }
+            }
+        });
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setAdapter(galleryAdapter);
 
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
         longClickBar = (RelativeLayout) view.findViewById(R.id.longClickBar);
@@ -217,20 +199,11 @@ public class AlbumPhotos extends Fragment {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
 
-                                ImageButton addToAlbum = (ImageButton) view.findViewById(R.id.addToAlbum);
-                                addToAlbum.setOnClickListener(new View.OnClickListener() {
+                                ImageButton restoreFromTrash = (ImageButton) view.findViewById(R.id.restoreFromTrash);
+                                restoreFromTrash.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        multiSelectionHelper.handleAddImagesToAlbum(imageInfoArrayList);
-                                        turnOffMultiSelectionMode();
-                                    }
-                                });
-
-                                ImageButton addToSecureFolder = (ImageButton) view.findViewById(R.id.addToSecureFolder);
-                                addToSecureFolder.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        multiSelectionHelper.handleMoveToSecureFolderImages(imageInfoArrayList, albumID);
+                                        multiSelectionHelper.handleRestoreImages(imageInfoArrayList, 3);
                                         turnOffMultiSelectionMode();
                                     }
                                 });
@@ -248,8 +221,7 @@ public class AlbumPhotos extends Fragment {
                                 deleteMultipleImages.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        multiSelectionHelper.handleDeleteImages(imageInfoArrayList, albumID);
-                                        notifyChangedListImageOnDelete(imageInfoArrayList);
+                                        multiSelectionHelper.handleDeleteImages(imageInfoArrayList, 0);
                                         turnOffMultiSelectionMode();
                                     }
                                 });
@@ -275,25 +247,6 @@ public class AlbumPhotos extends Fragment {
                         });
             }
         });
-
-        recyclerView = view.findViewById(R.id.recyclerview_image);
-        recyclerView.setHasFixedSize(true);
-
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                switch (galleryAdapter.getItemViewType(position)){
-                    case ListItem.TYPE_DATE:
-                        return 3;
-                    default:
-                        return 1;
-                }
-            }
-        });
-        recyclerView.setLayoutManager(layoutManager);
-
-        recyclerView.setAdapter(galleryAdapter);
 
         return view;
     }

@@ -116,9 +116,6 @@ public class AllPhotos extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-                            case R.id.secure_folder:
-                                openSecureFolderManager();
-                                return true;
                             case R.id.change_theme_blue:
                                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                                 sp = getContext().getSharedPreferences("MyPref", 0);
@@ -217,6 +214,15 @@ public class AllPhotos extends Fragment {
                                     }
                                 });
 
+                                ImageButton addToSecureFolder = (ImageButton) contextView.findViewById(R.id.addToSecureFolder);
+                                addToSecureFolder.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        multiSelectionHelper.handleMoveToSecureFolderImages(imageInfoArrayList, 0);
+                                        turnOffMultiSelectionMode();
+                                    }
+                                });
+
                                 ImageButton shareMultipleImages = (ImageButton) contextView.findViewById(R.id.shareMultipleImages);
                                 shareMultipleImages.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -278,11 +284,6 @@ public class AllPhotos extends Fragment {
         recyclerView.setAdapter(galleryAdapter);
 
         return contextView;
-    }
-
-    public void openSecureFolderManager() {
-        Intent intent = new Intent(getContext(), SecureFolderManager.class);
-        getContext().startActivity(intent);
     }
 
     @Override

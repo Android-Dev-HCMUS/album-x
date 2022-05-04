@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/album_photo_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/headerBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/backButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:drawableLeft="@drawable/ic_arrow_back"
+            android:text="  Album" />
+
+        <Button
+            android:id="@+id/buttonSelect"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toLeftOf="@+id/buttonSubMenu"
+            android:text="Chọn"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/buttonSubMenu"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:drawableRight="@drawable/ic_more" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/album_name"
+        android:layout_below="@+id/headerBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="Tên album"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/album_name"
+        android:gravity="center"
+        android:horizontalSpacing="5dp"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp" />
+
+        <RelativeLayout
+            android:id="@+id/longClickBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="75dp"
+            android:background="@drawable/tool_bar_border"
+            android:padding="10dp"
+            android:visibility="gone">
+            <ImageButton
+                android:id="@+id/restoreFromTrash"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/restore_from_trash"
+                android:tooltipText="Add images to album"/>
+            <ImageButton
+                android:id="@+id/shareMultipleImages"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_toRightOf="@+id/restoreFromTrash"
+                android:background="@drawable/ic_share"
+                android:tooltipText="Share images"/>
+            <ImageButton
+                android:id="@+id/deleteMultipleImages"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_toRightOf="@+id/shareMultipleImages"
+                android:background="@drawable/ic_delete"
+                android:tooltipText="Move images to recycle bin"/>
+            <ImageButton
+                android:id="@+id/closeToolbar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_toRightOf="@+id/deleteMultipleImages"
+                android:background="@drawable/ic_close"
+                android:tooltipText="Close toolbar"/>
+        </RelativeLayout>
+
+</RelativeLayout>

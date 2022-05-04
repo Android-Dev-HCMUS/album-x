@@ -25,6 +25,7 @@ import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
 import com.hcmus.albumx.RecycleBin.RecycleBinPhotos;
+import com.hcmus.albumx.SecureFolder.SecureFolderPhotos;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -184,6 +185,32 @@ public class MultiSelectionHelper {
         }
     }
 
+    private void moveImagesToSecureFolder(ArrayList<ImageInfo> imageInfoArrayList, List<ImageInfo> selectedImages) {
+        for (ImageInfo image : selectedImages) {
+            ImageDatabase.getInstance(context)
+                    .moveImageToSecureFolder(image.name, image.path);
+            AlbumDatabase.getInstance(context)
+                    .moveImageToSecureFolder(image.name, image.path);
+
+            imageInfoArrayList.remove(image);
+        }
+    }
+
+    public void handleMoveToSecureFolderImages(ArrayList<ImageInfo> imageInfoArrayList, int fromAlbum) {
+        List<ImageInfo> selectedImages = getSelectedImages(imageInfoArrayList);
+
+        if (!selectedImages.isEmpty()) {
+            if(fromAlbum != 3 && fromAlbum != -1){
+                moveImagesToSecureFolder(imageInfoArrayList, selectedImages);
+                notifyDataSetChange(fromAlbum, imageInfoArrayList);
+            } else {
+                Toast.makeText(context, "Cannot move to Secure Folder from this album!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            notificationWhenNothingIsSelect(context);
+        }
+    }
+
     public void handleDeleteImagesForever(ArrayList<ImageInfo> imageInfoArrayList, int fromAlbum) {
         List<ImageInfo> selectedImages = getSelectedImages(imageInfoArrayList);
 
@@ -338,6 +365,14 @@ public class MultiSelectionHelper {
         else if(fromAlbum == 0){
             AllPhotos fragment = (AllPhotos) main.getSupportFragmentManager()
                     .findFragmentByTag(AllPhotos.TAG);
+
+            if (fragment != null) {
+                fragment.notifyChangedListImageOnDelete(imageInfoArrayList);
+            }
+        }
+        else if(fromAlbum == 3){
+            SecureFolderPhotos fragment = (SecureFolderPhotos) main.getSupportFragmentManager()
+                    .findFragmentByTag(SecureFolderPhotos.TAG);
 
             if (fragment != null) {
                 fragment.notifyChangedListImageOnDelete(imageInfoArrayList);

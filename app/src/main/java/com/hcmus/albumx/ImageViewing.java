@@ -7,6 +7,7 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,7 @@ import com.hcmus.albumx.AllPhotos.AllPhotos;
 import com.hcmus.albumx.AllPhotos.FullScreenImageAdapter;
 import com.hcmus.albumx.AllPhotos.ImageDatabase;
 import com.hcmus.albumx.AllPhotos.ImageInfo;
+import com.hcmus.albumx.SecureFolder.SecureFolderPhotos;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -331,8 +334,32 @@ public class ImageViewing extends Fragment {
                                             Toast.LENGTH_SHORT).show();
                                 }
                                 return true;
-                            case R.id.add_secure_folder:
-                                // Di chuyển ảnh vào album secure folder
+                            case R.id.move_secure_folder:
+                                if(fromAlbum == 3) {
+                                    Toast.makeText(context, "Moved out of Secure Folder", Toast.LENGTH_SHORT).show();
+                                    ImageDatabase.getInstance(getContext())
+                                            .recoverImageFromRecycleBin(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path);
+                                    AlbumDatabase.getInstance(getContext())
+                                            .recoverImage(imageInfoArrayList.get(pos).name, imageInfoArrayList.get(pos).path);
+
+                                    imageInfoArrayList.remove(pos);
+
+                                    if (imageInfoArrayList.size() > 0) {
+                                        adapter.notifyDataSetChanged();
+                                        viewPager.setCurrentItem(pos, false);
+                                    } else {
+                                        main.getSupportFragmentManager().popBackStack();
+                                    }
+                                } else {
+                                    // Di chuyển ảnh vào album secure folder
+                                    SharedPreferences sp = getContext().getSharedPreferences("MyPref", 0);
+                                    if(!sp.contains("PIN")){
+                                        Toast.makeText(getContext(), "Bạn chưa thiết lập thư mục an toàn", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        moveImageToSecureFolder();
+                                        Toast.makeText(context, "Moved to Secure Folder", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
                                 return true;
                             default:
                                 return false;
@@ -353,10 +380,27 @@ public class ImageViewing extends Fragment {
                     .moveImageToRecycleBin(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
             AlbumDatabase.getInstance(getContext())
                     .softDeleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
-        } else{
+        } else {
             AlbumDatabase.getInstance(getContext())
                     .hardDeleteImage(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
         }
+
+        imageInfoArrayList.remove(pos);
+
+        if(imageInfoArrayList.size() > 0){
+            adapter.notifyDataSetChanged();
+            viewPager.setCurrentItem(pos, false);
+        } else {
+            main.getSupportFragmentManager().popBackStack();
+            onDetach();
+        }
+    }
+
+    private void moveImageToSecureFolder(){
+        ImageDatabase.getInstance(getContext())
+                .moveImageToSecureFolder(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
+        AlbumDatabase.getInstance(getContext())
+                .moveImageToSecureFolder(imageInfoArrayList.get(pos).name,imageInfoArrayList.get(pos).path);
 
         imageInfoArrayList.remove(pos);
 
@@ -423,12 +467,19 @@ public class ImageViewing extends Fragment {
             if (fragment != null) {
                 fragment.notifyChangedListImageOnDelete(imageInfoArrayList);
             }
-        } else {
-            AlbumPhotos fragment2 = (AlbumPhotos) main.getSupportFragmentManager()
-                    .findFragmentByTag(AlbumPhotos.TAG);
+        } if(fromAlbum == 3) {
+            SecureFolderPhotos fragment2 = (SecureFolderPhotos) main.getSupportFragmentManager()
+                    .findFragmentByTag(SecureFolderPhotos.TAG);
 
             if (fragment2 != null) {
                 fragment2.notifyChangedListImageOnDelete(imageInfoArrayList);
+            }
+        } else {
+            AlbumPhotos fragment3 = (AlbumPhotos) main.getSupportFragmentManager()
+                    .findFragmentByTag(AlbumPhotos.TAG);
+
+            if (fragment3 != null) {
+                fragment3.notifyChangedListImageOnDelete(imageInfoArrayList);
             }
         }
     }
