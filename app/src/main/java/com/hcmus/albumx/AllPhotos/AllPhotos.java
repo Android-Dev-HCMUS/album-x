@@ -77,6 +77,7 @@ public class AllPhotos extends Fragment {
     ImageDatabase myDB;
 
     List<Uri> listEditImages;
+    ImageButton selectAllBtn;
 
 
     public static AllPhotos newInstance() {
@@ -193,6 +194,8 @@ public class AllPhotos extends Fragment {
         galleryAdapter.setData(listItems);
 
         // Multiple image toolbar
+        selectAllBtn = (ImageButton) contextView.findViewById(R.id.buttonSelectAll);
+        selectAllBtn.setEnabled(false);
         MultiSelectionHelper multiSelectionHelper = new MultiSelectionHelper(main, context);
         longClickBar = (RelativeLayout) contextView.findViewById(R.id.longClickBar);
         Button selectBtn = (Button) contextView.findViewById(R.id.buttonSelect);
@@ -207,6 +210,13 @@ public class AllPhotos extends Fragment {
                             public void onAnimationStart(Animator animator) {
                                 longClickBar.setVisibility(View.VISIBLE);
                                 galleryAdapter.setMultipleSelectState(true);
+                                selectAllBtn.setEnabled(true);
+                                selectAllBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        selectAllImages();
+                                    }
+                                });
 
                                 ImageButton addToAlbum = (ImageButton) contextView.findViewById(R.id.addToAlbum);
                                 addToAlbum.setOnClickListener(new View.OnClickListener() {
@@ -240,6 +250,7 @@ public class AllPhotos extends Fragment {
                                     @Override
                                     public void onClick(View view) {
                                         turnOffMultiSelectionMode();
+                                        selectAllBtn.setEnabled(false);
                                         longClickBar.setVisibility(View.GONE);
                                     }
                                 });
@@ -513,6 +524,15 @@ public class AllPhotos extends Fragment {
         for(ImageInfo imageShow: imageInfoArrayList){
             if(imageShow.isSelected){
                 imageShow.isSelected = false;
+            }
+        }
+    }
+
+    public void selectAllImages(){
+        galleryAdapter.setMultipleSelectState(true);
+        for(ImageInfo imageShow: imageInfoArrayList){
+            if(!imageShow.isSelected){
+                imageShow.isSelected = true;
             }
         }
     }
